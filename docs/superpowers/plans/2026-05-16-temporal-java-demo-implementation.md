@@ -6,7 +6,7 @@
 
 **Architecture:** Single Maven module hosting one Spring Boot process that contains both the Temporal worker (auto-discovered via `temporal-spring-boot-starter-alpha`) and a REST controller. One `@WorkflowInterface` (`DiagnosticsWorkflow`) drives 5 parallel scan activities, a 60-second durable timer (the on-stage kill point), a deterministic prioritizer, and a conditional bridge notification. State lives in `temporal server start-dev` (single binary, no Docker). Java records + Jackson handle the wire format; the `Severity` enum uses `@JsonProperty` to match the .NET strings (`green` / `yellow_alert` / `red_alert`).
 
-**Tech Stack:** Java 21 LTS · Maven (with wrapper) · Spring Boot 3.4.x · `io.temporal:temporal-sdk` + `temporal-spring-boot-starter-alpha` 1.30.x · Jackson (default Spring Boot) · JUnit 5 + `io.temporal:temporal-testing` · Temporal CLI dev server.
+**Tech Stack:** Java 21 LTS · Maven (with wrapper) · Spring Boot 3.4.x · `io.temporal:temporal-sdk` + `temporal-spring-boot-starter` 1.30.x (the `-alpha` line was discontinued at 1.23.2; the GA starter ships dual Spring-Boot-2/3 auto-config) · Jackson (default Spring Boot) · JUnit 5 + `io.temporal:temporal-testing` · Temporal CLI dev server.
 
 **Reference (scenario only, not style):** `demos/04-dapr/EnterpriseDiagnostics.ApiService/`. Activity names, severity strings, subsystem ids, health range, retry policy shape, bridge message format, and workflow id must match. Do **not** transliterate C# style — write idiomatic Java.
 
@@ -112,7 +112,7 @@ Single responsibility per file. Activity interface and impl are split per Java c
         </dependency>
         <dependency>
             <groupId>io.temporal</groupId>
-            <artifactId>temporal-spring-boot-starter-alpha</artifactId>
+            <artifactId>temporal-spring-boot-starter</artifactId>
             <version>${temporal.version}</version>
         </dependency>
 

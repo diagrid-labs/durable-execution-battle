@@ -13,7 +13,7 @@ internal sealed partial class NotifyBridgeActivity(
         LogActivity(logger, input.ShipName);
 
         var message =
-            $"🚨 BRIDGE ALERT — USS {input.ShipName} — {input.Priority.Severity.ToUpperInvariant()}: " +
+            $"🚨 BRIDGE ALERT — {input.ShipName} — {input.Priority.Severity.ToUpperInvariant()}: " +
             $"{input.Priority.Summary} (engineer: {input.EngineerName})";
 
         LogNotification(logger, message);

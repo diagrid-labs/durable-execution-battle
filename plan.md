@@ -437,7 +437,7 @@ Translation lens: if you find yourself writing `DiagnosticsWorkflowImpl` in Go o
 
 ### 5.2 Temporal — Java (5 min)
 
-- **Module**: `demos/02-temporal/` — Java 21 + Spring Boot 3 + `temporal-spring-boot-starter-alpha`. See [`docs/superpowers/specs/2026-05-16-temporal-java-demo-design.md`](docs/superpowers/specs/2026-05-16-temporal-java-demo-design.md) for the full design.
+- **Module**: `demos/02-temporal/` — Java 21 + Spring Boot 3 + `temporal-spring-boot-starter` (the `-alpha` line was discontinued at 1.23.2; the GA starter at 1.30.x ships dual Spring-Boot-2/3 auto-config). See [`docs/superpowers/specs/2026-05-16-temporal-java-demo-design.md`](docs/superpowers/specs/2026-05-16-temporal-java-demo-design.md) for the full design.
 - **Workflow shape**: `@WorkflowInterface` + `@WorkflowMethod` on `DiagnosticsWorkflow`; `@WorkflowImpl(taskQueues = "diagnostics-tq")` on `DiagnosticsWorkflowImpl`. Activities are `@ActivityInterface` + `@Component @ActivityImpl(...)` impls auto-discovered by the Spring Boot starter.
 - **Fan-out**: 5 `Promise<ScanResult> = Async.function(stub::execute, new ScanInput(shipName, subsystem))` calls, then `Promise.allOf(...).get()` to fan in.
 - **Sleep**: `Workflow.sleep(Duration.ofSeconds(60))` — the durable kill point.
@@ -640,7 +640,7 @@ Author this as a literal checklist in `README.md`:
 Suggested build sequence — fastest payoff first, riskiest last:
 
 1. **Dapr demo (canonical reference)** — already done in `demos/04-dapr/`. .NET 10 + Aspire, 5 `Scan*` activities, 60s `CreateTimer`, conditional `NotifyBridge`. Use this as the spec when implementing the other four framework demos: match the activity names, the `ScanResult { subsystem, health, anomalies }` and `Priority { severity, summary }` shapes, the severity thresholds (`<50 → red_alert`, `<75 → yellow_alert`), and the low-biased health range for demo rigging.
-2. **Temporal demo (Java)** — Spring Boot + `temporal-spring-boot-starter-alpha`; sanity-check the scenario shape end-to-end. See [`docs/superpowers/specs/2026-05-16-temporal-java-demo-design.md`](docs/superpowers/specs/2026-05-16-temporal-java-demo-design.md). ~4 hours.
+2. **Temporal demo (Java)** — Spring Boot + `temporal-spring-boot-starter` (the `-alpha` line was discontinued at 1.23.2; GA ships at 1.30.x); sanity-check the scenario shape end-to-end. See [`docs/superpowers/specs/2026-05-16-temporal-java-demo-design.md`](docs/superpowers/specs/2026-05-16-temporal-java-demo-design.md). ~4 hours.
 3. **Restate demo** — single binary, no infra; quick second win. ~2 hours.
 4. **Conductor demo** — JSON DSL is a different mental model; budget time for the FORK_JOIN + SWITCH wiring. ~3 hours.
 5. **Cadence demo** — last because it's almost identical to Temporal in Go; cheap copy/translate. ~2 hours.

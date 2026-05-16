@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: enterprise-diagnostics
+  temporal:
+    namespace: default
+    connection:
+      target: 127.0.0.1:7233
+    workers:
+      - task-queue: diagnostics-tq
+        name: diagnostics-worker
+    workers-auto-discovery:
+      packages:
+        - io.diagrid.enterprisediagnostics.workflow
+        - io.diagrid.enterprisediagnostics.activity
+
+server:
+  port: 8080
+
+logging:
+  level:
+    io.diagrid.enterprisediagnostics: INFO
+    io.temporal: INFO

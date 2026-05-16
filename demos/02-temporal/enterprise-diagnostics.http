@@ -1,0 +1,19 @@
+### Start diagnostics
+POST http://localhost:8080/start
+Content-Type: application/json
+
+{
+  "id": "enterprise-ncc-1701",
+  "shipName": "USS Enterprise NCC-1701-D",
+  "diagnosticsDate": "2370-04-08",
+  "engineerName": "Geordi La Forge"
+}
+
+### Status
+GET http://localhost:8080/status/enterprise-ncc-1701
+
+### Cancel (Temporal's analog of Dapr Suspend — there's no Resume)
+POST http://localhost:8080/cancel/enterprise-ncc-1701
+
+### Terminate
+POST http://localhost:8080/terminate/enterprise-ncc-1701
