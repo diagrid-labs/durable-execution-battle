@@ -1,0 +1,26 @@
+# Secrets — never commit
+**/secrets.json
+**/*.secret.*
+.env
+.env.*
+
+# .NET build output
+**/bin/
+**/obj/
+**/out/
+
+# Aspire local state
+**/.aspire/cache/
+
+# IDE
+.vs/
+.vscode/*.log
+.idea/
+*.swp
+
+# macOS
+.DS_Store
+
+# Node / Restate / Conductor / Temporal demos (future)
+node_modules/
+**/*.log

@@ -1,0 +1,22 @@
+{
+  "id": "closing-pick",
+  "title": "Which would you try first when you get home?",
+  "subtitle": "Just one — based on what you saw today",
+  "type": "single-select",
+  "options": [
+    { "id": "temporal",   "label": "Temporal" },
+    { "id": "cadence",    "label": "Cadence" },
+    { "id": "conductor",  "label": "Conductor" },
+    { "id": "dapr",       "label": "Dapr Workflows" },
+    { "id": "restate",    "label": "Restate" },
+    { "id": "exploring",  "label": "Still exploring / depends" }
+  ],
+  "display": {
+    "qr": true,
+    "showResultsLive": true,
+    "resultStyle": "bar-chart-horizontal",
+    "compareTo": "opening-familiarity",
+    "anonymize": true
+  },
+  "duration": { "seconds": 75 }
+}

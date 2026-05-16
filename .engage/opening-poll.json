@@ -1,0 +1,21 @@
+{
+  "id": "opening-familiarity",
+  "title": "Which durable execution frameworks have you used?",
+  "subtitle": "Production, prototype, or serious evaluation — pick all that apply",
+  "type": "multi-select",
+  "options": [
+    { "id": "temporal",  "label": "Temporal" },
+    { "id": "cadence",   "label": "Cadence" },
+    { "id": "conductor", "label": "Conductor" },
+    { "id": "dapr",      "label": "Dapr Workflows" },
+    { "id": "restate",   "label": "Restate" },
+    { "id": "none",      "label": "None — new to durable execution" }
+  ],
+  "display": {
+    "qr": true,
+    "showResultsLive": true,
+    "resultStyle": "bar-chart-horizontal",
+    "anonymize": true
+  },
+  "duration": { "seconds": 90 }
+}

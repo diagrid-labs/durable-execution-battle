@@ -1,0 +1,125 @@
+{
+  "$schema": "https://demotime.show/schema.json",
+  "title": "Dapr Workflow — USS Enterprise diagnostics",
+  "description": "5-scan fan-out, durable 60s timer, kill+resume, conditional bridge alert. .NET 10 + Aspire + Diagrid Dev Dashboard.",
+  "demos": [
+    {
+      "title": "Open the demo intro slide",
+      "steps": [
+        { "action": "openSlide", "path": "slides/05-demo-intro/00-demo-block.md" }
+      ]
+    },
+    {
+      "title": "Show the workflow source — 5 parallel scans, 60s timer, conditional NotifyBridge",
+      "steps": [
+        {
+          "action": "open",
+          "path": "demos/04-dapr/EnterpriseDiagnostics.ApiService/Workflows/DiagnosticsWorkflow.cs"
+        },
+        {
+          "action": "highlight",
+          "path": "demos/04-dapr/EnterpriseDiagnostics.ApiService/Workflows/DiagnosticsWorkflow.cs",
+          "startLine": 1,
+          "endLine": 80
+        }
+      ]
+    },
+    {
+      "title": "Show one activity (deterministic scan)",
+      "steps": [
+        {
+          "action": "open",
+          "path": "demos/04-dapr/EnterpriseDiagnostics.ApiService/Activities/AnalyzeWarpCoreActivity.cs"
+        }
+      ]
+    },
+    {
+      "title": "Start the stack — aspire run boots Valkey + ApiService + Dapr sidecar + Diagrid Dashboard",
+      "steps": [
+        {
+          "action": "executeTerminalCommand",
+          "command": "cd demos/04-dapr && aspire run",
+          "terminalId": "aspire"
+        }
+      ]
+    },
+    {
+      "title": "Open the Aspire dashboard (auto-opens; this is a fallback)",
+      "steps": [
+        { "action": "openExternal", "url": "https://localhost:17068" }
+      ]
+    },
+    {
+      "title": "Open the Diagrid Dev Dashboard (link from the Aspire resource list)",
+      "steps": [
+        { "action": "openExternal", "url": "http://localhost:9001" }
+      ]
+    },
+    {
+      "title": "POST /start — kick off the workflow",
+      "steps": [
+        {
+          "action": "executeTerminalCommand",
+          "terminalId": "client",
+          "command": "curl -s -X POST http://localhost:5467/start -H 'Content-Type: application/json' -d '{\"id\":\"enterprise-ncc-1701\",\"shipName\":\"USS Enterprise NCC-1701-D\",\"diagnosticsDate\":\"2370-04-08\",\"engineerName\":\"Geordi La Forge\"}' | jq ."
+        }
+      ]
+    },
+    {
+      "title": "Watch the 5 scan activities fan out in the Diagrid Dev Dashboard",
+      "steps": [
+        {
+          "action": "waitForInput",
+          "message": "Point at the activity timeline — 5 parallel Scan* activities lit up green."
+        }
+      ]
+    },
+    {
+      "title": "Workflow enters the 60s durable timer — DemoTime countdown overlay",
+      "steps": [
+        { "action": "showCountdown", "seconds": 60, "label": "Durable sleep — kill at ~T+20s" }
+      ]
+    },
+    {
+      "title": "⚡ KILL POINT — kill the ApiService process mid-sleep",
+      "steps": [
+        { "action": "sendKey", "terminalId": "aspire", "key": "Ctrl+C" },
+        { "action": "wait", "ms": 3000 },
+        {
+          "action": "waitForInput",
+          "message": "Diagrid Dashboard shows the instance frozen. Now restart."
+        }
+      ]
+    },
+    {
+      "title": "Restart the stack — the timer durably wakes",
+      "steps": [
+        {
+          "action": "executeTerminalCommand",
+          "terminalId": "aspire",
+          "command": "aspire run"
+        }
+      ]
+    },
+    {
+      "title": "PrioritizeIssues runs → NotifyBridge fires (severity = red_alert)",
+      "steps": [
+        {
+          "action": "waitForInput",
+          "message": "Diagrid Dashboard activity timeline: prioritize → 🚨 NotifyBridge. Worker stdout shows the alert banner."
+        },
+        { "action": "showOverlay", "graphic": "red-alert", "durationMs": 4000 }
+      ]
+    },
+    {
+      "title": "GET /status — final workflow output",
+      "steps": [
+        {
+          "action": "executeTerminalCommand",
+          "terminalId": "client",
+          "command": "curl -s http://localhost:5467/status/enterprise-ncc-1701 | jq ."
+        }
+      ]
+    }
+  ]
+}

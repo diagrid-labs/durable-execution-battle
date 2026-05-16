@@ -1,0 +1,18 @@
+using Diagrid.Aspire.Hosting.Catalyst;
+using Grpc.Core;
+using Microsoft.AspNetCore.Components.Authorization;
+
+var builder = DistributedApplication.CreateBuilder(args);
+
+// This configures a new project in Catalyst with a managed state store for workflow state.
+var catalystProject = builder.AddCatalystProject("wf-aspire2", new()
+    {
+        EnableManagedWorkflow = true,
+    });
+    
+
+// The apiService will not use a Dapr sidecar anymore but will use the Catalyst.
+var workflowApp = builder.AddProject<Projects.EnterpriseDiagnostics_ApiService>("wf-app")
+    .WithCatalyst(catalystProject);
+
+builder.Build().Run();

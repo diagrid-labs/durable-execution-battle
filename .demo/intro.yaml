@@ -1,0 +1,9 @@
+title: intro
+description: ''
+version: 3
+scenes:
+  - id: scene-mp8ge3cr-opid
+    title: Opening
+    moves:
+      - action: openSlide
+        path: slides/00-open/00-title.md
