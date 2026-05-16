@@ -4,35 +4,27 @@ namespace EnterpriseDiagnostics.ApiService.Activities;
 
 internal static class MockAnalysisGenerator
 {
-    public static AnalysisResult Generate(string systemName, string[] candidateIssues)
+    public static ScanResult Generate(string subsystem, string[] candidateAnomalies)
     {
         var random = Random.Shared;
 
-        var healthPercentage = random.Next(40, 101);
+        // Biased low so the aggregate severity reliably lands on red_alert for the demo.
+        var health = random.Next(30, 66);
 
-        var status = healthPercentage switch
+        var maxAnomalies = health switch
         {
-            >= 90 => "Nominal",
-            >= 75 => "Operational",
-            >= 60 => "Degraded",
-            _ => "Critical"
+            >= 60 => 1,
+            >= 45 => 2,
+            _     => 3
         };
 
-        var maxIssues = healthPercentage switch
-        {
-            >= 90 => 0,
-            >= 75 => 1,
-            >= 60 => 2,
-            _ => 3
-        };
+        var anomalyCount = random.Next(1, maxAnomalies + 1);
 
-        var issueCount = maxIssues == 0 ? 0 : random.Next(1, maxIssues + 1);
-
-        var issues = candidateIssues
+        var anomalies = candidateAnomalies
             .OrderBy(_ => random.Next())
-            .Take(issueCount)
+            .Take(anomalyCount)
             .ToArray();
 
-        return new AnalysisResult(systemName, status, issues, healthPercentage);
+        return new ScanResult(subsystem, health, anomalies);
     }
 }

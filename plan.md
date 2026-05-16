@@ -9,7 +9,7 @@ Authoring plan for the 50-minute conference talk. Source of facts: [`research.md
 | **Talk structure** | Per-dimension comparison (DX → Lang → Hosting → Perf → Community), with a single ~25-min demo block in the middle |
 | **Live-demo budget** | ~25 minutes (half the talk) |
 | **Demo scenario** | **USS Enterprise diagnostics** — fan-out parallel scans → prioritization (with sleep/wait kill-and-resume window) → conditional bridge alert |
-| **Demo languages** | Most idiomatic per framework — Temporal **Python**, Cadence **Go** (forced — Python SDK is archived), Conductor **Python**, Dapr **.NET** (matches `diagrid-labs/dapr-workflow-versioning` reference), Restate **TypeScript** |
+| **Demo languages** | Most idiomatic per framework — Cadence **Go** (forced — Python SDK is archived), Temporal **Java** (Spring Boot), Conductor **Python**, Dapr **.NET** (matches `diagrid-labs/dapr-workflow-versioning` reference), Restate **TypeScript** |
 | **Slide tool** | Pure markdown with DemoTime-specific frontmatter |
 | **Audience polls** | Two symmetric EngageTime polls (opener: "which have you used?" multi-select; closer: "which would you try first?" single-select) — both started + stopped by DemoTime, with the closing poll's delta narrated into the decision guide |
 
@@ -27,8 +27,8 @@ Authoring plan for the 50-minute conference talk. Source of facts: [`research.md
 | 12:00 | **Dim 3 — Hosting** — self-host complexity, managed cloud, K8s, storage | Slides | 3 min |
 | 15:00 | **Dim 4 — Performance & Scalability** — proven scale numbers, architecture diagrams, bottlenecks | Slides | 3 min |
 | 18:00 | **DEMO BLOCK — USS Enterprise diagnostics in all 5** | DemoTime | **25 min** |
-| 18:00 | ↳ Temporal (Python) | Demo | 5 min |
-| 23:00 | ↳ Cadence (Go) — note SDK gap | Demo | 4 min |
+| 18:00 | ↳ Cadence (Go) — the ancestor; sets up the lineage | Demo | 4 min |
+| 22:00 | ↳ Temporal (Java) — workflow-as-code default | Demo | 5 min |
 | 27:00 | ↳ Conductor (Python) — workflow-as-data framing | Demo | 5 min |
 | 32:00 | ↳ Dapr (.NET) + Diagrid Dashboard | Demo | 6 min |
 | 38:00 | ↳ Restate (TS) — single-binary, handler-first | Demo | 5 min |
@@ -64,21 +64,27 @@ durable-execution-battle/
 │   ├── shared/
 │   │   └── scenario.md          # USS Enterprise diagnostics spec (kept identical across frameworks)
 │   │
-│   ├── 01-temporal/             # Python
-│   │   ├── README.md
-│   │   ├── diagnostics.py       # workflow + activities
-│   │   ├── worker.py
-│   │   ├── starter.py
-│   │   ├── docker-compose.yml   # temporal server start-dev alternative
-│   │   └── requirements.txt
-│   │
-│   ├── 02-cadence/              # Go
+│   ├── 01-cadence/              # Go
 │   │   ├── README.md
 │   │   ├── diagnostics.go
 │   │   ├── worker/main.go
 │   │   ├── starter/main.go
 │   │   ├── docker-compose.yml
 │   │   └── go.mod
+│   │
+│   ├── 02-temporal/             # Java 21 + Spring Boot 3 + temporal-spring-boot-starter
+│   │   ├── README.md
+│   │   ├── pom.xml
+│   │   ├── mvnw, mvnw.cmd, .mvn/
+│   │   ├── enterprise-diagnostics.http
+│   │   └── src/main/
+│   │       ├── java/io/diagrid/enterprisediagnostics/
+│   │       │   ├── EnterpriseDiagnosticsApplication.java
+│   │       │   ├── model/        # records: DiagnosticsInput/Output, ScanInput/Result, Priority, ...
+│   │       │   ├── workflow/     # DiagnosticsWorkflow{,Impl}.java
+│   │       │   ├── activity/     # 5 Scan*Activity + Prioritize + NotifyBridge + MockAnalysisGenerator
+│   │       │   └── api/          # DiagnosticsController.java
+│   │       └── resources/application.yml
 │   │
 │   ├── 03-conductor/            # Python (Conductor code-builder SDK)
 │   │   ├── README.md
@@ -104,8 +110,8 @@ durable-execution-battle/
 │
 ├── .demo/                       # DemoTime scripts (VS Code extension)
 │   ├── 00-opening-poll.demo     # opens EngageTime poll, waits, closes it
-│   ├── 01-temporal.demo
-│   ├── 02-cadence.demo
+│   ├── 01-cadence.demo
+│   ├── 02-temporal.demo
 │   ├── 03-conductor.demo
 │   ├── 04-dapr.demo
 │   └── 05-restate.demo
@@ -335,39 +341,41 @@ Same as Poll A — DemoTime skips with a keystroke; Marc goes straight to the de
 DiagnosticsWorkflow(shipId, missionId):
   # ─── Fan-out: 5 parallel subsystem scans ───
   scans = parallel [
-    activity(ScanWarpCore,    shipId),   # ~2-4s simulated
-    activity(ScanShields,     shipId),
-    activity(ScanLifeSupport, shipId),
-    activity(ScanSensors,     shipId),
-    activity(ScanWeapons,     shipId)
+    activity(ScanWarpCore,    { shipName, subsystem: "warp_core" }),
+    activity(ScanShields,     { shipName, subsystem: "shields" }),
+    activity(ScanLifeSupport, { shipName, subsystem: "life_support" }),
+    activity(ScanSensors,     { shipName, subsystem: "sensors" }),
+    activity(ScanWeapons,     { shipName, subsystem: "weapons" })
   ]
   results = await all(scans)             # ── Fan-in ──
 
   # ─── Prioritization with kill/resume window ───
   log("Engineering review pending — sleeping 60s")
   await sleep(60 seconds)                # ⚡ KILL POINT ⚡
-  priority = activity(PrioritizeIssues, results)
+  priority = activity(PrioritizeIssues, { shipName, scans: results })
 
   # ─── Conditional bridge notification ───
   if priority.severity in {"yellow_alert", "red_alert"}:
-    activity(NotifyBridge, missionId, priority)
+    activity(NotifyBridge, { shipName, engineerName, priority })
 
-  return priority
+  return { shipName, diagnosticsDate, engineerName, priority, bridgeNotification }
 ```
 
-### Activity behavior (deterministic across frameworks)
+### Activity behavior (canonical reference: `demos/04-dapr/` .NET)
 
-| Activity | What it does | How to simulate |
-|---|---|---|
-| `ScanWarpCore` | Returns `{ subsystem: "warp_core", health: 0-100, anomalies: [...] }` | `sleep(rand 2-4s)` + canned anomalies based on `shipId % 5` |
-| `ScanShields` | Same shape, shields subsystem | Same |
-| `ScanLifeSupport` | Same shape | Same |
-| `ScanSensors` | Same shape | Same |
-| `ScanWeapons` | Same shape | Same |
-| `PrioritizeIssues` | Aggregates 5 scans → `{ severity: "green" \| "yellow_alert" \| "red_alert", summary: "..." }` | Deterministic ranking |
-| `NotifyBridge` | Logs a styled "🚨 BRIDGE ALERT" line via the worker's stdout with the priority summary | No external service — the alert lands inside the framework UI (event history / workflow journal) |
+| Activity | Input | Output | How to simulate |
+|---|---|---|---|
+| `ScanWarpCore` | `{ shipName, subsystem: "warp_core" }` | `{ subsystem, health: 30-65, anomalies: [...] }` | No artificial latency — return immediately. Random health biased low + 1-3 anomalies sampled from a per-subsystem candidate list |
+| `ScanShields` | `{ shipName, subsystem: "shields" }` | Same shape | Same |
+| `ScanLifeSupport` | `{ shipName, subsystem: "life_support" }` | Same shape | Same |
+| `ScanSensors` | `{ shipName, subsystem: "sensors" }` | Same shape | Same |
+| `ScanWeapons` | `{ shipName, subsystem: "weapons" }` | Same shape | Same |
+| `PrioritizeIssues` | `{ shipName, scans: ScanResult[] }` | `{ severity, summary }` where `severity ∈ { "green", "yellow_alert", "red_alert" }` | Deterministic ranking on `min(health)`: `< 50 → red_alert`, `< 75 → yellow_alert`, else `green`. `summary` names the worst subsystem + count below threshold |
+| `NotifyBridge` | `{ shipName, engineerName, priority }` | `{ message }` | Logs a styled `🚨 BRIDGE ALERT — USS {ship} — {SEVERITY}: {summary} (engineer: {name})` line via the worker's stdout. No external service — the alert lands inside the framework UI (event history / workflow journal) |
 
-For demo drama, **rig the scan results so that severity = `red_alert`** — that way the conditional notification fires and the audience sees the `NotifyBridge` activity show up in the workflow UI (history / journal / DAG).
+**Demo drama — rig via biased scan range, not severity override.** Each scan returns `health` from a low-biased range (30–65) so `min(health) < 50` is almost certain → severity reliably lands on `red_alert` → conditional `NotifyBridge` fires every run → audience sees the activity appear in the framework's workflow UI. This keeps `PrioritizeIssues` honest (deterministic on real inputs) instead of hardcoding the outcome.
+
+**No artificial scan latency.** The earlier draft prescribed `sleep(rand 2-4s)` per scan to "give time to pause the workflow." That's no longer needed — the kill point is the 60-second `sleep` *between* fan-in and prioritization, which provides all the window required. Scans return as fast as the framework can dispatch them, which makes the fan-out visually snappy on stage.
 
 ### The kill-and-resume choreography (identical per framework)
 
@@ -391,25 +399,25 @@ The bridge notification is **intentionally internal** — `NotifyBridge` is a no
 
 Each demo follows the identical scenario, just implemented in the framework's idiomatic way. Each has its own `README.md` with step-by-step run instructions.
 
-### 5.1 Temporal — Python (5 min)
+### 5.1 Cadence — Go (4 min)
 
-- **File**: `demos/01-temporal/diagnostics.py`
-- **Workflow shape**: `@workflow.defn` class with `@workflow.run`; activities are `@activity.defn async def`.
-- **Fan-out**: `await asyncio.gather(*[workflow.execute_activity(...) for scan in scans])`
-- **Sleep**: `await workflow.sleep(timedelta(seconds=60))`
-- **Conditional notify**: standard `if` branch.
-- **Runtime**: `temporal server start-dev` in a sidecar terminal; worker = `python worker.py`; starter = `python starter.py`.
-- **Visual**: Temporal Web at `localhost:8233` — show event history with one row per event during sleep, then the resumption events lighting up after worker restart.
-- **Idiomatic tip to call out**: deterministic sandbox is doing the heavy lifting — point at the import-restricting Python sandbox.
-
-### 5.2 Cadence — Go (4 min)
-
-- **File**: `demos/02-cadence/diagnostics.go`
+- **File**: `demos/01-cadence/diagnostics.go`
 - **Workflow shape**: top-level `func DiagnosticsWorkflow(ctx workflow.Context, ...) (Priority, error)`.
 - **Fan-out**: 5 `workflow.ExecuteActivity` calls, store futures in a slice, `selector.Select(ctx)` or loop `.Get(ctx, &result)` over each.
 - **Sleep**: `workflow.Sleep(ctx, 60*time.Second)`.
 - **Runtime**: docker-compose with Cassandra + Cadence server (pre-pull all images — see §7); Cadence Web at `localhost:8088`.
-- **Talking point on stage**: "Notice how nearly identical this is to Temporal Go — Temporal is literally a fork by Cadence's original authors. Same model, different stewardship trajectory."
+- **Talking point on stage**: "Cadence is the ancestor. Temporal is literally a fork by Cadence's original authors. Same model, divergent stewardship. The next demo (Temporal in Java) shows where the model went after the fork."
+
+### 5.2 Temporal — Java (5 min)
+
+- **Module**: `demos/02-temporal/` — Java 21 + Spring Boot 3 + `temporal-spring-boot-starter-alpha`. See [`docs/superpowers/specs/2026-05-16-temporal-java-demo-design.md`](docs/superpowers/specs/2026-05-16-temporal-java-demo-design.md) for the full design.
+- **Workflow shape**: `@WorkflowInterface` + `@WorkflowMethod` on `DiagnosticsWorkflow`; `@WorkflowImpl(taskQueues = "diagnostics-tq")` on `DiagnosticsWorkflowImpl`. Activities are `@ActivityInterface` + `@Component @ActivityImpl(...)` impls auto-discovered by the Spring Boot starter.
+- **Fan-out**: 5 `Promise<ScanResult> = Async.function(stub::execute, new ScanInput(shipName, subsystem))` calls, then `Promise.allOf(...).get()` to fan in.
+- **Sleep**: `Workflow.sleep(Duration.ofSeconds(60))` — the durable kill point.
+- **Conditional notify**: standard `if (severity == YELLOW_ALERT || severity == RED_ALERT)` branch; `DiagnosticsOutput.bridgeNotification` is **nullable** so the green path is observable.
+- **Runtime**: `temporal server start-dev` in one terminal (Temporal CLI dev server; no Docker), `./mvnw spring-boot:run` in another (worker + REST API in one process). Kick off via `POST /start` from `enterprise-diagnostics.http`.
+- **Visual**: Temporal Web at `localhost:8233` — show event history with the 5 `ActivityTaskCompleted` events for the parallel scans, then `TimerStarted` (60s) → Marc kills the Spring Boot app → restart → `TimerFired` → `PrioritizeIssuesActivity` → `NotifyBridgeActivity` → `WorkflowExecutionCompleted`.
+- **Idiomatic tip to call out**: "Workflow code is a sandboxed deterministic class — no `Random`, no `LocalDateTime.now()`, no `Thread.sleep`. Activities are normal Spring beans where the side-effects live. The Spring Boot starter auto-wires the worker — same DI feel as the .NET Dapr demo coming up." This bridges into the Dapr/.NET comparison two demos later.
 
 ### 5.3 Conductor — Python with code-builder SDK (5 min)
 
@@ -422,22 +430,28 @@ Each demo follows the identical scenario, just implemented in the framework's id
 - **Talking point on stage**: "This is the only framework where the workflow is *data*, not code. The Python builder is sugar; the actual workflow is JSON the engine interprets. Strengths and trade-offs flow from that."
 - **Visual moment**: open the **Workflow Definitions** panel and show the generated JSON — proof that "workflow-as-code" here is really JSON-builder ergonomics.
 
-### 5.4 Dapr — .NET (6 min, with Aspire + Diagrid Dashboard)
+### 5.4 Dapr — .NET (6 min, with Aspire + Diagrid Dashboard) — **canonical reference**
 
-- **Project**: `demos/04-dapr/` — .NET 10 + Aspire orchestrating ApiService + Valkey state store + Diagrid Dashboard container. Code is copied as-is from `diagrid-labs/dapr-workflow-versioning/EnterpriseDiagnostics` and will be adapted in a follow-up pass to match the shared scenario (5 scans, 60s sleep, conditional NotifyBridge).
-- **Workflow shape**: `[Workflow] class DiagnosticsWorkflow : Workflow<DiagnosticsInput, DiagnosticsResult>`; activities are `[WorkflowActivity] class Analyze...Activity : WorkflowActivity<...>`.
-- **Fan-out**: `Task.WhenAll(context.CallActivityAsync<ScanResult>(nameof(AnalyzeWarpCoreActivity), ...), ...)` for the 5 parallel scans.
+This demo is the **canonical implementation** of the shared scenario; the other four framework demos should mirror its activity names, model shapes, severity thresholds, and rigging strategy.
+
+- **Project**: `demos/04-dapr/` — .NET 10 + Aspire orchestrating ApiService + Valkey state store + Diagrid Dashboard container. Seeded from `diagrid-labs/dapr-workflow-versioning/EnterpriseDiagnostics` and already adapted to the shared scenario (5 `Scan*` activities, 60s `CreateTimer`, conditional `NotifyBridge`).
+- **Workflow shape**: `internal sealed partial class DiagnosticsWorkflow : Workflow<DiagnosticsInput, DiagnosticsOutput>`; activities are `internal sealed partial class Scan...Activity : WorkflowActivity<ScanInput, ScanResult>`.
+- **Activities** (in `EnterpriseDiagnostics.ApiService/Activities/`):
+  - `ScanWarpCoreActivity`, `ScanShieldsActivity`, `ScanLifeSupportActivity`, `ScanSensorsActivity`, `ScanWeaponsActivity` — each returns `ScanResult(Subsystem, Health, Anomalies[])` via `MockAnalysisGenerator` (health 30-65, 1-3 anomalies sampled from a per-subsystem candidate list). **No `Thread.Sleep`** — scans return immediately.
+  - `PrioritizeIssuesActivity` — input `PrioritizeInput(ShipName, Scans[])`, output `Priority(Severity, Summary)`. Severity from `min(health)`: `< 50 → "red_alert"`, `< 75 → "yellow_alert"`, else `"green"`.
+  - `NotifyBridgeActivity` — input `BridgeNotificationInput(ShipName, EngineerName, Priority)`, output `BridgeNotificationResult(Message)`. Emits `🚨 BRIDGE ALERT — USS {ShipName} — {SEVERITY}: {Summary} (engineer: {EngineerName})`.
+- **Fan-out**: `Task.WhenAll(...)` over 5 `context.CallActivityAsync<ScanResult>(nameof(Scan...Activity), new ScanInput(shipName, subsystem), retryPolicy)` calls.
 - **Sleep**: `await context.CreateTimer(TimeSpan.FromSeconds(60));`.
-- **Conditional notify**: standard `if (priority.Severity is "yellow_alert" or "red_alert") await context.CallActivityAsync(nameof(NotifyBridgeActivity), ...);`.
+- **Conditional notify**: `if (priority.Severity is "yellow_alert" or "red_alert") { await context.CallActivityAsync(nameof(NotifyBridgeActivity), ...); }`. `DiagnosticsOutput.BridgeNotification` is **nullable** so the green path is observable (null = "notification skipped, severity was green").
+- **Rigging**: `MockAnalysisGenerator.Generate` returns `health = Random.Next(30, 66)` — biased low so `min(health) < 50` is overwhelmingly likely → severity reliably hits `red_alert` → bridge alert fires every run.
 - **Runtime**: `aspire run` from `demos/04-dapr/`. Aspire boots Valkey, the ApiService + Dapr sidecar, and the Diagrid Dashboard container in one shot.
 - **Demo arc** (6 min):
-  1. Show the workflow source + the 5 activities. Highlight the `Task.WhenAll` fan-out + the `CreateTimer` sleep + the conditional `NotifyBridge`.
-  2. Start a diagnostics instance via the `.http` file (`POST /start`).
-  3. Aspire dashboard: ApiService, sidecar, Valkey, Diagrid Dashboard all healthy. Open the **Diagrid Dashboard** to watch the workflow + the 5 parallel activities fan out.
-  4. Workflow enters the 60s timer. Kill the ApiService process (or the Dapr sidecar) mid-sleep. The Diagrid Dashboard shows the instance frozen.
-  5. Restart the ApiService — the timer durably wakes, prioritization runs, `NotifyBridge` activity completes (visible in the Diagrid Dashboard's activity timeline + the worker stdout).
+  1. Show `Workflows/DiagnosticsWorkflow.cs` + the 5 `Scan*` activities. Highlight the `Task.WhenAll` fan-out + the `CreateTimer(60s)` sleep + the conditional `NotifyBridge` branch.
+  2. Start a diagnostics instance via the `.http` file (`POST /start`, instance id `enterprise-ncc-1701`).
+  3. Aspire dashboard: ApiService, sidecar, Valkey, Diagrid Dashboard all healthy. Open the **Diagrid Dashboard** — 5 parallel scan activities complete near-instantly.
+  4. Workflow enters the 60s timer. Kill the ApiService process (or the Dapr sidecar) mid-sleep. The Diagrid Dashboard shows the instance frozen on the timer.
+  5. Restart the ApiService — the timer durably wakes, `PrioritizeIssues` runs, `NotifyBridge` fires with the 🚨 banner (visible in the Diagrid Dashboard's activity timeline + the worker stdout).
 - **Diagrid disclosure phrasing**: *"To visualize Dapr workflows I'm using the free Diagrid Dashboard — full disclosure, Diagrid is my employer. It's an anonymously-pulled container; Dapr OSS doesn't ship a Web UI, so this fills the gap locally."*
-- **Follow-up work** (separate task, not in this repo's first pass): rewrite `DiagnosticsWorkflow.cs` to use 5 scan activities matching the shared scenario, add the 60s `CreateTimer`, and make `NotifyBridgeActivity` conditional on severity. Currently the reference code has 4 scans, LLM-backed activities, and an unconditional bridge notify.
 
 ### 5.5 Restate — TypeScript (5 min)
 
@@ -514,30 +528,32 @@ Same shape as the opener, just bound to the `closing-pick` poll. Sits right befo
 
 ```jsonc
 {
-  "title": "Temporal — USS Enterprise diagnostics",
+  "title": "Temporal — USS Enterprise diagnostics (Java)",
   "description": "Fan-out scans, durable sleep, kill+resume, conditional bridge alert",
   "demos": [
     { "title": "Show the workflow code", "steps": [
-      { "action": "open", "path": "demos/01-temporal/diagnostics.py" },
-      { "action": "highlight", "path": "demos/01-temporal/diagnostics.py", "startLine": 12, "endLine": 30 }
+      { "action": "open", "path": "demos/02-temporal/src/main/java/io/diagrid/enterprisediagnostics/workflow/DiagnosticsWorkflowImpl.java" },
+      { "action": "highlight", "path": "demos/02-temporal/src/main/java/io/diagrid/enterprisediagnostics/workflow/DiagnosticsWorkflowImpl.java", "startLine": 20, "endLine": 55 }
     ]},
     { "title": "Start the server", "steps": [
-      { "action": "executeTerminalCommand", "command": "temporal server start-dev" }
+      { "action": "executeTerminalCommand", "command": "temporal server start-dev", "terminalId": "server" }
     ]},
-    { "title": "Start worker + workflow", "steps": [
-      { "action": "executeTerminalCommand", "command": "python demos/01-temporal/worker.py", "terminalId": "worker" },
-      { "action": "executeTerminalCommand", "command": "python demos/01-temporal/starter.py", "terminalId": "starter" }
+    { "title": "Start the Spring Boot app (worker + REST API)", "steps": [
+      { "action": "executeTerminalCommand", "command": "cd demos/02-temporal && ./mvnw spring-boot:run", "terminalId": "worker" }
+    ]},
+    { "title": "Kick off a workflow via POST /start", "steps": [
+      { "action": "open", "path": "demos/02-temporal/enterprise-diagnostics.http" }
     ]},
     { "title": "Open Temporal Web", "steps": [
       { "action": "openExternal", "url": "http://localhost:8233" }
     ]},
-    { "title": "Kill point — kill the worker during sleep", "steps": [
+    { "title": "Kill point — Ctrl+C the Spring Boot app during the 60s timer", "steps": [
       { "action": "sendKey", "terminalId": "worker", "key": "Ctrl+C" },
       { "action": "wait", "ms": 3000 },
-      { "action": "executeTerminalCommand", "command": "python demos/01-temporal/worker.py", "terminalId": "worker" }
+      { "action": "executeTerminalCommand", "command": "cd demos/02-temporal && ./mvnw spring-boot:run", "terminalId": "worker" }
     ]},
-    { "title": "Bridge alert lands", "steps": [
-      { "action": "focusTerminal", "terminalId": "bridge" }
+    { "title": "Bridge alert lands in worker stdout", "steps": [
+      { "action": "focusTerminal", "terminalId": "worker" }
     ]}
   ]
 }
@@ -568,6 +584,8 @@ Author this as a literal checklist in `README.md`:
   - `daprio/dapr:1.17.7`
   - `valkey/valkey:latest` (Dapr state store)
   - `restate/restate:1.6.2` (or whatever's current; pin)
+- [ ] `brew install temporal` (Temporal CLI dev server is a single binary — no Docker needed for the Temporal/Java demo).
+- [ ] In `demos/02-temporal/`, run `./mvnw dependency:go-offline` to warm the local Maven cache so the on-stage Spring Boot startup doesn't pull from Maven Central.
 - [ ] Run each demo end-to-end on the talk laptop (not just the dev machine).
 - [ ] **Run both polls end-to-end with a second device** (phone) acting as the audience — confirm QR scan works, results render live, DemoTime start/stop commands fire for both `opening-familiarity` and `closing-pick`, and the closing poll's `compareTo` overlay actually renders against the opener's results. Confirm fallback path works for each.
 - [ ] Record a 30-60s fallback video for each of the 5 demos.
@@ -594,8 +612,8 @@ Author this as a literal checklist in `README.md`:
 
 Suggested build sequence — fastest payoff first, riskiest last:
 
-1. **Dapr demo (copy as-is)** — clone `diagrid-labs/dapr-workflow-versioning/EnterpriseDiagnostics` into `demos/04-dapr/`. Adapt to shared scenario in a separate task (5 scans + 60s timer + conditional NotifyBridge). ~4 hours when the adapt step happens.
-2. **Temporal demo** — most familiar tooling, sanity-check the scenario shape end-to-end. ~3 hours.
+1. **Dapr demo (canonical reference)** — already done in `demos/04-dapr/`. .NET 10 + Aspire, 5 `Scan*` activities, 60s `CreateTimer`, conditional `NotifyBridge`. Use this as the spec when implementing the other four framework demos: match the activity names, the `ScanResult { subsystem, health, anomalies }` and `Priority { severity, summary }` shapes, the severity thresholds (`<50 → red_alert`, `<75 → yellow_alert`), and the low-biased health range for demo rigging.
+2. **Temporal demo (Java)** — Spring Boot + `temporal-spring-boot-starter-alpha`; sanity-check the scenario shape end-to-end. See [`docs/superpowers/specs/2026-05-16-temporal-java-demo-design.md`](docs/superpowers/specs/2026-05-16-temporal-java-demo-design.md). ~4 hours.
 3. **Restate demo** — single binary, no infra; quick second win. ~2 hours.
 4. **Conductor demo** — JSON DSL is a different mental model; budget time for the FORK_JOIN + SWITCH wiring. ~3 hours.
 5. **Cadence demo** — last because it's almost identical to Temporal in Go; cheap copy/translate. ~2 hours.

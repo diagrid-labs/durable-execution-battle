@@ -12,15 +12,9 @@ internal sealed partial class NotifyBridgeActivity(
     {
         LogActivity(logger, input.ShipName);
 
-        var topPriority = input.Recommendations.Priorities.FirstOrDefault()
-            ?? "No prioritized items.";
-        var recommendationCount = input.Recommendations.Recommendations.Length;
-
         var message =
-            $"Bridge notification for the {input.ShipName}: " +
-            $"diagnostics requested by {input.EngineerName} are complete. " +
-            $"{recommendationCount} recommendation(s) generated. " +
-            $"Top priority: {topPriority}.";
+            $"🚨 BRIDGE ALERT — USS {input.ShipName} — {input.Priority.Severity.ToUpperInvariant()}: " +
+            $"{input.Priority.Summary} (engineer: {input.EngineerName})";
 
         LogNotification(logger, message);
 

@@ -3,10 +3,10 @@ using EnterpriseDiagnostics.ApiService.Models;
 
 namespace EnterpriseDiagnostics.ApiService.Activities;
 
-internal sealed partial class AnalyzeWeaponSystemsActivity(
-    ILogger<AnalyzeWeaponSystemsActivity> logger) : WorkflowActivity<AnalysisInput, AnalysisResult>
+internal sealed partial class ScanWeaponsActivity(
+    ILogger<ScanWeaponsActivity> logger) : WorkflowActivity<ScanInput, ScanResult>
 {
-    private static readonly string[] CandidateIssues =
+    private static readonly string[] CandidateAnomalies =
     [
         "Phaser array bank 3 power coupling shows intermittent drop",
         "Photon torpedo launcher loading mechanism response time elevated",
@@ -15,19 +15,14 @@ internal sealed partial class AnalyzeWeaponSystemsActivity(
         "Quantum torpedo magazine humidity outside recommended range"
     ];
 
-    public override Task<AnalysisResult> RunAsync(
+    public override Task<ScanResult> RunAsync(
         WorkflowActivityContext context,
-        AnalysisInput input)
+        ScanInput input)
     {
         LogActivity(logger, input.ShipName);
-
-        // Just to simulate some processing, and you have time to pause the workflow.
-        Thread.Sleep(2500);
-
-        var result = MockAnalysisGenerator.Generate("Weapon Systems", CandidateIssues);
-        return Task.FromResult(result);
+        return Task.FromResult(MockAnalysisGenerator.Generate(input.Subsystem, CandidateAnomalies));
     }
 
-    [LoggerMessage(LogLevel.Information, "AnalyzeWeaponSystemsActivity: Analyzing weapon systems for {ShipName}")]
+    [LoggerMessage(LogLevel.Information, "ScanWeaponsActivity: Scanning weapons for {ShipName}")]
     static partial void LogActivity(ILogger logger, string ShipName);
 }

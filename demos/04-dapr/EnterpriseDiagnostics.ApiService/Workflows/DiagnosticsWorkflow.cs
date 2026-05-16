@@ -14,71 +14,57 @@ internal sealed partial class DiagnosticsWorkflow : Workflow<DiagnosticsInput, D
         var logger = context.CreateReplaySafeLogger<DiagnosticsWorkflow>();
         LogStart(logger, context.InstanceId, input.ShipName);
 
-        // Define activity tasks to run the five analyses in parallel
-        var hullTask = context.CallActivityAsync<AnalysisResult>(
-            nameof(AnalyzeHullActivity),
-            new AnalysisInput(input.ShipName, input.DiagnosticsDate, input.EngineerName, "Hull"),
+        // ── Fan-out: 5 parallel subsystem scans ──
+        var scanTasks = new[]
+        {
+            context.CallActivityAsync<ScanResult>(
+                nameof(ScanWarpCoreActivity),
+                new ScanInput(input.ShipName, "warp_core"),
+                GetActivityRetryPolicy()),
+            context.CallActivityAsync<ScanResult>(
+                nameof(ScanShieldsActivity),
+                new ScanInput(input.ShipName, "shields"),
+                GetActivityRetryPolicy()),
+            context.CallActivityAsync<ScanResult>(
+                nameof(ScanLifeSupportActivity),
+                new ScanInput(input.ShipName, "life_support"),
+                GetActivityRetryPolicy()),
+            context.CallActivityAsync<ScanResult>(
+                nameof(ScanSensorsActivity),
+                new ScanInput(input.ShipName, "sensors"),
+                GetActivityRetryPolicy()),
+            context.CallActivityAsync<ScanResult>(
+                nameof(ScanWeaponsActivity),
+                new ScanInput(input.ShipName, "weapons"),
+                GetActivityRetryPolicy()),
+        };
+
+        await Task.WhenAll(scanTasks);
+        var scans = scanTasks.Select(t => t.Result).ToArray();
+        LogScansComplete(logger, context.InstanceId);
+
+        // ── 60s durable sleep — ⚡ KILL POINT ⚡ ──
+        LogSleeping(logger, context.InstanceId);
+        await context.CreateTimer(TimeSpan.FromSeconds(60));
+
+        // ── Prioritization ──
+        var priority = await context.CallActivityAsync<Priority>(
+            nameof(PrioritizeIssuesActivity),
+            new PrioritizeInput(input.ShipName, scans),
             GetActivityRetryPolicy());
 
-        var warpCoreTask = context.CallActivityAsync<AnalysisResult>(
-            nameof(AnalyzeWarpCoreActivity),
-            new AnalysisInput(input.ShipName, input.DiagnosticsDate, input.EngineerName, "Warp Core"),
-            GetActivityRetryPolicy());
+        LogPrioritized(logger, context.InstanceId, priority.Severity);
 
-        var securityTask = context.CallActivityAsync<AnalysisResult>(
-            nameof(AnalyzeSecuritySystemsActivity),
-            new AnalysisInput(input.ShipName, input.DiagnosticsDate, input.EngineerName, "Security Systems"),
-            GetActivityRetryPolicy());
-
-        var weaponsTask = context.CallActivityAsync<AnalysisResult>(
-            nameof(AnalyzeWeaponSystemsActivity),
-            new AnalysisInput(input.ShipName, input.DiagnosticsDate, input.EngineerName, "Weapon Systems"),
-            GetActivityRetryPolicy());
-
-        var lifeSupportTask = context.CallActivityAsync<AnalysisResult>(
-            nameof(AnalyzeLifeSupportSystemsActivity),
-            new AnalysisInput(input.ShipName, input.DiagnosticsDate, input.EngineerName, "Life Support Systems"),
-            GetActivityRetryPolicy());
-
-        // Fan-out/fan-in: wait for all analyses to complete
-        await Task.WhenAll(hullTask, warpCoreTask, securityTask, weaponsTask, lifeSupportTask);
-
-        var hullResult = hullTask.Result;
-        var warpCoreResult = warpCoreTask.Result;
-        var securityResult = securityTask.Result;
-        var weaponsResult = weaponsTask.Result;
-        var lifeSupportResult = lifeSupportTask.Result;
-
-        LogAnalysesComplete(logger, context.InstanceId);
-
-        // Generate recommendations based on combined analysis data
-        var recommendationsInput = new RecommendationsInput(
-            input.ShipName,
-            input.DiagnosticsDate,
-            input.EngineerName,
-            hullResult,
-            warpCoreResult,
-            securityResult,
-            weaponsResult,
-            lifeSupportResult);
-
-        var recommendations = await context.CallActivityAsync<RecommendationsResult>(
-            nameof(GenerateRecommendationsActivity),
-            recommendationsInput,
-            GetActivityRetryPolicy());
-
-        LogRecommendationsComplete(logger, context.InstanceId);
-
-        // Notify the bridge with results
-        var notificationInput = new BridgeNotificationInput(
-            input.ShipName,
-            input.EngineerName,
-            recommendations);
-
-        var notification = await context.CallActivityAsync<BridgeNotificationResult>(
-            nameof(NotifyBridgeActivity),
-            notificationInput,
-            GetActivityRetryPolicy());
+        // ── Conditional bridge notification ──
+        string? bridgeMessage = null;
+        if (priority.Severity is "yellow_alert" or "red_alert")
+        {
+            var notification = await context.CallActivityAsync<BridgeNotificationResult>(
+                nameof(NotifyBridgeActivity),
+                new BridgeNotificationInput(input.ShipName, input.EngineerName, priority),
+                GetActivityRetryPolicy());
+            bridgeMessage = notification.Message;
+        }
 
         LogWorkflowComplete(logger, context.InstanceId);
 
@@ -86,8 +72,8 @@ internal sealed partial class DiagnosticsWorkflow : Workflow<DiagnosticsInput, D
             input.ShipName,
             input.DiagnosticsDate,
             input.EngineerName,
-            recommendations,
-            notification.Message);
+            priority,
+            bridgeMessage);
     }
 
     private static WorkflowTaskOptions GetActivityRetryPolicy()
@@ -104,11 +90,14 @@ internal sealed partial class DiagnosticsWorkflow : Workflow<DiagnosticsInput, D
     [LoggerMessage(LogLevel.Information, "Starting diagnostics workflow {Id} for ship: {ShipName}")]
     static partial void LogStart(ILogger logger, string Id, string ShipName);
 
-    [LoggerMessage(LogLevel.Information, "All analyses complete for workflow {Id}")]
-    static partial void LogAnalysesComplete(ILogger logger, string Id);
+    [LoggerMessage(LogLevel.Information, "All scans complete for workflow {Id}")]
+    static partial void LogScansComplete(ILogger logger, string Id);
 
-    [LoggerMessage(LogLevel.Information, "Recommendations generated for workflow {Id}")]
-    static partial void LogRecommendationsComplete(ILogger logger, string Id);
+    [LoggerMessage(LogLevel.Information, "Workflow {Id} sleeping 60s — engineering review window")]
+    static partial void LogSleeping(ILogger logger, string Id);
+
+    [LoggerMessage(LogLevel.Information, "Workflow {Id} prioritized with severity: {Severity}")]
+    static partial void LogPrioritized(ILogger logger, string Id, string Severity);
 
     [LoggerMessage(LogLevel.Information, "Diagnostics workflow {Id} complete")]
     static partial void LogWorkflowComplete(ILogger logger, string Id);

@@ -56,14 +56,14 @@ TemporaryDependencyNodeTargetIdentifier=net10.0
 
 [sourceFiles]
 Activities/
- AnalyzeHullActivity.cs
- AnalyzeLifeSupportSystemsActivity.cs
- AnalyzeSecuritySystemsActivity.cs
- AnalyzeWarpCoreActivity.cs
- AnalyzeWeaponSystemsActivity.cs
- GenerateRecommendationsActivity.cs
  MockAnalysisGenerator.cs
  NotifyBridgeActivity.cs
+ PrioritizeIssuesActivity.cs
+ ScanLifeSupportActivity.cs
+ ScanSensorsActivity.cs
+ ScanShieldsActivity.cs
+ ScanWarpCoreActivity.cs
+ ScanWeaponsActivity.cs
 Models/DiagnosticsModels.cs
 obj/Debug/net10.0/
  .NETCoreApp,Version=v10.0.AssemblyAttributes.cs

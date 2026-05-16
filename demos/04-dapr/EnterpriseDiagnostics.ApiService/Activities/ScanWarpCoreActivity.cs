@@ -3,10 +3,10 @@ using EnterpriseDiagnostics.ApiService.Models;
 
 namespace EnterpriseDiagnostics.ApiService.Activities;
 
-internal sealed partial class AnalyzeWarpCoreActivity(
-    ILogger<AnalyzeWarpCoreActivity> logger) : WorkflowActivity<AnalysisInput, AnalysisResult>
+internal sealed partial class ScanWarpCoreActivity(
+    ILogger<ScanWarpCoreActivity> logger) : WorkflowActivity<ScanInput, ScanResult>
 {
-    private static readonly string[] CandidateIssues =
+    private static readonly string[] CandidateAnomalies =
     [
         "Matter/antimatter containment field oscillating outside tolerance",
         "Dilithium crystal alignment drift detected at 0.04 microns",
@@ -15,19 +15,14 @@ internal sealed partial class AnalyzeWarpCoreActivity(
         "EPS conduit overheating near main reactor manifold"
     ];
 
-    public override Task<AnalysisResult> RunAsync(
+    public override Task<ScanResult> RunAsync(
         WorkflowActivityContext context,
-        AnalysisInput input)
+        ScanInput input)
     {
         LogActivity(logger, input.ShipName);
-
-        // Just to simulate some processing, and you have time to pause the workflow.
-        Thread.Sleep(2500);
-
-        var result = MockAnalysisGenerator.Generate("Warp Core", CandidateIssues);
-        return Task.FromResult(result);
+        return Task.FromResult(MockAnalysisGenerator.Generate(input.Subsystem, CandidateAnomalies));
     }
 
-    [LoggerMessage(LogLevel.Information, "AnalyzeWarpCoreActivity: Analyzing warp core for {ShipName}")]
+    [LoggerMessage(LogLevel.Information, "ScanWarpCoreActivity: Scanning warp core for {ShipName}")]
     static partial void LogActivity(ILogger logger, string ShipName);
 }

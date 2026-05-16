@@ -10,38 +10,20 @@ public record DiagnosticsOutput(
     string ShipName,
     string DiagnosticsDate,
     string EngineerName,
-    RecommendationsResult Recommendations,
-    string BridgeNotification);
+    Priority Priority,
+    string? BridgeNotification);
 
-public record AnalysisInput(
-    string ShipName,
-    string DiagnosticsDate,
-    string EngineerName,
-    string SystemName);
+public record ScanInput(string ShipName, string Subsystem);
 
-public record AnalysisResult(
-    string SystemName,
-    string Status,
-    string[] Issues,
-    int HealthPercentage);
+public record ScanResult(string Subsystem, int Health, string[] Anomalies);
 
-public record RecommendationsInput(
-    string ShipName,
-    string DiagnosticsDate,
-    string EngineerName,
-    AnalysisResult? HullAnalysis,
-    AnalysisResult? WarpCoreAnalysis,
-    AnalysisResult? SecurityProtocolsAnalysis,
-    AnalysisResult? WeaponSystemsAnalysis = null,
-    AnalysisResult? LifeSupportSystemsAnalysis = null);
+public record PrioritizeInput(string ShipName, ScanResult[] Scans);
 
-public record RecommendationsResult(
-    string[] Recommendations,
-    string[] Priorities);
+public record Priority(string Severity, string Summary);
 
 public record BridgeNotificationInput(
     string ShipName,
     string EngineerName,
-    RecommendationsResult Recommendations);
+    Priority Priority);
 
 public record BridgeNotificationResult(string Message);

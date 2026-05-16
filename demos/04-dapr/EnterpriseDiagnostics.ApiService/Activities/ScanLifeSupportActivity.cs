@@ -3,10 +3,10 @@ using EnterpriseDiagnostics.ApiService.Models;
 
 namespace EnterpriseDiagnostics.ApiService.Activities;
 
-internal sealed partial class AnalyzeLifeSupportSystemsActivity(
-    ILogger<AnalyzeLifeSupportSystemsActivity> logger) : WorkflowActivity<AnalysisInput, AnalysisResult>
+internal sealed partial class ScanLifeSupportActivity(
+    ILogger<ScanLifeSupportActivity> logger) : WorkflowActivity<ScanInput, ScanResult>
 {
-    private static readonly string[] CandidateIssues =
+    private static readonly string[] CandidateAnomalies =
     [
         "Atmospheric CO2 scrubber efficiency reduced by 4.7% on deck 9",
         "Environmental control humidity regulators showing intermittent faults in crew quarters",
@@ -15,19 +15,14 @@ internal sealed partial class AnalyzeLifeSupportSystemsActivity(
         "Gravity plating fluctuation outside nominal range in cargo bay 4"
     ];
 
-    public override Task<AnalysisResult> RunAsync(
+    public override Task<ScanResult> RunAsync(
         WorkflowActivityContext context,
-        AnalysisInput input)
+        ScanInput input)
     {
         LogActivity(logger, input.ShipName);
-
-        // Just to simulate some processing, and you have time to pause the workflow.
-        Thread.Sleep(2500);
-
-        var result = MockAnalysisGenerator.Generate("Life Support Systems", CandidateIssues);
-        return Task.FromResult(result);
+        return Task.FromResult(MockAnalysisGenerator.Generate(input.Subsystem, CandidateAnomalies));
     }
 
-    [LoggerMessage(LogLevel.Information, "AnalyzeLifeSupportSystemsActivity: Analyzing life support systems for {ShipName}")]
+    [LoggerMessage(LogLevel.Information, "ScanLifeSupportActivity: Scanning life support for {ShipName}")]
     static partial void LogActivity(ILogger logger, string ShipName);
 }

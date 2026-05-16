@@ -11,12 +11,13 @@ builder.AddServiceDefaults();
 
 builder.Services.AddDaprWorkflow(options =>
 {
-    options.RegisterActivity<AnalyzeHullActivity>();
-    options.RegisterActivity<AnalyzeWarpCoreActivity>();
-    options.RegisterActivity<AnalyzeSecuritySystemsActivity>();
-    options.RegisterActivity<AnalyzeLifeSupportSystemsActivity>();
+    options.RegisterActivity<ScanWarpCoreActivity>();
+    options.RegisterActivity<ScanShieldsActivity>();
+    options.RegisterActivity<ScanLifeSupportActivity>();
+    options.RegisterActivity<ScanSensorsActivity>();
+    options.RegisterActivity<ScanWeaponsActivity>();
 
-    options.RegisterActivity<GenerateRecommendationsActivity>();
+    options.RegisterActivity<PrioritizeIssuesActivity>();
     options.RegisterActivity<NotifyBridgeActivity>();
 });
 builder.Services.AddDaprWorkflowVersioning();
