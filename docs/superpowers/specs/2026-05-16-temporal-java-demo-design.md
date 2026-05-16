@@ -13,9 +13,10 @@
 
 Implement the USS Enterprise diagnostics workflow in Temporal Java as one of the five framework demos for the "Durable Execution Battle" talk. The implementation must:
 
-- Match the **canonical shared scenario** (§4 of `plan.md`) on activity names, model shapes, severity thresholds, rigging strategy, and the kill-and-resume choreography.
-- Mirror the **structural shape** of the .NET/Dapr reference (`demos/04-dapr/`) where the framework permits — same activity class names, same DTO field names, same retry policy intent — so on-stage code comparisons stay clean.
-- Be **idiomatic Java**, not a literal C# transliteration. Where Temporal Java conventions differ from .NET (e.g. workflow interface + impl split, `Workflow.newActivityStub`, `Promise.allOf`), follow Temporal Java conventions.
+- Match the **canonical shared scenario** (§4 of `plan.md`) on activity *behavior*, severity thresholds, rigging strategy, and the kill-and-resume choreography.
+- Hold the **cross-demo invariants** from `plan.md` §5.0 constant on the wire — subsystem string ids (`warp_core`, `shields`, `life_support`, `sensors`, `weapons`), severity wire values (`green`, `yellow_alert`, `red_alert`), health range `30..65`, bridge alert message format, and workflow id `enterprise-ncc-1701`.
+- Be **idiomatic Java**, not a C# transliteration of the .NET reference. The .NET implementation at `demos/04-dapr/` is the **scenario reference**, NOT a style guide. Do not blindly copy `PascalCase` activity/class names, `Task.WhenAll` shapes, .NET-style file layout, or .NET DI patterns into Java. Use Maven layout, Java `record` types, Spring Boot conventions, `Promise.allOf`, `Workflow.newActivityStub`, `camelCase` methods, and the Temporal Spring Boot starter's auto-discovery — these are what an experienced Java/Temporal engineer would write from scratch.
+- Use **idiomatic Java naming** throughout: packages (`io.diagrid.enterprisediagnostics.workflow`), class names (`DiagnosticsWorkflow` + `DiagnosticsWorkflowImpl` split — a Java convention, not a .NET one), method names (`runDiagnostics`, `execute` — `camelCase`), record component names (`shipName`, not `ShipName`), enum constants in `SCREAMING_SNAKE_CASE` (`RED_ALERT`) with Jackson-serialized snake_case wire values (`red_alert`).
 - Run from a fresh laptop in under 2 minutes (`temporal server start-dev` + `./mvnw spring-boot:run`).
 
 ## 2. Locked decisions

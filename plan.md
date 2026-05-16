@@ -399,6 +399,33 @@ The bridge notification is **intentionally internal** — `NotifyBridge` is a no
 
 Each demo follows the identical scenario, just implemented in the framework's idiomatic way. Each has its own `README.md` with step-by-step run instructions.
 
+### 5.0 Idiomatic naming — do NOT transliterate the .NET reference
+
+The Dapr/.NET demo at `demos/04-dapr/` is the **canonical scenario reference** (activity behavior, severity thresholds, rigging strategy, kill-and-resume choreography). It is **not** a style guide for the other four implementations.
+
+Each demo MUST use the host language's and framework's native conventions for:
+
+- **Filenames and folder layout** — e.g. `diagnostics.go` / `snake_case.py` / `kebab-case.ts` / `PascalCase.java`; Go's flat package, Python's `__init__.py`, Maven's `src/main/java/...`, TypeScript's `src/`.
+- **Class / type / record / struct names** — e.g. Go uses unexported `scanResult` if package-private, Python uses `dataclass`/`TypedDict`, TS uses `interface`/`type`, Java uses `record`. Don't force `PascalCase` everywhere.
+- **Method / function names** — `camelCase` in Java/TS, `snake_case` in Python, `PascalCase` exported in Go.
+- **Variable names** — short, idiomatic locals (`ctx`, `err` in Go; `_` for unused in Python; etc.).
+- **Async/concurrency primitives** — `Promise.allOf` in Java, `asyncio.gather` in Python, `Promise.all` in TS, `workflow.Future` + `selector` in Go. Match the SDK's natural surface, not the .NET `Task.WhenAll` shape.
+- **Error handling** — Go's `if err != nil`, Python exceptions, TS try/catch, Java checked vs unchecked — use what the SDK and language expect.
+- **Logging / formatting / config** — language-native (slog/zap in Go, logging in Python, console/pino in TS, SLF4J in Java; `.env` / YAML / TOML as the ecosystem prefers).
+
+What MUST stay constant across all five demos (so on-stage comparisons read cleanly):
+
+- **The five scan subsystem identifiers** as wire/string values: `warp_core`, `shields`, `life_support`, `sensors`, `weapons`.
+- **Severity wire values**: `green`, `yellow_alert`, `red_alert` (snake_case in JSON regardless of in-language enum casing).
+- **Severity thresholds**: `min(health) < 50 → red_alert`, `< 75 → yellow_alert`, else `green`.
+- **Health rigging range**: `30..65` inclusive (biased low so `red_alert` is overwhelmingly likely).
+- **Bridge alert message format**: `🚨 BRIDGE ALERT — USS {shipName} — {SEVERITY}: {summary} (engineer: {engineerName})`.
+- **Workflow id used on stage**: `enterprise-ncc-1701`.
+- **Kill point**: a 60-second durable sleep/timer between fan-in and prioritization.
+- **Conditional notify**: bridge notification fires only on `yellow_alert` or `red_alert`; the output's bridge-notification field is nullable/optional so the green path stays observable.
+
+Translation lens: if you find yourself writing `DiagnosticsWorkflowImpl` in Go or `Task.WhenAll` in Python, stop — that's transliteration. Read how Temporal/Cadence/Conductor/Restate sample code is written in *that* language's docs, and match that voice.
+
 ### 5.1 Cadence — Go (4 min)
 
 - **File**: `demos/01-cadence/diagnostics.go`
