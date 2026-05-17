@@ -1,0 +1,15 @@
+server:
+  port: 8080
+
+logging:
+  level:
+    root: INFO
+    io.diagrid.enterprisediagnostics: INFO
+    com.uber.cadence: WARN
+
+cadence:
+  service-name: cadence-frontend
+  host: 127.0.0.1
+  port: 7933
+  domain: default
+  task-list: diagnostics-tl

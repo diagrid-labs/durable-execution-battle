@@ -1,0 +1,41 @@
+services:
+  cassandra:
+    image: cassandra:4.1
+    container_name: cadence-cassandra
+    ports:
+      - "9042:9042"
+    environment:
+      CASSANDRA_LISTEN_ADDRESS: auto
+      MAX_HEAP_SIZE: 512M
+      HEAP_NEWSIZE: 100M
+    healthcheck:
+      test: ["CMD", "cqlsh", "-e", "describe keyspaces"]
+      interval: 15s
+      timeout: 5s
+      retries: 12
+
+  cadence:
+    image: ubercadence/server:v1.2.18-auto-setup
+    container_name: cadence-server
+    ports:
+      - "7933:7933"
+      - "7934:7934"
+      - "7935:7935"
+      - "7939:7939"
+    environment:
+      CASSANDRA_SEEDS: cassandra
+      LOG_LEVEL: warn
+    depends_on:
+      cassandra:
+        condition: service_healthy
+
+  cadence-web:
+    image: ubercadence/web:v4.0.15
+    container_name: cadence-web
+    ports:
+      - "8088:8088"
+    environment:
+      CADENCE_GRPC_PEERS: cadence:7833
+      CADENCE_GRPC_SERVICES_NAME: cadence-frontend
+    depends_on:
+      - cadence

@@ -9,7 +9,7 @@ Authoring plan for the 50-minute conference talk. Source of facts: [`research.md
 | **Talk structure** | Per-dimension comparison (DX → Lang → Hosting → Perf → Community), with a single ~25-min demo block in the middle |
 | **Live-demo budget** | ~25 minutes (half the talk) |
 | **Demo scenario** | **USS Enterprise diagnostics** — fan-out parallel scans → prioritization (with sleep/wait kill-and-resume window) → conditional bridge alert |
-| **Demo languages** | Most idiomatic per framework — Cadence **Go** (forced — Python SDK is archived), Temporal **Java** (Spring Boot), Conductor **Python**, Dapr **.NET** (matches `diagrid-labs/dapr-workflow-versioning` reference), Restate **TypeScript** |
+| **Demo languages** | Most idiomatic per framework — Cadence **Java** (Spring Boot, manual `@Bean` wiring — no first-party starter), Temporal **Java** (Spring Boot starter), Conductor **C#** (ASP.NET Core minimal API + `conductor-csharp`), Dapr **.NET** (matches `diagrid-labs/dapr-workflow-versioning` reference), Restate **TypeScript**. Two deliberate language pairings: Cadence + Temporal share Java so the audience sees the API ancestry side-by-side; Conductor + Dapr share C#/.NET so the audience can compare workflow-as-data vs workflow-as-code in the *same* host language. Stage talking point lives in §5.3. |
 | **Slide tool** | Pure markdown with DemoTime-specific frontmatter |
 | **Audience polls** | Two symmetric EngageTime polls (opener: "which have you used?" multi-select; closer: "which would you try first?" single-select) — both started + stopped by DemoTime, with the closing poll's delta narrated into the decision guide |
 
@@ -27,9 +27,9 @@ Authoring plan for the 50-minute conference talk. Source of facts: [`research.md
 | 12:00 | **Dim 3 — Hosting** — self-host complexity, managed cloud, K8s, storage | Slides | 3 min |
 | 15:00 | **Dim 4 — Performance & Scalability** — proven scale numbers, architecture diagrams, bottlenecks | Slides | 3 min |
 | 18:00 | **DEMO BLOCK — USS Enterprise diagnostics in all 5** | DemoTime | **25 min** |
-| 18:00 | ↳ Cadence (Go) — the ancestor; sets up the lineage | Demo | 4 min |
+| 18:00 | ↳ Cadence (Java) — the ancestor; sets up the lineage and the API surface that Temporal inherited | Demo | 4 min |
 | 22:00 | ↳ Temporal (Java) — workflow-as-code default | Demo | 5 min |
-| 27:00 | ↳ Conductor (Python) — workflow-as-data framing | Demo | 5 min |
+| 27:00 | ↳ Conductor (C#) — workflow-as-data framing | Demo | 5 min |
 | 32:00 | ↳ Dapr (.NET) + Diagrid Dashboard | Demo | 6 min |
 | 38:00 | ↳ Restate (TS) — single-binary, handler-first | Demo | 5 min |
 | 43:00 | **Dim 5 — Community & Support** — license, stars, foundation, commercial backing | Slides | 3 min |
@@ -64,13 +64,21 @@ durable-execution-battle/
 │   ├── shared/
 │   │   └── scenario.md          # USS Enterprise diagnostics spec (kept identical across frameworks)
 │   │
-│   ├── 01-cadence/              # Go
+│   ├── 01-cadence/              # Java 21 + Spring Boot 3 + cadence-client (manual @Bean wiring — no first-party starter)
 │   │   ├── README.md
-│   │   ├── diagnostics.go
-│   │   ├── worker/main.go
-│   │   ├── starter/main.go
-│   │   ├── docker-compose.yml
-│   │   └── go.mod
+│   │   ├── pom.xml
+│   │   ├── mvnw, mvnw.cmd, .mvn/
+│   │   ├── docker-compose.yml   # Cassandra + Cadence server
+│   │   ├── enterprise-diagnostics.http
+│   │   └── src/main/
+│   │       ├── java/io/diagrid/enterprisediagnostics/
+│   │       │   ├── EnterpriseDiagnosticsApplication.java
+│   │       │   ├── config/        # CadenceConfig: WorkflowClient, WorkerFactory, Worker as @Beans
+│   │       │   ├── model/         # records: DiagnosticsInput/Output, ScanInput/Result, Priority, ...
+│   │       │   ├── workflow/      # DiagnosticsWorkflow{,Impl}.java
+│   │       │   ├── activity/      # 5 Scan*Activity + Prioritize + NotifyBridge + MockAnalysisGenerator
+│   │       │   └── api/           # DiagnosticsController.java
+│   │       └── resources/application.yml
 │   │
 │   ├── 02-temporal/             # Java 21 + Spring Boot 3 + temporal-spring-boot-starter
 │   │   ├── README.md
@@ -86,13 +94,24 @@ durable-execution-battle/
 │   │       │   └── api/          # DiagnosticsController.java
 │   │       └── resources/application.yml
 │   │
-│   ├── 03-conductor/            # Python (Conductor code-builder SDK)
+│   ├── 03-conductor/            # .NET 10 + ASP.NET Core minimal API + conductor-csharp
 │   │   ├── README.md
-│   │   ├── diagnostics.py
-│   │   ├── workers.py
-│   │   ├── starter.py
-│   │   ├── docker-compose.yml
-│   │   └── requirements.txt
+│   │   ├── EnterpriseDiagnostics.Conductor.csproj
+│   │   ├── Program.cs              # minimal API (POST /start, GET /status); registers WorkflowTaskCoordinator as a hosted service
+│   │   ├── Workflows/
+│   │   │   └── DiagnosticsWorkflow.cs    # ConductorWorkflow builder: FORK_JOIN + WAIT + SWITCH
+│   │   ├── Workers/                # one [WorkerTask] method per task type
+│   │   │   ├── ScanWarpCoreWorker.cs
+│   │   │   ├── ScanShieldsWorker.cs
+│   │   │   ├── ScanLifeSupportWorker.cs
+│   │   │   ├── ScanSensorsWorker.cs
+│   │   │   ├── ScanWeaponsWorker.cs
+│   │   │   ├── PrioritizeIssuesWorker.cs
+│   │   │   └── NotifyBridgeWorker.cs
+│   │   ├── Models/                 # records: DiagnosticsInput/Output, ScanInput/Result, Priority, ...
+│   │   ├── docker-compose.yml      # Conductor standalone (server + UI + ES)
+│   │   ├── enterprise-diagnostics.http
+│   │   └── appsettings.json
 │   │
 │   ├── 04-dapr/                 # .NET 10 + Aspire (copied from diagrid-labs/dapr-workflow-versioning)
 │   │   ├── README.md
@@ -157,18 +176,19 @@ Content...
 5. **Lineage map** — Mermaid diagram from research.md §2.
 6. **The 5 dimensions we'll evaluate** — preview of upcoming sections.
 
-#### `01-dx.md` — Developer Experience (4 min, ~4 slides)
+#### `01-dx.md` — Developer Experience (4 min, ~5 slides)
 
-1. **DX matrix** — table from research.md §8.1.
-2. **Quickstart wall-clock** — bar chart of "time to hello-workflow" per framework.
-3. **Web UI snapshots** — Temporal Web, Conductor DAG, Restate journal UI side-by-side; Dapr panel labeled "no native OSS UI → Diagrid Dashboard (disclosed)".
-4. **Learning curve** — determinism cliff (Temporal/Cadence/Dapr/Restate) vs DSL learning (Conductor).
+1. **Terminology — same idea, different word** — 5×7 table mapping each framework's name for orchestration unit, side-effect unit, worker process, tenancy, routing, durable log, stateful object; plus the false-friend callouts (Conductor "Task" vs Temporal "Activity", Cadence→Temporal renames, Restate's overloaded "Service", Dapr/Restate stateful-object primitives).
+2. **DX matrix** — table from research.md §8.1.
+3. **Quickstart wall-clock** — bar chart of "time to hello-workflow" per framework.
+4. **Web UI snapshots** — Temporal Web, Conductor DAG, Restate journal UI side-by-side; Dapr panel labeled "no native OSS UI → Diagrid Dashboard (disclosed)".
+5. **Learning curve** — determinism cliff (Temporal/Cadence/Dapr/Restate) vs DSL learning (Conductor).
 
 #### `02-languages.md` — Language Support & Features (3 min, ~4 slides)
 
 1. **SDK matrix** — from research.md §8.2, with maturity flags.
-2. **Feature comparison grid** — signals, queries, child workflows, versioning, scheduling, search.
-3. **Cadence Python is archived** — flag honestly, recommend Go for any new Cadence work.
+2. **Workflow patterns — same idea, different name** — 6×5 vocabulary matrix covering task chaining, fan-out/fan-in, monitor (continue-as-new), external event / human-in-the-loop, child workflows, cross-language orchestration. Calls out the two asymmetries: Restate folds child-workflow + continue-as-new into `ctx.run` + durable RPC; Cadence has no credible cross-language story in 2026.
+3. **Cadence Python is archived** — flag honestly, recommend Java (used in this talk) or Go for any new Cadence work.
 4. **Sagas + cron** — note Temporal/Conductor have first-class; Restate ships as documented patterns.
 
 #### `03-hosting.md` — Hosting (3 min, ~3 slides)
@@ -405,13 +425,13 @@ The Dapr/.NET demo at `demos/04-dapr/` is the **canonical scenario reference** (
 
 Each demo MUST use the host language's and framework's native conventions for:
 
-- **Filenames and folder layout** — e.g. `diagnostics.go` / `snake_case.py` / `kebab-case.ts` / `PascalCase.java`; Go's flat package, Python's `__init__.py`, Maven's `src/main/java/...`, TypeScript's `src/`.
-- **Class / type / record / struct names** — e.g. Go uses unexported `scanResult` if package-private, Python uses `dataclass`/`TypedDict`, TS uses `interface`/`type`, Java uses `record`. Don't force `PascalCase` everywhere.
-- **Method / function names** — `camelCase` in Java/TS, `snake_case` in Python, `PascalCase` exported in Go.
-- **Variable names** — short, idiomatic locals (`ctx`, `err` in Go; `_` for unused in Python; etc.).
-- **Async/concurrency primitives** — `Promise.allOf` in Java, `asyncio.gather` in Python, `Promise.all` in TS, `workflow.Future` + `selector` in Go. Match the SDK's natural surface, not the .NET `Task.WhenAll` shape.
-- **Error handling** — Go's `if err != nil`, Python exceptions, TS try/catch, Java checked vs unchecked — use what the SDK and language expect.
-- **Logging / formatting / config** — language-native (slog/zap in Go, logging in Python, console/pino in TS, SLF4J in Java; `.env` / YAML / TOML as the ecosystem prefers).
+- **Filenames and folder layout** — e.g. `PascalCase.cs` / `kebab-case.ts` / `PascalCase.java`; .NET's project-relative folders (`Workflows/`, `Workers/`, `Models/`), Maven's `src/main/java/...`, TypeScript's `src/`.
+- **Class / type / record / struct names** — C# uses `record`, TS uses `interface`/`type`, Java uses `record`. Match casing to the ecosystem (`PascalCase` for C#/Java types; `camelCase` for TS).
+- **Method / function names** — `camelCase` in Java/TS, `PascalCase` in C#.
+- **Variable names** — short, idiomatic locals (`_` for unused/discard in C#; `var` where the type is obvious).
+- **Async/concurrency primitives** — `Promise.allOf` in Java (Cadence/Temporal), `Promise.all` in TS (Restate), `Task.WhenAll` in C# (Dapr's *workflow* code). **Conductor is the exception**: fan-out is the declarative `FORK_JOIN` system task, so Conductor's C# workflow definition never calls `Task.WhenAll` — the engine schedules the branches.
+- **Error handling** — C# exceptions, TS try/catch, Java checked vs unchecked — use what the SDK and language expect.
+- **Logging / formatting / config** — language-native (`ILogger`/`appsettings.json` in .NET, console/pino in TS, SLF4J in Java; `.env` / YAML / TOML as the ecosystem prefers).
 
 What MUST stay constant across all five demos (so on-stage comparisons read cleanly):
 
@@ -424,16 +444,19 @@ What MUST stay constant across all five demos (so on-stage comparisons read clea
 - **Kill point**: a 60-second durable sleep/timer between fan-in and prioritization.
 - **Conditional notify**: bridge notification fires only on `yellow_alert` or `red_alert`; the output's bridge-notification field is nullable/optional so the green path stays observable.
 
-Translation lens: if you find yourself writing `DiagnosticsWorkflowImpl` in Go or `Task.WhenAll` in Python, stop — that's transliteration. Read how Temporal/Cadence/Conductor/Restate sample code is written in *that* language's docs, and match that voice.
+Translation lens: if you find yourself writing `Task.WhenAll` inside Conductor's C# workflow definition, stop — Conductor fans out via the `FORK_JOIN` system task in JSON, not host-language concurrency. Likewise, don't reach for `Promise.allOf` in Restate (it has `Promise.all`) or `Async.function` in Conductor (it has no workflow-as-code surface). Read how each framework's sample code is written in *that* language's docs, and match that voice.
 
-### 5.1 Cadence — Go (4 min)
+### 5.1 Cadence — Java (4 min)
 
-- **File**: `demos/01-cadence/diagnostics.go`
-- **Workflow shape**: top-level `func DiagnosticsWorkflow(ctx workflow.Context, ...) (Priority, error)`.
-- **Fan-out**: 5 `workflow.ExecuteActivity` calls, store futures in a slice, `selector.Select(ctx)` or loop `.Get(ctx, &result)` over each.
-- **Sleep**: `workflow.Sleep(ctx, 60*time.Second)`.
-- **Runtime**: docker-compose with Cassandra + Cadence server (pre-pull all images — see §7); Cadence Web at `localhost:8088`.
-- **Talking point on stage**: "Cadence is the ancestor. Temporal is literally a fork by Cadence's original authors. Same model, divergent stewardship. The next demo (Temporal in Java) shows where the model went after the fork."
+- **Module**: `demos/01-cadence/` — Java 21 + Spring Boot 3, using Uber's first-party `com.uber.cadence:cadence-client`. **No first-party Spring Boot starter** — `WorkflowClient`, `WorkerFactory`, and `Worker` are wired as `@Bean`s in a `CadenceConfig` class. This is the deliberate structural delta versus the Temporal demo: same workflow API, manual worker plumbing.
+- **Workflow shape**: `@WorkflowInterface` + `@WorkflowMethod` on `DiagnosticsWorkflow` (imports from `com.uber.cadence.workflow`). `DiagnosticsWorkflowImpl` is a plain class registered with the worker via `worker.registerWorkflowImplementationTypes(DiagnosticsWorkflowImpl.class)` — there is no `@WorkflowImpl` auto-discovery analog.
+- **Activities**: `@ActivityInterface` + `@ActivityMethod`; the 5 `Scan*Activity` + `PrioritizeIssuesActivity` + `NotifyBridgeActivity` impl classes are plain Spring beans, but registered with the Worker manually via `worker.registerActivitiesImplementations(...)`.
+- **Fan-out**: 5 `Promise<ScanResult> = Async.function(stub::execute, new ScanInput(shipName, subsystem))` calls, then `Promise.allOf(...).get()` — the surface is identical to Temporal Java (the fork inherited it).
+- **Sleep**: `Workflow.sleep(Duration.ofSeconds(60))` — the durable kill point.
+- **Conditional notify**: same shape as Temporal — `if (severity == YELLOW_ALERT || severity == RED_ALERT)`; `DiagnosticsOutput.bridgeNotification` is **nullable** so the green path is observable.
+- **Runtime**: `docker compose up` from `demos/01-cadence/` boots Cassandra + Cadence server (pre-pull all images — see §7); `./mvnw spring-boot:run` starts the worker + REST API. Cadence Web at `localhost:8088`. Kick off via `POST /start` from `enterprise-diagnostics.http`.
+- **Visual**: Cadence Web at `localhost:8088` — show the workflow history with the 5 parallel `ActivityTaskCompleted` events, then `TimerStarted` (60s) → kill the Spring Boot app → restart → `TimerFired` → `PrioritizeIssuesActivity` → `NotifyBridgeActivity` → workflow completes.
+- **Talking point on stage**: "Cadence is the ancestor. Temporal is literally a fork by Cadence's original authors. Same SDK surface — `@WorkflowMethod`, `Async.function`, `Promise.allOf`, `Workflow.sleep` — only the import paths (`com.uber.cadence` vs `io.temporal`) and the domain-vs-namespace terminology differ. Watch the *next* demo: same code, plus the Spring Boot starter auto-wires the worker. That ergonomics gap is where the fork went."
 
 ### 5.2 Temporal — Java (5 min)
 
@@ -446,16 +469,19 @@ Translation lens: if you find yourself writing `DiagnosticsWorkflowImpl` in Go o
 - **Visual**: Temporal Web at `localhost:8233` — show event history with the 5 `ActivityTaskCompleted` events for the parallel scans, then `TimerStarted` (60s) → Marc kills the Spring Boot app → restart → `TimerFired` → `PrioritizeIssuesActivity` → `NotifyBridgeActivity` → `WorkflowExecutionCompleted`.
 - **Idiomatic tip to call out**: "Workflow code is a sandboxed deterministic class — no `Random`, no `LocalDateTime.now()`, no `Thread.sleep`. Activities are normal Spring beans where the side-effects live. The Spring Boot starter auto-wires the worker — same DI feel as the .NET Dapr demo coming up." This bridges into the Dapr/.NET comparison two demos later.
 
-### 5.3 Conductor — Python with code-builder SDK (5 min)
+### 5.3 Conductor — C# with ASP.NET Core minimal API (5 min)
 
-- **File**: `demos/03-conductor/diagnostics.py`
-- **Workflow shape**: `ConductorWorkflow` built via `>>` chaining + `FORK_JOIN` task type for the parallel scans.
-- **Fan-out**: `FORK_JOIN` system task — declarative, the engine runs it; workers don't see the fork.
-- **Sleep**: `WAIT` system task with 60s duration (or `INLINE` task with `setTimeout`).
-- **Conditional notify**: `SWITCH` task with a JQ expression on `${prioritize.output.severity}`.
-- **Runtime**: `docker run -p 8080:8080 -p 5000:5000 conductoross/conductor-standalone:latest`; UI at `localhost:5000`.
-- **Talking point on stage**: "This is the only framework where the workflow is *data*, not code. The Python builder is sugar; the actual workflow is JSON the engine interprets. Strengths and trade-offs flow from that."
-- **Visual moment**: open the **Workflow Definitions** panel and show the generated JSON — proof that "workflow-as-code" here is really JSON-builder ergonomics.
+- **Module**: `demos/03-conductor/` — .NET 10 + ASP.NET Core minimal API + `conductor-csharp` SDK. Same host language as the Dapr demo two slots later, by design (see §5.0 talking-point bridge below).
+- **Workflow shape**: `ConductorWorkflow` built in C# via fluent task chaining — a `ForkJoinTask` wrapping 5 `SimpleTask`s, then a `WaitTask`, then a `SwitchTask` keyed on `${prioritize.output.severity}`. Registered with the Conductor server at startup; the engine owns the definition.
+- **Fan-out**: `FORK_JOIN` system task — **declarative**; the engine schedules the branches and joins. Workers don't see the fork. No `Task.WhenAll` in workflow code — that absence is the whole point of workflow-as-data.
+- **Workers**: 7 `[WorkerTask("scan_warp_core")]` / `[WorkerTask("prioritize_issues")]` / etc. methods on a `Workers` class; registered with the `WorkflowTaskCoordinator` running as an `IHostedService` in `Program.cs`. Workers poll the server for tasks the engine assigns to them.
+- **Models**: `record ScanResult(string Subsystem, int Health, string[] Anomalies)`, `record Priority(string Severity, string Summary)`, etc. — wire values stay snake_case (`warp_core`, `red_alert`) via `[JsonPropertyName]` or `JsonNamingPolicy.SnakeCaseLower`.
+- **Sleep**: `WAIT` system task with a 60s `duration`.
+- **Conditional notify**: `SWITCH` task with a JQ expression `${prioritize.output.severity}`; the `red_alert` and `yellow_alert` branches call the `notify_bridge` task, the `green` branch is empty.
+- **Rigging**: identical to the canonical Dapr scenario — each `Scan*Worker` returns `health = Random.Shared.Next(30, 66)` so `min(health) < 50` is overwhelmingly likely → `red_alert` → bridge alert fires almost every run.
+- **Runtime**: `docker compose up` from `demos/03-conductor/` boots `conductoross/conductor-standalone:v3.30.0.rc15`; UI at `localhost:5000`. `dotnet run` starts the ASP.NET Core app — the workers begin polling and the REST endpoint exposes `POST /start` to kick off a `enterprise-ncc-1701` instance.
+- **Killer talking point on stage** (this is the §5.0 language-pairing payoff): "We're about to see Dapr in the same language. Watch what changes when the framework's philosophy flips. Conductor's workflow is JSON the engine interprets — these C# `ForkJoinTask`/`WaitTask` calls just *build* that JSON at startup. The workers never call each other; the engine schedules them. In two demos' time, Dapr's workflow is *literally* C# code the runtime replays. Same language, opposite mental model."
+- **Visual moment**: open Conductor UI → **Workflow Definitions** panel → show the generated JSON. Then flip to the C# `DiagnosticsWorkflow.cs` and point at the line-for-line correspondence. Proof that the C# fluent builder is sugar; the engine's contract is JSON.
 
 ### 5.4 Dapr — .NET (6 min, with Aspire + Diagrid Dashboard) — **canonical reference**
 
@@ -612,7 +638,7 @@ Author this as a literal checklist in `README.md`:
   - `valkey/valkey:latest` (Dapr state store)
   - `restate/restate:1.6.2` (or whatever's current; pin)
 - [ ] `brew install temporal` (Temporal CLI dev server is a single binary — no Docker needed for the Temporal/Java demo).
-- [ ] In `demos/02-temporal/`, run `./mvnw dependency:go-offline` to warm the local Maven cache so the on-stage Spring Boot startup doesn't pull from Maven Central.
+- [ ] In **both** `demos/01-cadence/` and `demos/02-temporal/`, run `./mvnw dependency:go-offline` to warm the local Maven cache so the on-stage Spring Boot startups don't pull from Maven Central.
 - [ ] Run each demo end-to-end on the talk laptop (not just the dev machine).
 - [ ] **Run both polls end-to-end with a second device** (phone) acting as the audience — confirm QR scan works, results render live, DemoTime start/stop commands fire for both `opening-familiarity` and `closing-pick`, and the closing poll's `compareTo` overlay actually renders against the opener's results. Confirm fallback path works for each.
 - [ ] Record a 30-60s fallback video for each of the 5 demos.
@@ -642,8 +668,8 @@ Suggested build sequence — fastest payoff first, riskiest last:
 1. **Dapr demo (canonical reference)** — already done in `demos/04-dapr/`. .NET 10 + Aspire, 5 `Scan*` activities, 60s `CreateTimer`, conditional `NotifyBridge`. Use this as the spec when implementing the other four framework demos: match the activity names, the `ScanResult { subsystem, health, anomalies }` and `Priority { severity, summary }` shapes, the severity thresholds (`<50 → red_alert`, `<75 → yellow_alert`), and the low-biased health range for demo rigging.
 2. **Temporal demo (Java)** — Spring Boot + `temporal-spring-boot-starter` (the `-alpha` line was discontinued at 1.23.2; GA ships at 1.30.x); sanity-check the scenario shape end-to-end. See [`docs/superpowers/specs/2026-05-16-temporal-java-demo-design.md`](docs/superpowers/specs/2026-05-16-temporal-java-demo-design.md). ~4 hours.
 3. **Restate demo** — single binary, no infra; quick second win. ~2 hours.
-4. **Conductor demo** — JSON DSL is a different mental model; budget time for the FORK_JOIN + SWITCH wiring. ~3 hours.
-5. **Cadence demo** — last because it's almost identical to Temporal in Go; cheap copy/translate. ~2 hours.
+4. **Conductor demo (C#)** — JSON DSL is a different mental model; budget time for the `ForkJoinTask` + `SwitchTask` wiring, plus registering workers with `WorkflowTaskCoordinator` as an `IHostedService`. The §5.0 talking-point bridge from Conductor → Dapr is what justifies sharing C# across the two demos, so rehearse that segue. ~3.5 hours.
+5. **Cadence demo (Java)** — last because the SDK surface is nearly identical to Temporal Java; mostly a copy + swap of imports (`io.temporal` → `com.uber.cadence`) and a swap of the Spring Boot starter for a manual `CadenceConfig` `@Bean` wiring class. ~2 hours.
 6. **Slide deck** — write last, once the demos are real and you know what visuals you actually have. ~6 hours.
 7. **DemoTime scripts** — last; choreographed against the working demos. ~3 hours.
 8. **EngageTime polls + DemoTime triggers** — author `.engage/opening-poll.json`, `.engage/closing-poll.json`, `00-opening-poll.demo`, `99-closing-poll.demo`; test the start/stop commands and the closing-poll `compareTo` overlay locally with a second device acting as audience. ~1.5 hours.
@@ -658,8 +684,8 @@ Total: ~24-29 hours of focused authoring, plus ~5 hours of dry runs.
 |---|---|
 | 5 demos × ~5 min = no buffer for failures | Cut the Cadence demo to 2 min (it's nearly identical to Temporal — show the code diff, skip the runtime) if running long |
 | Conference Wi-Fi blocks `docker pull` | Pre-pull everything day-before; never pull on stage |
-| Temporal/Cadence Cassandra container takes >2 min to start cold | Start docker-compose during the preceding dimension slides, not at demo time |
-| Audience asks: "Why is the Dapr demo .NET when the rest are Python/TS?" | Pre-bake the answer: ".NET shows the source-generator versioning pattern, which is the most distinctive new thing in Dapr 1.17. Python/Go versioning APIs are also covered on the language slide." |
+| Cadence Cassandra container takes >2 min to start cold (Temporal uses the `start-dev` CLI — no Cassandra needed) | Start `demos/01-cadence/docker-compose.yml` during the preceding dimension slides, not at demo time |
+| Audience asks: "Why are Conductor and Dapr both C# / .NET?" | Pre-bake: "Deliberate pairing — same host language, opposite philosophies. Conductor's workflow is JSON the engine interprets; Dapr's workflow is C# code the runtime replays. Holding the language constant sharpens the workflow-as-data vs workflow-as-code contrast. Cadence + Temporal do the same trick with Java." |
 | "Why didn't you include Azure Durable Functions / AWS Step Functions / etc.?" | Have a backup slide: scope was OSS workflow-as-code platforms with self-hostable runtimes — proprietary cloud-only services excluded by design |
 | EngageTime poll fails on stage (extension crash, projector mirror issue, no phones in the room) | DemoTime skips the poll step with one keystroke; fallback slide shows the 5 names + "show of hands"; Marc reads the room visually. Pre-talk checklist includes a poll dry-run with a second device. |
 | Poll dominates time / audience won't stop typing answers | Hard-capped at 90s (opener) / 75s (closer) by the `duration` field; DemoTime stops the poll regardless. |
