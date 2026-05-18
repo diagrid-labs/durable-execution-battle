@@ -1,0 +1,14 @@
+services:
+  conductor:
+    image: conductoross/conductor-standalone:3.15.0
+    container_name: conductor-standalone
+    ports:
+      - "8080:8080"   # Conductor REST API
+      - "5002:5000"   # Conductor UI (host 5002 — macOS holds 5000 & 5001)
+    environment:
+      CONFIG_PROP: config.properties
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O- http://localhost:8080/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
