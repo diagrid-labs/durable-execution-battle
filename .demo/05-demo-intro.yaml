@@ -1,0 +1,27 @@
+title: 05 — Demo intro
+description: |
+  Demo intro section: announce the 25-minute demo block →
+  show the shared workflow scenario (fan-out / fan-in / sleep / kill point) →
+  set up the kill-and-resume promise that every framework will be judged against.
+version: 3
+scenes:
+  - id: demo-intro-block
+    title: Demo block — 25 minutes
+    moves:
+      - action: openSlide
+        path: slides/05-demo-intro/00-demo-block.md
+  - id: demo-intro-scenario
+    title: The scenario (workflow shape + kill point)
+    moves:
+      - action: openSlide
+        path: slides/05-demo-intro/01-scenario.md
+  - id: demo-intro-kill-and-resume
+    title: The kill-and-resume promise
+    moves:
+      - action: openSlide
+        path: slides/05-demo-intro/02-kill-and-resume.md
+  - id: demo-intro-workflow-activities
+    title: EnterpriseDiagnostics — workflow & activities
+    moves:
+      - action: openSlide
+        path: slides/05-demo-intro/03-workflow-activities.md

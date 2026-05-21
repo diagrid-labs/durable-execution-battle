@@ -1,5 +1,5 @@
 ---
-layout: title
+layout: intro
 ---
 
 # Durable Execution Battle

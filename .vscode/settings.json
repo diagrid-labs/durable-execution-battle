@@ -1,3 +1,5 @@
 {
-    "demoTime.defaultFileType": "yaml"
+    "demoTime.defaultFileType": "yaml",
+    "workbench.editor.showTabs": "none",
+    "demoTime.customTheme": ".demo/themes/diagrid.css"
 }

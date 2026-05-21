@@ -1,0 +1,54 @@
+title: 00 — Opening
+description: |
+  Opening section: title → disclosure → what is durable execution →
+  the 5 contenders → audience familiarity poll (EngageTime) →
+  lineage map → dimensions preview.
+
+  DemoTime drives the EngageTime poll start/stop so only one extension
+  is operated on stage.
+version: 3
+scenes:
+  - id: open-title
+    title: Title
+    moves:
+      - action: setPresentationView
+      - action: openSlide
+        path: slides/00-open/00-title.md
+  - id: open-disclosure
+    title: Disclosure
+    moves:
+      - action: openSlide
+        path: slides/00-open/01-disclosure.md
+  - id: open-what-is
+    title: What is durable execution?
+    moves:
+      - action: openSlide
+        path: slides/00-open/02-what-is-durable-execution.md
+  - id: open-five-contenders
+    title: The 5 contenders (poll question matches the option list)
+    moves:
+      - action: openSlide
+        path: slides/00-open/03-five-contenders.md
+  - id: open-poll-qr
+    title: Show the QR slide and start the opening poll
+    moves:
+      - action: openSlide
+        path: slides/00-open/04-opening-poll.md
+      - action: showEngageTimePoll
+        pollId: opening-familiarity
+        startOnOpen: true
+  - id: open-lineage-map
+    title: Lineage map
+    moves:
+      - action: openSlide
+        path: slides/00-open/05-lineage-map.md
+  - id: open-dimensions-preview
+    title: Dimensions preview
+    moves:
+      - action: openSlide
+        path: slides/00-open/06-dimensions-preview.md
+  - id: open-poll-stop
+    title: Stop the poll (results stay frozen for one beat)
+    moves:
+      - action: closeEngageTimePoll
+        pollId: opening-familiarity

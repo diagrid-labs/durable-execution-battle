@@ -1,0 +1,19 @@
+title: 04 — Dimension 3 — Hosting
+description: |
+  Hosting section: hosting matrix → operational footprint →
+  managed cloud landscape.
+
+  Slides-only — no terminal or code moves.
+version: 3
+scenes:
+  - id: hosting-section
+    title: Section divider — Dimension 3 — Hosting
+    moves:
+      - action: setPresentationView
+      - action: openSlide
+        path: slides/03-hosting/00-section.md
+  - id: hosting-matrix
+    title: Hosting matrix
+    moves:
+      - action: openSlide
+        path: slides/03-hosting/01-hosting-matrix.md
