@@ -1,0 +1,117 @@
+title: 02 — Temporal (Java) — USS Enterprise diagnostics
+description: |
+  Temporal Java demo: 5-scan fan-out, durable 60s timer, kill+resume,
+  conditional bridge alert. Spring Boot 3 + temporal-spring-boot-starter
+  1.30.x, Temporal CLI dev server (single binary, in-memory).
+
+  API calls are driven from demos/02-temporal/enterprise-diagnostics.http —
+  the speaker clicks "Send Request" on each block when prompted.
+version: 3
+scenes:
+  - id: temporal-intro
+    title: Open the demo intro slide
+    moves:
+      - action: setPresentationView
+      - action: openSlide
+        path: slides/05-demo-intro/00-demo-block.md
+  - id: temporal-show-config
+    title: Show the Spring Boot starter config (no @Bean wiring, no Cassandra)
+    moves:
+      - action: open
+        path: demos/02-temporal/src/main/resources/application.yml
+  - id: temporal-show-workflow
+    title: Show the workflow — 5 parallel scans, 60s timer, conditional NotifyBridge
+    moves:
+      - action: open
+        path: demos/02-temporal/src/main/java/io/diagrid/enterprisediagnostics/workflow/DiagnosticsWorkflowImpl.java
+  - id: temporal-show-activity
+    title: Show one scan activity (deterministic mock analysis)
+    moves:
+      - action: open
+        path: demos/02-temporal/src/main/java/io/diagrid/enterprisediagnostics/activity/ScanWarpCoreActivityImpl.java
+  - id: temporal-start-server
+    title: Start the Temporal dev server (single binary, in-memory)
+    moves:
+      - action: executeTerminalCommand
+        terminalId: temporal-server
+        command: temporal server start-dev
+        insertTypingMode: instant
+        autoExecute: true
+      - action: waitForInput
+        message: Wait for 'Server started' + Web UI URL, then continue.
+  - id: temporal-start-app
+    title: Start the Spring Boot worker + REST API (port 8080)
+    moves:
+      - action: executeTerminalCommand
+        terminalId: temporal-app
+        command: cd demos/02-temporal && ./mvnw spring-boot:run
+        insertTypingMode: character-by-character
+        insertTypingSpeed: 90
+        autoExecute: true
+      - action: waitForInput
+        message: Wait for 'Started EnterpriseDiagnosticsApplication', then continue.
+  - id: temporal-open-temporal-web
+    title: Open Temporal Web (manual — browser)
+    moves:
+      - action: waitForInput
+        message: Open http://localhost:8233 → default namespace. Keep it visible.
+  - id: temporal-open-http-file
+    title: Open the .http file for API calls
+    moves:
+      - action: open
+        path: demos/02-temporal/enterprise-diagnostics.http
+  - id: temporal-send-start
+    title: POST /start — kick off the workflow
+    moves:
+      - action: waitForInput
+        message: 'Click ''Send Request'' above the ### Start diagnostics block.'
+  - id: temporal-watch-fanout
+    title: Watch the 5 scan activities fan out in Temporal Web
+    moves:
+      - action: waitForInput
+        message: 'Temporal Web → open the latest DiagnosticsWorkflow run: 5 Scan* activities complete in ~2s, then TimerStarted (60s).'
+  - id: temporal-kill-point
+    title: ⚡ KILL POINT — Ctrl+C the Spring Boot app mid-timer (~T+20s)
+    moves:
+      - action: focusTerminal
+      - action: sendKeybinding
+        keybinding: ctrl+c
+      - action: waitForTimeout
+        timeout: 3000
+      - action: waitForInput
+        message: 'Temporal Web: workflow still Running, history frozen on TimerStarted. Server keeps ticking. Now restart the worker.'
+  - id: temporal-restart-app
+    title: Restart the worker — timer fires, PrioritizeIssues + NotifyBridge run
+    moves:
+      - action: executeTerminalCommand
+        terminalId: temporal-app
+        command: ./mvnw spring-boot:run
+        insertTypingMode: instant
+        autoExecute: true
+      - action: waitForInput
+        message: 'Watch worker stdout: PrioritizeIssues → 🚨 BRIDGE ALERT RED_ALERT banner.'
+  - id: temporal-send-status
+    title: GET /status — final workflow output
+    moves:
+      - action: open
+        path: demos/02-temporal/enterprise-diagnostics.http
+      - action: waitForInput
+        message: 'Click ''Send Request'' above the ### Status block.'
+  - id: temporal-cleanup
+    title: Stop the worker and the dev server
+    moves:
+      - action: focusTerminal
+        terminalId: temporal-app
+      - action: sendKeybinding
+        keybinding: ctrl+c
+      - action: focusTerminal
+        terminalId: temporal-server
+      - action: sendKeybinding
+        keybinding: ctrl+c
+      - action: waitForTimeout
+        timeout: 1000
+      - action: closeTerminal
+        terminalId: temporal-app
+      - action: closeTerminal
+        terminalId: temporal-server
+      - action: unsetPresentationView
