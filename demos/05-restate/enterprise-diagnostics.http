@@ -1,13 +1,16 @@
 ### Start a diagnostics workflow
+# @name startDiagnostics
 POST http://localhost:3000/start
 Content-Type: application/json
 
 {
-  "id": "enterprise-ncc-1701",
+  "id": "{{$guid}}",
   "shipName": "USS Enterprise NCC-1701-D",
   "diagnosticsDate": "2370-04-08",
   "engineerName": "Geordi La Forge"
 }
 
+
+@instanceId={{startDiagnostics.response.body.workflowId}}
 ### Query workflow status
-GET http://localhost:3000/status/enterprise-ncc-1701
+GET http://localhost:3000/status/{{instanceId}}

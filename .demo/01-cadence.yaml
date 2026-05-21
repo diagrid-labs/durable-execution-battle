@@ -14,31 +14,26 @@ scenes:
       - action: setPresentationView
       - action: openSlide
         path: slides/05-demo-intro/00-demo-block.md
-
   - id: cadence-show-cluster
     title: Show the Cassandra + Cadence cluster (the cost-of-entry)
     moves:
       - action: open
         path: demos/01-cadence/docker-compose.yml
-
   - id: cadence-show-config
     title: Show the manual @Bean wiring (vs Temporal's Spring Boot starter)
     moves:
       - action: open
         path: demos/01-cadence/src/main/java/io/diagrid/enterprisediagnostics/config/CadenceConfig.java
-
   - id: cadence-show-workflow
     title: Show the workflow — 5 parallel scans, 60s timer, conditional NotifyBridge
     moves:
       - action: open
         path: demos/01-cadence/src/main/java/io/diagrid/enterprisediagnostics/workflow/DiagnosticsWorkflowImpl.java
-
   - id: cadence-show-activity
     title: Show one scan activity (deterministic mock analysis)
     moves:
       - action: open
         path: demos/01-cadence/src/main/java/io/diagrid/enterprisediagnostics/activity/ScanWarpCoreActivityImpl.java
-
   - id: cadence-start-cluster
     title: Start the Cadence cluster (Cassandra + server + web)
     moves:
@@ -48,8 +43,7 @@ scenes:
         insertTypingMode: instant
         autoExecute: true
       - action: waitForInput
-        message: "Wait for Cassandra healthy + Cadence server ready, then continue."
-
+        message: Wait for Cassandra healthy + Cadence server ready, then continue.
   - id: cadence-start-app
     title: Start the Spring Boot worker (port 8080)
     moves:
@@ -60,32 +54,27 @@ scenes:
         insertTypingSpeed: 90
         autoExecute: true
       - action: waitForInput
-        message: "Wait for 'Started EnterpriseDiagnosticsApplication', then continue."
-
+        message: Wait for 'Started EnterpriseDiagnosticsApplication', then continue.
   - id: cadence-open-cadence-web
     title: Open Cadence Web (manual — browser)
     moves:
       - action: waitForInput
-        message: "Open http://localhost:8088 → default domain. Keep it visible."
-
+        message: Open http://localhost:8088 → default domain. Keep it visible.
   - id: cadence-open-http-file
     title: Open the .http file for API calls
     moves:
       - action: open
         path: demos/01-cadence/enterprise-diagnostics.http
-
   - id: cadence-send-start
     title: POST /start — kick off the workflow
     moves:
       - action: waitForInput
-        message: "Click 'Send Request' above the ### Start diagnostics block."
-
+        message: 'Click ''Send Request'' above the ### Start diagnostics block.'
   - id: cadence-watch-fanout
     title: Watch the 5 scan activities fan out in Cadence Web
     moves:
       - action: waitForInput
-        message: "Cadence Web → enterprise-ncc-1701: 5 Scan* activities complete in ~2s, then TimerStarted."
-
+        message: 'Cadence Web → enterprise-ncc-1701: 5 Scan* activities complete in ~2s, then TimerStarted.'
   - id: cadence-kill-point
     title: ⚡ KILL POINT — Ctrl+C the Spring Boot app mid-timer (~T+20s)
     moves:
@@ -95,27 +84,24 @@ scenes:
       - action: waitForTimeout
         timeout: 3000
       - action: waitForInput
-        message: "Cadence Web: workflow still Running, history frozen on TimerStarted. Now restart."
-
+        message: 'Cadence Web: workflow still Running, history frozen on TimerStarted. Now restart.'
   - id: cadence-restart-app
     title: Restart the worker — the timer durably wakes
     moves:
       - action: executeTerminalCommand
         terminalId: cadence-app
-        command: cd demos/01-cadence && ./mvnw spring-boot:run
+        command: ./mvnw spring-boot:run
         insertTypingMode: instant
         autoExecute: true
       - action: waitForInput
-        message: "Watch worker stdout: PrioritizeIssues → 🚨 BRIDGE ALERT RED_ALERT banner."
-
+        message: 'Watch worker stdout: PrioritizeIssues → 🚨 BRIDGE ALERT RED_ALERT banner.'
   - id: cadence-send-status
     title: GET /status — final workflow output
     moves:
       - action: open
         path: demos/01-cadence/enterprise-diagnostics.http
       - action: waitForInput
-        message: "Click 'Send Request' above the ### Status block."
-
+        message: 'Click ''Send Request'' above the ### Status block.'
   - id: cadence-cleanup
     title: Stop the worker and the cluster
     moves:
@@ -124,6 +110,8 @@ scenes:
         keybinding: ctrl+c
       - action: closeTerminal
         terminalId: cadence-app
+      - action: waitForTimeout
+        timeout: 1000
       - action: closeTerminal
         terminalId: cadence-cluster
       - action: unsetPresentationView

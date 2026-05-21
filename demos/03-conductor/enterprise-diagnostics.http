@@ -1,20 +1,20 @@
 @host=http://localhost:5050
 
 ### Start the diagnostics workflow
-# @name workflowStartRequest
+# @name startDiagnostics
 POST {{host}}/start
 Content-Type: application/json
 
 {
-    "id": "enterprise-ncc-1701",
+    "id": "{{$guid}}",
     "ship_name": "USS Enterprise NCC-1701-D",
     "diagnostics_date": "2370-04-08",
     "engineer_name": "Geordi La Forge"
 }
 
 ### Get the workflow status (uses the workflow_id Conductor generated)
-@workflowId={{workflowStartRequest.response.body.$.workflow_id}}
-GET {{host}}/status/{{workflowId}}
+@instanceId={{startDiagnostics.response.body.$.workflow_id}}
+GET {{host}}/status/{{instanceId}}
 
 ### Terminate the workflow
-POST {{host}}/terminate/{{workflowId}}
+POST {{host}}/terminate/{{instanceId}}

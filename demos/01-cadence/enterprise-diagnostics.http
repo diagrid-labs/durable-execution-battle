@@ -1,19 +1,22 @@
 ### Start diagnostics
+# @name startDiagnostics
 POST http://localhost:8080/start
 Content-Type: application/json
 
 {
-  "id": "enterprise-ncc-1701",
+  "id": "{{$guid}}",
   "shipName": "USS Enterprise NCC-1701-D",
   "diagnosticsDate": "2370-04-08",
   "engineerName": "Geordi La Forge"
 }
 
+
+@instanceId={{startDiagnostics.response.body.workflowId}}
 ### Status
-GET http://localhost:8080/status/enterprise-ncc-1701
+GET http://localhost:8080/status/{{instanceId}}
 
 ### Terminate
-POST http://localhost:8080/terminate/enterprise-ncc-1701
+POST http://localhost:8080/terminate/{{instanceId}}
 
 ### Cancel
-POST http://localhost:8080/cancel/enterprise-ncc-1701
+POST http://localhost:8080/cancel/{{instanceId}}
