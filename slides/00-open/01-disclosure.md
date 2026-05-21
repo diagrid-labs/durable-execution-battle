@@ -1,14 +1,20 @@
 ---
-layout: default
+layout: two-columns
 footer: |
   <span>Marc Duiker</span>
   <img src=".demo/assets/diagrid-logo.webp" alt="Diagrid" style="height: 20px; width: auto;">
 ---
 
-# Disclosure
+# Hi 👋
 
-I work at **Diagrid** — the commercial company behind **Dapr**.
+![Name animation](.demo/images/marcduiker_name_anim_x400.gif)
 
-I will be **deliberate** about flagging Dapr's *limitations* alongside its *strengths*.
+- Developer Advocate at [Diagrid](https://diagrid.io)
+- One of the [Dapr](https://dapr.io) Community Managers
+- [marcduiker.dev](https://marcduiker.dev)
 
-If anything sounds suspiciously rosy, **call me out**.
+![Avatar](.demo/images/marcduiker_dapr_rainbow_eyes.gif)
+
+::right::
+
+![Join EngageTime](.demo/images/session-6r41hf-qr.png)

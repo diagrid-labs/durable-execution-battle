@@ -10,10 +10,9 @@ footer: |
 Code that survives **process crashes**, **host failures**, **deploys**, and **indefinite waits** — without you writing the checkpointing or retry plumbing.
 
 ```python
-async def book_starship_tour(passenger):
-    await charge_card(passenger)
-    await sleep(30 * DAY)        # warp core breach? doesn't matter.
-    await send_boarding_pass(passenger)
+async def process_order(order):
+    await charge_payment(order)
+    await reserve_inventory(order)
+    await ship_package(order)
+    await send_tracking_email(order)
 ```
-
-> *Imagine writing* `await sleep(30 days)` *and it just works — even if the warp core breaches mid-wait.*

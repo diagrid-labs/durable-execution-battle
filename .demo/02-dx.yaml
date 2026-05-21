@@ -1,7 +1,8 @@
 title: 02 — Dimension 1 — Developer Experience
 description: |
   DX section: same-idea-different-word terminology → DX matrix →
-  time-to-hello-workflow bar chart → web UIs comparison → learning curve.
+  getting-started step count → time-to-hello-workflow bar chart →
+  web UIs comparison → learning curve.
 
   Slides-only — no terminal or code moves.
 version: 3
@@ -25,20 +26,26 @@ scenes:
       - action: openSlide
         path: slides/01-dx/02-dx-matrix.md
 
+  - id: dx-getting-started
+    title: Getting started — step count
+    moves:
+      - action: openSlide
+        path: slides/01-dx/03-getting-started.md
+
   - id: dx-hello-workflow
     title: Time to "hello workflow"
     moves:
       - action: openSlide
-        path: slides/01-dx/03-hello-workflow.md
+        path: slides/01-dx/04-hello-workflow.md
 
   - id: dx-web-uis
     title: Web UIs comparison
     moves:
       - action: openSlide
-        path: slides/01-dx/04-web-uis.md
+        path: slides/01-dx/05-web-uis.md
 
   - id: dx-learning-curve
     title: Learning curve — two cliffs
     moves:
       - action: openSlide
-        path: slides/01-dx/05-learning-curve.md
+        path: slides/01-dx/06-learning-curve.md

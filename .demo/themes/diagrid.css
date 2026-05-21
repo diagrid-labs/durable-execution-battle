@@ -69,7 +69,7 @@ code, pre, kbd, samp {
   /* two-columns layout */
   --demotime-two-columns-background: #0a0a0a;
   --demotime-two-columns-color: #e6e6e6;
-  --demotime-two-columns-heading-color: #41BD9B;
+  --demotime-two-columns-heading-color: #F0C75E;
   --demotime-two-columns-heading-background: transparent;
 
   /* h2 isn't exposed via per-layout variables in the default theme.

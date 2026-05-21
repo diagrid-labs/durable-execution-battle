@@ -6,5 +6,6 @@ layout: intro
 
 ## Cadence · Temporal · Conductor · Dapr · Restate
 
-**Marc Duiker** — Developer Advocate, Diagrid
-*<conference name>*, 2026
+**Marc Duiker**
+
+![bot-animation](.demo/images/bot-animations-0.gif)
