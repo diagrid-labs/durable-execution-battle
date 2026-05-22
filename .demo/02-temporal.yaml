@@ -13,7 +13,7 @@ scenes:
     moves:
       - action: setPresentationView
       - action: openSlide
-        path: slides/05-demo-intro/00-demo-block.md
+        path: slides/05-demo/02-temporal.md
   - id: temporal-show-config
     title: Show the Spring Boot starter config (no @Bean wiring, no Cassandra)
     moves:
@@ -93,8 +93,6 @@ scenes:
   - id: temporal-send-status
     title: GET /status — final workflow output
     moves:
-      - action: open
-        path: demos/02-temporal/enterprise-diagnostics.http
       - action: waitForInput
         message: 'Click ''Send Request'' above the ### Status block.'
   - id: temporal-cleanup

@@ -13,7 +13,7 @@ scenes:
     moves:
       - action: setPresentationView
       - action: openSlide
-        path: slides/05-demo-intro/00-demo-block.md
+        path: slides/05-demo/01-cadence.md
   - id: cadence-show-cluster
     title: Show the Cassandra + Cadence cluster (the cost-of-entry)
     moves:
