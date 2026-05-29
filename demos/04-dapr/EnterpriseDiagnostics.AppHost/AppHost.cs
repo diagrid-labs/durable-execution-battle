@@ -30,7 +30,7 @@ workflowApp.WaitFor(cache);
 builder
     .AddContainer("diagrid-dashboard", "ghcr.io/diagridio/diagrid-dashboard:latest")
     .WithContainerName("diagrid-dashboard")
-    .WithBindMount(Path.Join(executingPath, "Resources"), "/app/components")
+    .WithBindMount(Path.Join(executingPath, "Resources/dashboard"), "/app/components")
     .WithEnvironment("COMPONENT_FILE", "/app/components/statestore-dashboard.yaml")
     .WithEnvironment("APP_ID", "diagrid-dashboard")
     .WithHttpEndpoint(port: 58888, targetPort: 8080)

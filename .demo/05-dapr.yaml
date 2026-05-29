@@ -1,0 +1,91 @@
+title: 05 — Dapr (C# / .NET 10) — USS Enterprise diagnostics
+description: |
+  Dapr Workflow demo: 5-scan fan-out, durable 60s timer, kill+resume,
+  conditional bridge alert. .NET 10 + Aspire AppHost orchestrates a
+  Valkey state-store, the ApiService + Dapr sidecar, and the Diagrid
+  Dev Dashboard — one `aspire run` boots the whole stack.
+
+  API calls are driven from
+  demos/04-dapr/EnterpriseDiagnostics.ApiService/EnterpriseDiagnostics.ApiService.http —
+  the speaker clicks "Send Request" on each block when prompted.
+version: 3
+scenes:
+  - id: dapr-intro
+    title: Open the demo intro slide
+    moves:
+      - action: setPresentationView
+      - action: openSlide
+        path: slides/05-demo/04-dapr.md
+  - id: dapr-show-apphost
+    title: Show the Aspire AppHost — Valkey + sidecar + Diagrid Dashboard wired in code
+    moves:
+      - action: open
+        path: demos/04-dapr/EnterpriseDiagnostics.AppHost/AppHost.cs
+  - id: dapr-show-workflow
+    title: Show the workflow — 5 parallel scans, 60s timer, conditional NotifyBridge
+    moves:
+      - action: open
+        path: demos/04-dapr/EnterpriseDiagnostics.ApiService/Workflows/DiagnosticsWorkflow.cs
+  - id: dapr-show-activity
+    title: Show one scan activity (deterministic mock analysis)
+    moves:
+      - action: open
+        path: demos/04-dapr/EnterpriseDiagnostics.ApiService/Activities/ScanWarpCoreActivity.cs
+  - id: dapr-start-aspire
+    title: Start Aspire — boots Valkey, ApiService + Dapr sidecar, Diagrid Dashboard
+    moves:
+      - action: executeTerminalCommand
+        terminalId: dapr-aspire
+        command: cd demos/04-dapr && aspire run
+        insertTypingMode: character-by-character
+        insertTypingSpeed: 90
+        autoExecute: true
+      - action: waitForInput
+        message: Wait for the Aspire dashboard to open and all resources (cache, wf-app, diagrid-dashboard) to report Running.
+  - id: dapr-open-diagrid-dashboard
+    title: Open the Diagrid Dev Dashboard (manual — browser)
+    moves:
+      - action: waitForInput
+        message: Open http://localhost:58888 → Workflows tab. Keep it visible alongside the Aspire dashboard.
+  - id: dapr-open-http-file
+    title: Open the .http file for API calls
+    moves:
+      - action: open
+        path: demos/04-dapr/EnterpriseDiagnostics.ApiService/EnterpriseDiagnostics.ApiService.http
+  - id: dapr-send-start
+    title: POST /start — kick off the workflow
+    moves:
+      - action: waitForInput
+        message: 'Click ''Send Request'' above the ### Start the diagnostics workflow block. Copy the returned instanceId.'
+  - id: dapr-watch-fanout
+    title: Watch the 5 scan activities fan out in the Diagrid Dev Dashboard
+    moves:
+      - action: waitForInput
+        message: 'Diagrid Dev Dashboard → open the latest DiagnosticsWorkflow run: 5 Scan* activities complete in ~1s, then the 60s timer starts.'
+  - id: dapr-kill-point
+    title: ⚡ KILL POINT — stop the wf-app resource in the Aspire dashboard (~T+20s)
+    moves:
+      - action: waitForInput
+        message: 'Aspire dashboard → wf-app row → Stop. Valkey keeps running so state survives. Workflow stays Running in the Diagrid dashboard, timer still ticking.'
+  - id: dapr-restart-app
+    title: Restart the wf-app resource — timer fires, PrioritizeIssues + NotifyBridge run
+    moves:
+      - action: waitForInput
+        message: 'Aspire dashboard → wf-app row → Start. Watch wf-app stdout: PrioritizeIssues → 🚨 BRIDGE ALERT RED_ALERT banner. Diagrid dashboard shows workflow Completed.'
+  - id: dapr-send-status
+    title: GET /status — final workflow output
+    moves:
+      - action: waitForInput
+        message: 'Click ''Send Request'' above the ### Get the workflow status block.'
+  - id: dapr-cleanup
+    title: Stop Aspire (tears down sidecar, Valkey, Diagrid Dashboard)
+    moves:
+      - action: focusTerminal
+        terminalId: dapr-aspire
+      - action: sendKeybinding
+        keybinding: ctrl+c
+      - action: waitForTimeout
+        timeout: 2000
+      - action: closeTerminal
+        terminalId: dapr-aspire
+      - action: unsetPresentationView
