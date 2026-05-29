@@ -1,0 +1,125 @@
+title: 04 — Conductor (C# / .NET 10) — USS Enterprise diagnostics
+description: |
+  Conductor demo: workflow-as-data. Fluent C# builder POSTs a JSON
+  workflow definition to the Conductor engine at startup; the engine
+  owns the 5-scan fan-out, the ~59s WAIT timer, and the conditional
+  bridge alert. Single conductor-standalone container (server + UI +
+  embedded Elasticsearch) plus an ASP.NET app hosting the workers.
+
+  API calls are driven from demos/03-conductor/enterprise-diagnostics.http —
+  the speaker clicks "Send Request" on each block when prompted.
+version: 3
+scenes:
+  - id: conductor-intro
+    title: Open the demo intro slide
+    moves:
+      - action: setPresentationView
+      - action: openSlide
+        path: slides/05-demo/03-conductor.md
+  - id: conductor-show-workflow
+    title: Show the workflow — fluent C# builder, ForkJoin → Join → Wait → Switch
+    moves:
+      - action: open
+        path: demos/03-conductor/Workflows/DiagnosticsWorkflow.cs
+  - id: conductor-show-worker
+    title: Show one scan worker (typed method + [WorkerTask] adapter)
+    moves:
+      - action: open
+        path: demos/03-conductor/Workers/ScanWarpCoreWorker.cs
+  - id: conductor-start-server
+    title: Start Conductor (single container — server + UI + embedded Elasticsearch)
+    moves:
+      - action: executeTerminalCommand
+        terminalId: conductor-server
+        command: cd demos/03-conductor && docker compose up
+        insertTypingMode: instant
+        autoExecute: true
+      - action: waitForInput
+        message: Wait ~60s until the container reports 'healthy', then continue.
+  - id: conductor-start-app
+    title: Start the ASP.NET app (workers + REST API + startup registrar on :5050)
+    moves:
+      - action: executeTerminalCommand
+        terminalId: conductor-app
+        command: cd demos/03-conductor && dotnet run
+        insertTypingMode: character-by-character
+        insertTypingSpeed: 90
+        autoExecute: true
+      - action: waitForInput
+        message: Wait for 'Now listening on http://localhost:5050' + 'Registered diagnostics_workflow', then continue.
+  - id: conductor-open-ui
+    title: Open the Conductor UI (manual — browser)
+    moves:
+      - action: waitForInput
+        message: Open http://localhost:5002 → keep it visible.
+  - id: conductor-show-json
+    title: Show the JSON workflow definition in the Conductor UI
+    moves:
+      - action: waitForInput
+        message: Conductor UI → Workflow Definitions → diagnostics_workflow → JSON view. 'My C# code is a builder. The JSON is the workflow.'
+  - id: conductor-open-http-file
+    title: Open the .http file for API calls
+    moves:
+      - action: open
+        path: demos/03-conductor/enterprise-diagnostics.http
+  - id: conductor-send-start
+    title: POST /start — kick off the workflow
+    moves:
+      - action: waitForInput
+        message: 'Click ''Send Request'' above the ### Start the diagnostics workflow block. Copy the returned workflow_id.'
+  - id: conductor-watch-fanout
+    title: Watch the 5 scan tasks fan out in the Conductor UI
+    moves:
+      - action: waitForInput
+        message: 'Conductor UI → Executions → open the latest run: 5 Scan* tasks transition SCHEDULED → IN_PROGRESS → COMPLETED in ~2s, then engineering_review WAIT (~59s) starts ticking.'
+  - id: conductor-kill-point
+    title: ⚡ KILL POINT — Ctrl+C the ASP.NET app mid-WAIT (~T+20s)
+    moves:
+      - action: focusTerminal
+        terminalId: conductor-app
+      - action: sendKeybinding
+        keybinding: ctrl+c
+      - action: waitForTimeout
+        timeout: 3000
+      - action: waitForInput
+        message: 'Conductor UI: workflow still RUNNING, WAIT keeps counting down — the engine owns the timer, not the worker. Now restart the app.'
+  - id: conductor-restart-app
+    title: Restart the worker — WAIT fires, prioritize + notify_bridge run
+    moves:
+      - action: executeTerminalCommand
+        terminalId: conductor-app
+        command: dotnet run
+        insertTypingMode: instant
+        autoExecute: true
+      - action: waitForInput
+        message: 'Watch app stdout: prioritize_issues → 🚨 BRIDGE ALERT RED_ALERT banner. Conductor UI shows workflow COMPLETED.'
+  - id: conductor-send-status
+    title: GET /status — final workflow output
+    moves:
+      - action: waitForInput
+        message: 'Click ''Send Request'' above the ### Get the workflow status block.'
+  - id: conductor-cleanup
+    title: Stop the app and tear down the Conductor container (+ volume)
+    moves:
+      - action: focusTerminal
+        terminalId: conductor-app
+      - action: sendKeybinding
+        keybinding: ctrl+c
+      - action: focusTerminal
+        terminalId: conductor-server
+      - action: sendKeybinding
+        keybinding: ctrl+c
+      - action: waitForTimeout
+        timeout: 1000
+      - action: executeTerminalCommand
+        terminalId: conductor-server
+        command: docker compose down -v
+        insertTypingMode: instant
+        autoExecute: true
+      - action: waitForInput
+        message: Wait for the container to stop, then continue.
+      - action: closeTerminal
+        terminalId: conductor-app
+      - action: closeTerminal
+        terminalId: conductor-server
+      - action: unsetPresentationView

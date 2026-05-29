@@ -44,8 +44,15 @@ internal sealed partial class DiagnosticsWorkflow : Workflow<DiagnosticsInput, D
         LogScansComplete(logger, context.InstanceId);
 
         // ── 60s durable sleep — ⚡ KILL POINT ⚡ ──
-        LogSleeping(logger, context.InstanceId);
-        await context.CreateTimer(TimeSpan.FromSeconds(60));
+        if (!input.Testing)
+        {
+            LogSleeping(logger, context.InstanceId);
+            await context.CreateTimer(TimeSpan.FromSeconds(60));
+        }
+        else
+        {
+            LogSleepSkipped(logger, context.InstanceId);
+        }
 
         // ── Prioritization ──
         var priority = await context.CallActivityAsync<Priority>(
@@ -101,4 +108,7 @@ internal sealed partial class DiagnosticsWorkflow : Workflow<DiagnosticsInput, D
 
     [LoggerMessage(LogLevel.Information, "Diagnostics workflow {Id} complete")]
     static partial void LogWorkflowComplete(ILogger logger, string Id);
+
+    [LoggerMessage(LogLevel.Information, "Workflow {Id} testing=true — skipping engineering review wait")]
+    static partial void LogSleepSkipped(ILogger logger, string Id);
 }

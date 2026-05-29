@@ -48,8 +48,12 @@ public class DiagnosticsWorkflowImpl implements DiagnosticsWorkflow {
         List<ScanResult> scans = List.of(
             pWarp.get(), pShields.get(), pLifeSupport.get(), pSensors.get(), pWeapons.get());
 
-        logger.info("Engineering review pending — sleeping 60s");
-        Workflow.sleep(Duration.ofSeconds(60));
+        if (!input.testing()) {
+            logger.info("Engineering review pending — sleeping 60s");
+            Workflow.sleep(Duration.ofSeconds(60));
+        } else {
+            logger.info("testing=true — skipping engineering review wait");
+        }
 
         Priority priority = prioritize.execute(new PrioritizeInput(input.shipName(), scans));
 

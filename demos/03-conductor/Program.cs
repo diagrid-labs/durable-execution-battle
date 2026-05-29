@@ -58,6 +58,10 @@ app.MapPost("/start", (DiagnosticsInput input, WorkflowResourceApi api) =>
             ["ship_name"]        = input.ShipName,
             ["diagnostics_date"] = input.DiagnosticsDate,
             ["engineer_name"]    = input.EngineerName,
+            // Serialize as a lowercase string so the workflow's SwitchTask matches the
+            // literal case key "false" reliably. Booleans on the wire can compare
+            // unpredictably against string-typed switch cases.
+            ["testing"]          = input.Testing.ToString().ToLowerInvariant(),
         }
     };
     var workflowId = api.StartWorkflow(request);

@@ -1,4 +1,4 @@
-title: 03 — Dimension 2 — Language Support & Features
+title: 08 — Language Support & Features
 description: |
   Languages section: SDK matrix → workflow patterns naming →
   Cadence Python archived warning → sagas + cron.
@@ -12,16 +12,13 @@ scenes:
       - action: setPresentationView
       - action: openSlide
         path: slides/02-languages/00-section.md
-
   - id: languages-sdk-matrix
     title: SDK matrix
     moves:
       - action: openSlide
         path: slides/02-languages/01-sdk-matrix.md
-
   - id: languages-patterns
     title: Workflow patterns — same idea, different name
     moves:
       - action: markdownPreview
         path: slides/02-languages/02-patterns.md
-

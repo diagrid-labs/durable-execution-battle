@@ -24,6 +24,7 @@ export interface DiagnosticsInput {
   shipName: string;
   diagnosticsDate: string;
   engineerName: string;
+  testing?: boolean;
 }
 
 export interface DiagnosticsOutput {

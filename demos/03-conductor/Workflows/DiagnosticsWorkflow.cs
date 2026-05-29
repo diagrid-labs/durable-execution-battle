@@ -39,6 +39,12 @@ public static class DiagnosticsWorkflow
         // FromSeconds(59) is the largest single-component value and gives the demo
         // a ~60s window for the kill+restart choreography.
         var engineeringReview = new WaitTask("engineering_review", TimeSpan.FromSeconds(59));
+        // SwitchTask gated on ${workflow.input.testing}. The "false" branch runs
+        // the durable WaitTask; when testing=true no case matches and the switch
+        // falls through immediately. Matches the in-code conditional used by the
+        // other four engines.
+        var engineeringReviewSwitch = new SwitchTask("engineering_review_switch", "${workflow.input.testing}")
+            .WithDecisionCase("false", BranchTasks(engineeringReview));
 
         // ── Prioritization ──
         // SimpleTask signature is (taskName, taskReferenceName).
@@ -69,7 +75,7 @@ public static class DiagnosticsWorkflow
             .WithOwner("marc@diagrid.io")
             .WithTask(scanFork)
             .WithTask(scanJoin)
-            .WithTask(engineeringReview)
+            .WithTask(engineeringReviewSwitch)
             .WithTask(prioritize)
             .WithTask(notifySwitch);
 
