@@ -106,8 +106,6 @@ scenes:
         keybinding: ctrl+c
       - action: waitForTimeout
         timeout: 500
-      - action: sendKeybinding
-        keybinding: ctrl+c
       - action: focusTerminal
         terminalId: restate-server
       - action: sendKeybinding
