@@ -1,0 +1,121 @@
+title: 06 — Restate (TypeScript) — USS Enterprise diagnostics
+description: |
+  Restate TypeScript demo: 5-scan fan-out, durable 60s sleep, kill+resume,
+  conditional bridge alert. Single Node process (tsx watch) hosting both the
+  Restate SDK handler endpoint (:9080) and an Express wrapper (:3000), backed
+  by the single restate-server binary (RocksDB embedded — no Postgres, no
+  Kafka, no Cassandra).
+
+  API calls are driven from demos/05-restate/enterprise-diagnostics.http —
+  the speaker clicks "Send Request" on each block when prompted.
+version: 3
+scenes:
+  - id: restate-intro
+    title: Open the demo intro slide
+    moves:
+      - action: setPresentationView
+      - action: openSlide
+        path: slides/05-demo/05-restate.md
+  - id: restate-show-workflow
+    title: Show the workflow — Promise.all over 5 scans, ctx.sleep(60s), conditional notifyBridge
+    moves:
+      - action: open
+        path: demos/05-restate/src/diagnostics.ts
+  - id: restate-show-service
+    title: Show the activities service — 7 handlers in one restate.service
+    moves:
+      - action: open
+        path: demos/05-restate/src/services.ts
+  - id: restate-start-server
+    title: Start restate-server (single binary, RocksDB embedded — no Docker)
+    moves:
+      - action: executeTerminalCommand
+        terminalId: restate-server
+        command: restate-server
+        insertTypingMode: instant
+        autoExecute: true
+      - action: waitForInput
+        message: Wait for 'Restate server started' on :8080/:9070, then continue.
+  - id: restate-start-app
+    title: Start the Node process (handler endpoint + Express wrapper + auto-register)
+    moves:
+      - action: executeTerminalCommand
+        terminalId: restate-app
+        command: cd demos/05-restate && npm run dev
+        insertTypingMode: character-by-character
+        insertTypingSpeed: 90
+        autoExecute: true
+      - action: waitForInput
+        message: Wait for 'Deployment registered at http://localhost:9080', then continue.
+  - id: restate-open-admin-ui
+    title: Open the Restate admin UI (manual — browser)
+    moves:
+      - action: waitForInput
+        message: Open http://localhost:9070 → Invocations. Keep it visible.
+  - id: restate-open-http-file
+    title: Open the .http file for API calls
+    moves:
+      - action: open
+        path: demos/05-restate/enterprise-diagnostics.http
+  - id: restate-send-start
+    title: POST /start — kick off the workflow
+    moves:
+      - action: waitForInput
+        message: 'Click ''Send Request'' above the ### Start a diagnostics workflow block.'
+  - id: restate-watch-fanout
+    title: Watch the 5 scan calls fan out in the Restate admin UI
+    moves:
+      - action: waitForInput
+        message: 'Restate UI → Invocations → open the latest run: 5 Call(activities/scan*) entries complete in ~1s, then Sleep(60s) starts counting down.'
+  - id: restate-kill-point
+    title: ⚡ KILL POINT — Ctrl+C the Node process twice mid-sleep (~T+20s)
+    moves:
+      - action: focusTerminal
+        terminalId: restate-app
+      - action: sendKeybinding
+        keybinding: ctrl+c
+      - action: waitForTimeout
+        timeout: 1000
+      - action: sendKeybinding
+        keybinding: ctrl+c
+      - action: waitForTimeout
+        timeout: 3000
+      - action: waitForInput
+        message: 'Restate UI: invocation transitions to SUSPENDED / RETRY_BACKOFF. Journal lives in the server. Now restart the Node process.'
+  - id: restate-restart-app
+    title: Restart the Node process — handler re-registers, sleep resumes from the journal
+    moves:
+      - action: executeTerminalCommand
+        terminalId: restate-app
+        command: npm run dev
+        insertTypingMode: instant
+        autoExecute: true
+      - action: waitForInput
+        message: 'Watch stdout: Prioritized with severity → 🚨 BRIDGE ALERT RED_ALERT banner. Restate UI shows invocation COMPLETED.'
+  - id: restate-send-status
+    title: GET /status/:id — final workflow output
+    moves:
+      - action: waitForInput
+        message: 'Click ''Send Request'' above the ### Query workflow status block.'
+  - id: restate-cleanup
+    title: Stop the Node process and restate-server
+    moves:
+      - action: focusTerminal
+        terminalId: restate-app
+      - action: sendKeybinding
+        keybinding: ctrl+c
+      - action: waitForTimeout
+        timeout: 500
+      - action: sendKeybinding
+        keybinding: ctrl+c
+      - action: focusTerminal
+        terminalId: restate-server
+      - action: sendKeybinding
+        keybinding: ctrl+c
+      - action: waitForTimeout
+        timeout: 1000
+      - action: closeTerminal
+        terminalId: restate-app
+      - action: closeTerminal
+        terminalId: restate-server
+      - action: unsetPresentationView

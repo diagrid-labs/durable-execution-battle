@@ -24,3 +24,6 @@
 # Node / Restate / Conductor / Temporal demos (future)
 node_modules/
 **/*.log
+
+# Restate
+restate-data

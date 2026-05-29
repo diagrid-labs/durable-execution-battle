@@ -10,7 +10,7 @@ Content-Type: application/json
   "engineerName": "Geordi La Forge"
 }
 
-
+###
 @instanceId={{startDiagnostics.response.body.workflowId}}
 ### Query workflow status
 GET http://localhost:3000/status/{{instanceId}}
