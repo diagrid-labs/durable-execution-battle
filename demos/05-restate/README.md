@@ -66,6 +66,17 @@ Watch the Restate admin UI at `http://localhost:9070` → **Invocations** → `e
 7. When the timer fires, `prioritizeIssues` runs; if severity is `yellow_alert` / `red_alert` (overwhelmingly likely thanks to the rigged health range), `notifyBridge` fires.
 8. A `🚨 BRIDGE ALERT` line at WARN level appears in Terminal 2's stdout.
 
+## Cleanup
+
+`Ctrl+C` both terminals — the Node process (Terminal 2) and `restate-server` (Terminal 1). The server is a single binary with embedded RocksDB, so stopping it leaves nothing behind.
+
+If you used the **Docker fallback** for the server (`docker run … restate/restate:1.6.x`) instead of the native binary, `Ctrl+C` does not remove the container — stop and remove it explicitly:
+
+```bash
+docker ps                 # find the restate container id
+docker stop <id> && docker rm <id>
+```
+
 ## API
 
 | Method | Path | Purpose |

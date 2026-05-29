@@ -1,0 +1,68 @@
+title: 91 — Performance — Temporal burst (testing=true)
+description: |
+  Runs the demos/perf benchmark against Temporal: 100 DiagnosticsWorkflows in a
+  burst with testing=true (the 60s engineering-review wait is skipped). Starts
+  the Temporal dev server and the Spring Boot worker, runs the bench, shows the
+  updated results table, then tears the stack down.
+
+  Prereq: deps installed once with `cd demos/perf && npm install`.
+  The driver replaces the temporal row in slides/04-performance/04-results.md.
+version: 3
+scenes:
+  - id: temporal-perf-start-stack
+    title: Start the Temporal dev server
+    moves:
+      - action: executeTerminalCommand
+        terminalId: temporal-server
+        command: cd demos/02-temporal && temporal server start-dev
+        insertTypingMode: instant
+        autoExecute: true
+      - action: waitForInput
+        message: Wait for 'Server started' + Web UI URL, then continue.
+  - id: temporal-perf-start-worker
+    title: Start the Spring Boot worker (port 8080)
+    moves:
+      - action: executeTerminalCommand
+        terminalId: temporal-app
+        command: cd demos/02-temporal && ./mvnw spring-boot:run
+        insertTypingMode: instant
+        autoExecute: true
+      - action: waitForInput
+        message: Wait for 'Started EnterpriseDiagnosticsApplication', then continue.
+  - id: temporal-perf-run-bench
+    title: Run the benchmark — 100 workflows against Temporal
+    moves:
+      - action: executeTerminalCommand
+        terminalId: temporal-perf
+        command: cd demos/perf && npm run bench -- --engine temporal --n 100
+        insertTypingMode: character-by-character
+        insertTypingSpeed: 90
+        autoExecute: true
+      - action: waitForInput
+        message: 'Wait for the [perf] summary line (wallclock + throughput), then continue.'
+  - id: temporal-perf-show-results
+    title: Show the updated results table
+    moves:
+      - action: open
+        path: slides/04-performance/04-results.md
+      - action: waitForInput
+        message: 'Temporal row in 04-results.md is updated. Discuss the numbers, then continue to teardown.'
+  - id: temporal-perf-teardown
+    title: Stop the worker and the Temporal dev server
+    moves:
+      - action: focusTerminal
+        terminalId: temporal-app
+      - action: sendKeybinding
+        keybinding: ctrl+c
+      - action: focusTerminal
+        terminalId: temporal-server
+      - action: sendKeybinding
+        keybinding: ctrl+c
+      - action: waitForTimeout
+        timeout: 1000
+      - action: closeTerminal
+        terminalId: temporal-perf
+      - action: closeTerminal
+        terminalId: temporal-app
+      - action: closeTerminal
+        terminalId: temporal-server

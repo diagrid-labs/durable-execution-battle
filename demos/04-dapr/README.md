@@ -55,3 +55,15 @@ See [`plan.md` §5.4](../../plan.md) and [`.demo/04-dapr.demo`](../../.demo/04-d
 3. Open the Diagrid Dev Dashboard — 5 parallel `Scan*` activities fan out and complete within ~1 second.
 4. Workflow enters the 60-second `CreateTimer`. Kill the ApiService process mid-sleep (~T+20s).
 5. Restart the ApiService — the timer durably wakes, `PrioritizeIssues` runs, `NotifyBridge` fires with the 🚨 BRIDGE ALERT banner (visible in the Diagrid Dev Dashboard activity timeline + the worker stdout).
+
+## Cleanup
+
+`Ctrl+C` the `aspire run` process. Aspire owns the lifecycle of the containers it started (the Valkey state-store and the Diagrid Dev Dashboard) and stops them on graceful shutdown.
+
+Because the containers are Aspire-managed rather than torn down by an explicit `docker compose down`, **verify they actually stopped** — if the shutdown is interrupted they can be orphaned:
+
+```shell
+docker ps
+```
+
+If a `valkey` or Diagrid Dashboard container is still listed, stop it with `docker stop <id>`.

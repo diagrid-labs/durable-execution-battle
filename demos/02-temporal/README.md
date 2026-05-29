@@ -40,6 +40,10 @@ Watch event history live at <http://localhost:8233>.
 
 The Spring Boot app hosts worker + REST API in one process, so killing the app *is* killing the worker — exactly the durability demo beat.
 
+## Cleanup
+
+`Ctrl+C` both terminals — the Spring Boot app (Terminal 2) and the `temporal server start-dev` process (Terminal 1). No Docker is involved: the dev server is a single binary holding all state in memory, so it leaves nothing behind once stopped.
+
 ## Endpoints
 
 | Method | Path | Notes |

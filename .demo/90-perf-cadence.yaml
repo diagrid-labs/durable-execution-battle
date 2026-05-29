@@ -1,0 +1,75 @@
+title: 90 — Performance — Cadence burst (testing=true)
+description: |
+  Runs the demos/perf benchmark against Cadence: 100 DiagnosticsWorkflows in a
+  burst with testing=true (the 60s engineering-review wait is skipped). Starts
+  the Cassandra-backed Cadence cluster and the Spring Boot worker, runs the
+  bench, shows the updated results table, then tears the stack down.
+
+  Prereq: deps installed once with `cd demos/perf && npm install`.
+  The driver replaces the cadence row in slides/04-performance/04-results.md.
+version: 3
+scenes:
+  - id: cadence-perf-start-stack
+    title: Start the Cadence cluster (Cassandra + server + web)
+    moves:
+      - action: executeTerminalCommand
+        terminalId: cadence-cluster
+        command: cd demos/01-cadence && docker compose up
+        insertTypingMode: instant
+        autoExecute: true
+      - action: waitForInput
+        message: Wait for Cassandra healthy + Cadence server ready, then continue.
+  - id: cadence-perf-start-worker
+    title: Start the Spring Boot worker (port 8080)
+    moves:
+      - action: executeTerminalCommand
+        terminalId: cadence-app
+        command: cd demos/01-cadence && ./mvnw spring-boot:run
+        insertTypingMode: instant
+        autoExecute: true
+      - action: waitForInput
+        message: Wait for 'Started EnterpriseDiagnosticsApplication', then continue.
+  - id: cadence-perf-run-bench
+    title: Run the benchmark — 100 workflows against Cadence
+    moves:
+      - action: executeTerminalCommand
+        terminalId: cadence-perf
+        command: cd demos/perf && npm run bench -- --engine cadence --n 100
+        insertTypingMode: character-by-character
+        insertTypingSpeed: 90
+        autoExecute: true
+      - action: waitForInput
+        message: 'Wait for the [perf] summary line (wallclock + throughput), then continue.'
+  - id: cadence-perf-show-results
+    title: Show the updated results table
+    moves:
+      - action: open
+        path: slides/04-performance/04-results.md
+      - action: waitForInput
+        message: 'Cadence row in 04-results.md is updated. Discuss the numbers, then continue to teardown.'
+  - id: cadence-perf-teardown
+    title: Stop the worker and tear down the Cadence cluster
+    moves:
+      - action: focusTerminal
+        terminalId: cadence-app
+      - action: sendKeybinding
+        keybinding: ctrl+c
+      - action: focusTerminal
+        terminalId: cadence-cluster
+      - action: sendKeybinding
+        keybinding: ctrl+c
+      - action: waitForTimeout
+        timeout: 1000
+      - action: executeTerminalCommand
+        terminalId: cadence-cluster
+        command: docker compose down -v
+        insertTypingMode: instant
+        autoExecute: true
+      - action: waitForInput
+        message: Wait for all Cadence containers to stop, then continue.
+      - action: closeTerminal
+        terminalId: cadence-perf
+      - action: closeTerminal
+        terminalId: cadence-app
+      - action: closeTerminal
+        terminalId: cadence-cluster

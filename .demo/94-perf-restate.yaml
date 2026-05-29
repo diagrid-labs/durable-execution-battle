@@ -1,0 +1,71 @@
+title: 94 — Performance — Restate burst (testing=true)
+description: |
+  Runs the demos/perf benchmark against Restate: 100 DiagnosticsWorkflows in a
+  burst with testing=true (the 60s engineering-review wait is skipped). Starts
+  restate-server and the Node service, runs the bench, shows the updated results
+  table, then tears the stack down.
+
+  Prereq: deps installed once with `cd demos/perf && npm install`.
+  Notes: restate-server here runs from demos/05-restate, so it writes a fresh
+  restate-data/ in that folder. On a multi-homed host it can hang on "Trying to
+  join cluster" — if so, relaunch with a loopback RESTATE_ADVERTISED_ADDRESS.
+  The driver replaces the restate row in slides/04-performance/04-results.md.
+version: 3
+scenes:
+  - id: restate-perf-start-stack
+    title: Start restate-server
+    moves:
+      - action: executeTerminalCommand
+        terminalId: restate-server
+        command: cd demos/05-restate && RESTATE_ADVERTISED_ADDRESS="http://127.0.0.1:5122/" restate-server
+        insertTypingMode: instant
+        autoExecute: true
+      - action: waitForInput
+        message: Wait for 'Restate server started' on :8080/:9070, then continue.
+  - id: restate-perf-start-worker
+    title: Start the Node service
+    moves:
+      - action: executeTerminalCommand
+        terminalId: restate-app
+        command: cd demos/05-restate && npm run dev
+        insertTypingMode: instant
+        autoExecute: true
+      - action: waitForInput
+        message: Wait for 'Deployment registered at http://localhost:9080', then continue.
+  - id: restate-perf-run-bench
+    title: Run the benchmark — 100 workflows against Restate
+    moves:
+      - action: executeTerminalCommand
+        terminalId: restate-perf
+        command: cd demos/perf && npm run bench -- --engine restate --n 100
+        insertTypingMode: character-by-character
+        insertTypingSpeed: 90
+        autoExecute: true
+      - action: waitForInput
+        message: Wait for the [perf] summary line (wallclock + throughput), then continue.
+  - id: restate-perf-show-results
+    title: Show the updated results table
+    moves:
+      - action: open
+        path: slides/04-performance/04-results.md
+      - action: waitForInput
+        message: Restate row in 04-results.md is updated. Discuss the numbers, then continue to teardown.
+  - id: restate-perf-teardown
+    title: Stop the Node service and restate-server
+    moves:
+      - action: focusTerminal
+        terminalId: restate-app
+      - action: sendKeybinding
+        keybinding: ctrl+c
+      - action: focusTerminal
+        terminalId: restate-server
+      - action: sendKeybinding
+        keybinding: ctrl+c
+      - action: waitForTimeout
+        timeout: 1000
+      - action: closeTerminal
+        terminalId: restate-perf
+      - action: closeTerminal
+        terminalId: restate-app
+      - action: closeTerminal
+        terminalId: restate-server

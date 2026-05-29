@@ -69,6 +69,16 @@ This is the demo's payoff.
 
 Verified Task 14 outcome: 10/10 reruns landed `red_alert`; the rigging is solid.
 
+## Cleanup
+
+`Ctrl+C` the Spring Boot app in Terminal 2 to stop the worker. Then tear down the cluster:
+
+```
+cd demos/01-cadence && docker compose down -v
+```
+
+Closing the terminal does **not** stop the containers — `docker compose up` ran them in the foreground, but the Cassandra, Cadence server, and Cadence web containers must be stopped explicitly. The `-v` also drops the Cassandra volume so the next run starts from a clean domain. Confirm with `docker ps` that nothing is left running.
+
 ## API
 
 | Method | Path | Purpose |
