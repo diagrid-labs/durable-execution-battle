@@ -103,15 +103,27 @@ scenes:
       - action: waitForInput
         message: 'Click ''Send Request'' above the ### Status block.'
   - id: cadence-cleanup
-    title: Stop the worker and the cluster
+    title: Stop the worker and tear down the Cadence cluster (Cassandra + server + web)
     moves:
       - action: focusTerminal
+        terminalId: cadence-app
       - action: sendKeybinding
         keybinding: ctrl+c
-      - action: closeTerminal
-        terminalId: cadence-app
+      - action: focusTerminal
+        terminalId: cadence-cluster
+      - action: sendKeybinding
+        keybinding: ctrl+c
       - action: waitForTimeout
         timeout: 1000
+      - action: executeTerminalCommand
+        terminalId: cadence-cluster
+        command: docker compose down -v
+        insertTypingMode: instant
+        autoExecute: true
+      - action: waitForInput
+        message: Wait for all Cadence containers (Cassandra + server + web) to stop, then continue.
+      - action: closeTerminal
+        terminalId: cadence-app
       - action: closeTerminal
         terminalId: cadence-cluster
       - action: unsetPresentationView

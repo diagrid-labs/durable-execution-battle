@@ -31,7 +31,10 @@ Three terminals:
 
 ```bash
 # Terminal 1 — Restate server (single binary, no Docker required on macOS)
-restate-server
+# Pin the advertised address to loopback so auto-provisioning works regardless of
+# what VPN/VM/Docker interfaces are up (a multi-homed hostname makes the node hang
+# on "Trying to join the cluster ... Has the cluster been provisioned, yet?").
+RESTATE_ADVERTISED_ADDRESS="http://127.0.0.1:5122/" restate-server
 
 # Terminal 2 — Node process: handler endpoint + Express wrapper + auto-registration
 cd demos/05-restate
