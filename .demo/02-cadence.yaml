@@ -1,4 +1,4 @@
-title: 01 — Cadence (Java) — USS Enterprise diagnostics
+title: 02— Cadence (Java) — USS Enterprise diagnostic
 description: |
   Cadence Java demo: 5-scan fan-out, durable 60s timer, kill+resume,
   conditional bridge alert. Spring Boot 3 + cadence-client 3.13.0,

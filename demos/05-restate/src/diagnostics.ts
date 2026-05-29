@@ -38,10 +38,13 @@ export const diagnosticsWorkflow = restate.workflow({
         client.scanWeapons({ shipName: input.shipName, subsystem: "weapons" }),
       ]);
 
-      ctx.console.log("All scans complete — engineering review pending, sleeping 60s");
-
-      // ── 60s durable sleep — ⚡ KILL POINT ⚡ ──
-      await ctx.sleep({ seconds: 60 });
+      if (!input.testing) {
+        ctx.console.log("All scans complete — engineering review pending, sleeping 60s");
+        // ── 60s durable sleep — ⚡ KILL POINT ⚡ ──
+        await ctx.sleep({ seconds: 60 });
+      } else {
+        ctx.console.log("testing=true — skipping engineering review wait");
+      }
 
       // ── Prioritization ──
       const priority: Priority = await client.prioritizeIssues({
