@@ -7,13 +7,17 @@ footer: |
 
 # SDK matrix
 
-| Platform | First-party GA SDKs |
-|---|---|
-| **Cadence** | Go · Java — **2** *(Python community SDK archived)* |
-| **Temporal** | Go · Java · Python · TS · .NET · PHP · Ruby — **7** |
-| **Conductor** | Python · Java · Go · C# · JS · Clojure · Rust · Ruby — **8 code-builders** |
-| **Dapr Workflows** | .NET · Python (stable); Java/Go (beta); JS (alpha) |
-| **Restate** | TS · Java · Kotlin · Python · Go · Rust |
+| Engine | Go | Java | Python | JS/TS | .NET | Ruby | Rust | Kotlin | PHP | Clojure |
+|---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+| **Cadence** | ✅ | ✅ | 🟡 | — | — | ⚪ | — | — | — | — |
+| **Temporal** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | 🟡 | — | ✅ | — |
+| **Conductor** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | 🟡 | — | — | ⚪ |
+| **Dapr Workflows** | ✅ | ✅ | ✅ | ✅ | ✅ | — | — | — | — | — |
+| **Restate** | ✅ | ✅ | ✅ | ✅ | — | 🟡 | ✅ | ✅ | — | — |
 
-**Most polyglot** by count → **Conductor**, but those SDKs build JSON.
-**Most polyglot workflow-as-code** → **Temporal**.
+✅ GA first-party · 🟡 beta / preview / early first-party · ⚪ community · — none
+
+**Most polyglot** by count → **Conductor** (8 SDKs incl. Rust; Clojure community) — but those SDKs build JSON.
+**Most polyglot workflow-as-code** → **Temporal** (7 GA + Rust in preview).
+
+Cadence: **2 GA** (Go, Java) + early Python · Dapr Workflows: **5 GA** · Restate: **6 GA**.
