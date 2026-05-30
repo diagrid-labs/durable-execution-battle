@@ -7,15 +7,28 @@ footer: |
 
 # Community matrix
 
-*Star counts verified 2026-05-16; community sizes approximate — refresh morning-of-talk.*
+## GitHub
 
-| | License | Stars | Where to find the community | Issues & PRs |
+*Activity counted over the last 3 months (since 2026-02-28): new issues, new PRs, plus PRs merged / closed-unmerged.*
+
+| | License | Stars | Repo | Issues & PRs *(last 3 mo)* |
 |---|---|---|---|---|
-| **Cadence** | Apache 2.0 | ~9.3k | [CNCF Slack](https://communityinviter.com/apps/cloud-native/cncf) `#cadence` · [GitHub Discussions](https://github.com/cadence-workflow/cadence/discussions) — *size n/a* | [cadence-workflow/cadence](https://github.com/cadence-workflow/cadence) |
-| **Temporal** | MIT | ~20.3k | [Slack](https://t.mp/slack) **~14k** · [Forum (Discourse)](https://community.temporal.io/) | [temporalio/temporal](https://github.com/temporalio/temporal) |
-| **Conductor** | Apache 2.0 | ~31.8k | [Slack](https://join.slack.com/t/orkes-conductor/shared_invite/zt-2vdbx239s-Eacdyqya9giNLHfrCavfaA) **1k+** *(2023)* · [Forum](https://community.orkes.io/) · [GitHub Discussions](https://github.com/conductor-oss/conductor/discussions) | [conductor-oss/conductor](https://github.com/conductor-oss/conductor) |
-| **Dapr** | Apache 2.0 | ~25.8k | [Discord](https://bit.ly/dapr-discord) **~8.2k** · [GitHub Discussions](https://github.com/dapr/dapr/discussions) | [dapr/dapr](https://github.com/dapr/dapr) |
-| **Restate** | **BSL 1.1** *(→ Apache 2.0 after 4y)* | ~3.9k | [Discord](https://discord.restate.dev) **~1.4k** · [Slack](https://slack.restate.dev) · [GitHub Discussions](https://github.com/restatedev/restate/discussions) | [restatedev/restate](https://github.com/restatedev/restate) |
+| **Cadence** | Apache 2.0 | ~9.3k | [cadence-workflow/cadence](https://github.com/cadence-workflow/cadence) | **49** new issues · **342** new PRs<br>**275** merged · **75** closed |
+| **Temporal** | MIT | ~20.6k | [temporalio/temporal](https://github.com/temporalio/temporal) | **66** new issues · **881** new PRs<br>**643** merged · **162** closed |
+| **Conductor** | Apache 2.0 | ~31.9k | [conductor-oss/conductor](https://github.com/conductor-oss/conductor) | **79** new issues · **258** new PRs<br>**159** merged · **64** closed |
+| **Dapr** | Apache 2.0 | ~25.8k | [dapr/dapr](https://github.com/dapr/dapr) | **62** new issues · **403** new PRs<br>**319** merged · **61** closed |
+| **Restate** | **BSL 1.1** *(→ Apache 2.0 after 4y)* | ~3.9k | [restatedev/restate](https://github.com/restatedev/restate) | **86** new issues · **303** new PRs<br>**244** merged · **57** closed |
 
-**Largest chat communities** → Temporal (Slack ~14k) & Dapr (Discord ~8.2k).
-**Primary hub varies**: CNCF/dedicated Slack (Cadence), Slack + Discourse (Temporal, Conductor), Discord (Dapr, Restate).
+
+---
+
+## Where to find the community
+
+| | Channels |
+|---|---|
+| **Cadence** | [CNCF Slack](https://communityinviter.com/apps/cloud-native/cncf) `#cadence-users` — **74** · [GitHub Discussions](https://github.com/cadence-workflow/cadence/discussions) |
+| **Temporal** | [Slack](https://t.mp/slack) **~23k** · [Discourse](https://community.temporal.io/) |
+| **Conductor** | [Discourse](https://community.orkes.io/) · [GitHub Discussions](https://github.com/conductor-oss/conductor/discussions) |
+| **Dapr** | [Discord](https://bit.ly/dapr-discord) **~8.2k** |
+| **Restate** | [Discord](https://discord.restate.dev) **~1.3k** · [Slack](https://slack.restate.dev) · [GitHub Discussions](https://github.com/restatedev/restate/discussions) |
+

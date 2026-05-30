@@ -28,18 +28,43 @@ scenes:
     moves:
       - action: openSlide
         path: slides/01-dx/03-getting-started.md
+  - id: dx-local-cadence
+    title: Local dev — Cadence
+    moves:
+      - action: openSlide
+        path: slides/01-dx/04-local-cadence.md
+  - id: dx-local-temporal
+    title: Local dev — Temporal
+    moves:
+      - action: openSlide
+        path: slides/01-dx/05-local-temporal.md
+  - id: dx-local-conductor
+    title: Local dev — Conductor
+    moves:
+      - action: openSlide
+        path: slides/01-dx/06-local-conductor.md
+  - id: dx-local-dapr
+    title: Local dev — Dapr Workflows
+    moves:
+      - action: openSlide
+        path: slides/01-dx/07-local-dapr.md
+  - id: dx-local-restate
+    title: Local dev — Restate
+    moves:
+      - action: openSlide
+        path: slides/01-dx/08-local-restate.md
   - id: dx-hello-workflow
     title: Time to "hello workflow"
     moves:
       - action: openSlide
-        path: slides/01-dx/04-hello-workflow.md
+        path: slides/01-dx/09-hello-workflow.md
   - id: dx-web-uis
     title: Web UIs comparison
     moves:
       - action: openSlide
-        path: slides/01-dx/05-web-uis.md
+        path: slides/01-dx/10-web-uis.md
   - id: dx-learning-curve
     title: Learning curve — two cliffs
     moves:
       - action: openSlide
-        path: slides/01-dx/06-learning-curve.md
+        path: slides/01-dx/11-learning-curve.md
