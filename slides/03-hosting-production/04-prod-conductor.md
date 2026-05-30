@@ -30,6 +30,9 @@ graph TD
   S2 --> ES
   S3 --> ES
   Brokers[Kafka / NATS / SQS / AMQP] -. Event tasks .- S1
+  classDef default stroke:#41bd9b,stroke-width:2px
+  linkStyle default stroke:#41bd9b,stroke-width:1px
+  style ServerCluster fill:#1e2a38,stroke:#7c93c7,stroke-width:1px,color:#d6def0
 ```
 
 A horizontally scalable cluster of **stateless** Conductor Server nodes (run ≥3 across AZs) behind a load balancer, sharing an external HA data tier: Redis (or Redis Cluster) for state/queues, a relational/NoSQL store for durability, and Elasticsearch/OpenSearch for indexing. Worker fleets are independent and poll the servers; brokers integrate via Event tasks.

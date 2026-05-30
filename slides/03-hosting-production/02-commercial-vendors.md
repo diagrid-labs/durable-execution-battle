@@ -9,8 +9,8 @@ footer: |
 
 | | Vendor | Offering | HQ |
 |---|---|---|---|
-| **Cadence** | Instaclustr *(NetApp)* | Managed Cadence | 🇦🇺 Canberra, Australia → 🇺🇸 US-owned (NetApp) |
-| **Temporal** | Temporal Technologies | Cloud · BYOC · support | 🇺🇸 USA |
+| **Cadence** | Instaclustr *(NetApp)* | Managed Cadence (any cloud) | 🇺🇸 USA |
+| **Temporal** | Temporal Technologies | Cloud (AWS or GCP) | 🇺🇸 USA |
 | **Conductor** | Orkes | Cloud · Enterprise | 🇺🇸 USA |
 | **Dapr** | Diagrid  | Catalyst | 🇺🇸 USA |
 | **Restate** | Restate GmbH | Cloud | 🇩🇪 Germany |

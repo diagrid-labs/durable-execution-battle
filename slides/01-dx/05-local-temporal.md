@@ -24,6 +24,9 @@ graph TD
   Dev --> CLI
   Dev --> Worker
   Dev -->|browser| UI
+  classDef default stroke:#41bd9b,stroke-width:2px
+  linkStyle default stroke:#41bd9b,stroke-width:1px
+  style DevServer fill:#1e2a38,stroke:#7c93c7,stroke-width:1px,color:#d6def0
 ```
 
 **`temporal server start-dev`** — one binary bundles the server, SQLite persistence and the Web UI. Zero external dependencies; you only add your worker process.

@@ -22,6 +22,8 @@ flowchart TD
   Prio -->|severity ∈ yellow/red| Notify[NotifyBridge 🚨]
   Prio -->|green| Done([Done])
   Notify --> Done
+  classDef default stroke:#41bd9b,stroke-width:2px
+  linkStyle default stroke:#41bd9b,stroke-width:1px
 ```
 
 Same shape, every framework. Same kill point. Same payoff.

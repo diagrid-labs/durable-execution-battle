@@ -29,6 +29,9 @@ graph TD
   W2 -->|snapshots| OS
   W1 -->|bidi HTTP2 invoke| SVC[Your SDK services / AWS Lambda]
   W2 -->|invoke| SVC
+  classDef default stroke:#41bd9b,stroke-width:2px
+  linkStyle default stroke:#41bd9b,stroke-width:1px
+  style Cluster fill:#1e2a38,stroke:#7c93c7,stroke-width:1px,color:#d6def0
 ```
 
 The same single binary run as a multi-node cluster with four colocatable node **roles**: worker, log-server, metadata-server, admin/ingress. The replicated durable log (**Bifrost**) is the source of truth; each partition has one leader processor tailing the log and materializing state in embedded RocksDB, with object storage (S3/MinIO) holding snapshots. Your handler code runs **outside** the cluster as stateless HTTP services on K8s or AWS Lambda.

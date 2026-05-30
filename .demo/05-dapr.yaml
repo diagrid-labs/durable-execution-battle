@@ -15,7 +15,7 @@ scenes:
     moves:
       - action: setPresentationView
       - action: openSlide
-        path: slides/05-demo/04-dapr.md
+        path: slides/05-demo/05-dapr.md
   - id: dapr-show-apphost
     title: Show the Aspire AppHost — Valkey + sidecar + Diagrid Dashboard wired in code
     moves:

@@ -26,6 +26,8 @@ graph LR
 
   Flink["ex-Apache Flink team"] --> Restate["Restate
   (BSL 1.1, 2023)"]
+  classDef default stroke:#41bd9b,stroke-width:2px
+  linkStyle default stroke:#41bd9b,stroke-width:1px
 ```
 
 Two are **siblings** (Cadence ↔ Temporal). The other three are **independent lineages**.

@@ -34,6 +34,10 @@ graph TD
   A2 --> Store
   A3 --> Store
   Sentry -.mTLS.-> A1
+  classDef default stroke:#41bd9b,stroke-width:2px
+  linkStyle default stroke:#41bd9b,stroke-width:1px
+  style ControlPlane fill:#1e2a38,stroke:#7c93c7,stroke-width:1px,color:#d6def0
+  style DataPlane fill:#13302b,stroke:#41bd9b,stroke-width:1px,color:#9fe6d3
 ```
 
 Typically Kubernetes: a control plane (Operator, Sentry for mTLS, Placement, Scheduler) plus the Sidecar Injector. Each worker pod gets a `daprd` sidecar with the embedded `durabletask-go` engine and actor runtime — **there is no dedicated workflow cluster**; the engine scales with your app pods while Placement load-balances the workflow/activity actors. State is event-sourced into an external transactional+ETag store, and timers/reminders live in the Scheduler's etcd.

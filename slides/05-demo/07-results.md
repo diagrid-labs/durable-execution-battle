@@ -8,4 +8,4 @@
 | dapr      | 100 | 2.2 s     | 46.4 wf/s  | 1307 ms | 1423 ms | 2149 ms | 0      | 2026-05-29 20:08 |
 | restate   | 100 | 60.3 s    | 1.7 wf/s   | 530 ms | 1145 ms | 60311 ms | 0      | 2026-05-29 20:11 |
 
-_Methodology: single-node local engines, default config; bursts of N workflows with `testing=true` (60s wait skipped); 200 ms status-poll floor; 5-workflow warmup discarded._
+_Methodology: single-node local engines, default config; bursts of 100 workflows with `testing=true` (60s wait skipped); 200 ms status-poll floor; 5-workflow warmup discarded._

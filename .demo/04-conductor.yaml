@@ -15,7 +15,7 @@ scenes:
     moves:
       - action: setPresentationView
       - action: openSlide
-        path: slides/05-demo/03-conductor.md
+        path: slides/05-demo/04-conductor.md
   - id: conductor-show-workflow
     title: Show the workflow — fluent C# builder, ForkJoin → Join → Wait → Switch
     moves:

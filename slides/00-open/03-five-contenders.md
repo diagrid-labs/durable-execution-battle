@@ -7,12 +7,10 @@ footer: |
 
 # The 5 contenders
 
-| | What it is |
+| | Their tag line |
 |---|---|
-| **Cadence** | The Uber original — Apache 2.0, Java/Go, lineage parent |
-| **Temporal** | The mature default — fork of Cadence (2019), MIT, 7 SDKs |
-| **Conductor** | Workflow-as-**data** — Netflix → Orkes, JSON DAG + workers |
-| **Dapr Workflows** | The sidecar option — CNCF graduated, virtual actors |
-| **Restate** | The newcomer — single binary, Rust core, handler-first |
-
-> *(This slide stays on screen during the opening poll.)*
+| **Cadence** | Orchestrate with Confidence: The Open-Source Workflow Engine for Tomorrow |
+| **Temporal** | A durable execution platform that lets you write the code you want |
+| **Conductor** | Crash-proof workflows and AI agents that finish what they start — powered by durable execution at Netflix scale. |
+| **Dapr Workflows** | APIs for Building Secure and Reliable Workflows and Agentic AI Systems |
+| **Restate** | Build innately resilient backends and agents |

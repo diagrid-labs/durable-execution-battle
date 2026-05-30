@@ -13,7 +13,7 @@ scenes:
     moves:
       - action: setPresentationView
       - action: openSlide
-        path: slides/05-demo/02-temporal.md
+        path: slides/05-demo/03-temporal.md
   - id: temporal-show-config
     title: Show the Spring Boot starter config (no @Bean wiring, no Cassandra)
     moves:

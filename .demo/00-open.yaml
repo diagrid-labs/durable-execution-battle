@@ -14,11 +14,16 @@ scenes:
       - action: setPresentationView
       - action: openSlide
         path: slides/00-open/00-title.md
-  - id: open-disclosure
-    title: Disclosure
+  - id: open-bio
+    title: Bio
     moves:
       - action: openSlide
-        path: slides/00-open/01-disclosure.md
+        path: slides/00-open/01-bio.md
+  - id: open-agenda
+    title: Agenda
+    moves:
+      - action: openSlide
+        path: slides/00-open/02-agenda.md
   - id: open-what-is
     title: What is durable execution?
     moves:
@@ -40,7 +45,7 @@ scenes:
   - id: open-lineage-map
     title: Lineage map
     moves:
-      - action: openSlide
+      - action: markdownPreview
         path: slides/00-open/05-lineage-map.md
   - id: open-dimensions-preview
     title: Dimensions preview

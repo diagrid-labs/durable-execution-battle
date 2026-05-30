@@ -1,8 +1,7 @@
 title: 01 — Demo intro
 description: |
   Demo intro section: announce the 25-minute demo block →
-  show the shared workflow scenario (fan-out / fan-in / sleep / kill point) →
-  set up the kill-and-resume promise that every framework will be judged against.
+  show the shared workflow scenario (fan-out / fan-in / sleep / kill point).
 version: 3
 scenes:
   - id: demo-intro-block
@@ -15,8 +14,3 @@ scenes:
     moves:
       - action: markdownPreview
         path: slides/05-demo/01-scenario.md
-  - id: demo-intro-kill-and-resume
-    title: The kill-and-resume promise
-    moves:
-      - action: openSlide
-        path: slides/05-demo/02-kill-and-resume.md

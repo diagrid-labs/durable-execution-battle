@@ -21,6 +21,9 @@ graph TD
   end
   worker[Your Worker process Go/Java SDK] -->|long-poll tasks| fe
   server --> db[(Persistence DB: Cassandra / MySQL / Postgres)]
+  classDef default stroke:#41bd9b,stroke-width:2px
+  linkStyle default stroke:#41bd9b,stroke-width:1px
+  style server fill:#1e2a38,stroke:#7c93c7,stroke-width:1px,color:#d6def0
 ```
 
 **`docker-compose up`** — auto-setup server (4 roles in one container) + a persistence DB + Web UI. You run your own worker and register a domain via the CLI.

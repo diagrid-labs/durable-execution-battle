@@ -19,6 +19,9 @@ graph TD
     DB
     UI
   end
+  classDef default stroke:#41bd9b,stroke-width:2px
+  linkStyle default stroke:#41bd9b,stroke-width:1px
+  style LocalDockerCompose fill:#1e2a38,stroke:#7c93c7,stroke-width:1px,color:#d6def0
 ```
 
 **`docker-compose up`** — stateless server + a persistence store + Web UI. You register workflow/task definitions as JSON, then run polling workers.

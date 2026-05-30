@@ -31,6 +31,10 @@ graph TD
     DB2[(Standby cluster + DB)]
   end
   IWRK -.async replication.-> DB2
+  classDef default stroke:#41bd9b,stroke-width:2px
+  linkStyle default stroke:#41bd9b,stroke-width:1px
+  style Cluster fill:#1e2a38,stroke:#7c93c7,stroke-width:1px,color:#d6def0
+  style DR fill:#33271e,stroke:#d9a86b,stroke-width:1px,color:#f0dcc4
 ```
 
 The same four Go services as Cadence (Frontend, History, Matching, internal Worker) discovering each other over Ringpop, fronting a clustered DB (Cassandra / MySQL 8+ / PostgreSQL 12+). Visibility lands in the same SQL store (standard) or Elasticsearch/OpenSearch (advanced). The **History Shard count is the master, immutable scaling parameter** (≈1 History instance per ~500 shards); in practice the persistence DB and the ES cluster are the real bottleneck.

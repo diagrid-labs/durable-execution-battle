@@ -12,12 +12,8 @@ footer: |
 | **Cadence** | ✅ | ✅ | 🟡 | — | — | ⚪ | — | — | — | — |
 | **Temporal** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | 🟡 | — | ✅ | — |
 | **Conductor** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | 🟡 | — | — | ⚪ |
-| **Dapr Workflows** | ✅ | ✅ | ✅ | ✅ | ✅ | — | — | — | — | — |
+| **Dapr Workflows** | ✅ | ✅ | ✅ | ✅ | ✅ | — | 🟡 | — | — | — |
 | **Restate** | ✅ | ✅ | ✅ | ✅ | — | 🟡 | ✅ | ✅ | — | — |
 
 ✅ GA first-party · 🟡 beta / preview / early first-party · ⚪ community · — none
 
-**Most polyglot** by count → **Conductor** (8 SDKs incl. Rust; Clojure community) — but those SDKs build JSON.
-**Most polyglot workflow-as-code** → **Temporal** (7 GA + Rust in preview).
-
-Cadence: **2 GA** (Go, Java) + early Python · Dapr Workflows: **5 GA** · Restate: **6 GA**.
