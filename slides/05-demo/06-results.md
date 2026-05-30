@@ -1,4 +1,4 @@
-# Performance — local burst (testing=true, wait skipped)
+# Local Dev Performance — local burst (testing=true, wait skipped)
 
 | Engine    | N   | Wallclock | Throughput | p50    | p95    | p99    | Errors | Run at           |
 |-----------|-----|-----------|------------|--------|--------|--------|--------|------------------|
