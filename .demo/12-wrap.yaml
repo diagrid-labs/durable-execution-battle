@@ -18,6 +18,26 @@ scenes:
     moves:
       - action: openSlide
         path: slides/07-wrap/00-summary.md
+  - id: wrap-not-cadence
+    title: Why not Cadence?
+    moves:
+      - action: openSlide
+        path: slides/07-wrap/01-not-cadence.md
+  - id: wrap-not-conductor
+    title: Why not Conductor?
+    moves:
+      - action: openSlide
+        path: slides/07-wrap/01-not-conductor.md
+  - id: wrap-not-restate
+    title: Why not Restate?
+    moves:
+      - action: openSlide
+        path: slides/07-wrap/01-not-restate.md
+  - id: wrap-temporal
+    title: Temporal — the strong rival
+    moves:
+      - action: openSlide
+        path: slides/07-wrap/01-temporal.md
   - id: demo-mpu15d02-ojmj
     title: Best option IMHO
     moves:

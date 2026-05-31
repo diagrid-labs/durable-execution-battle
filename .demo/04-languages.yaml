@@ -18,7 +18,17 @@ scenes:
       - action: openSlide
         path: slides/02-languages/01-sdk-matrix.md
   - id: languages-patterns
-    title: Workflow patterns — same idea, different name
+    title: Workflow patterns
     moves:
       - action: openSlide
         path: slides/02-languages/02-patterns.md
+  - id: languages-features
+    title: Workflow features
+    moves:
+      - action: openSlide
+        path: slides/02-languages/03-features.md
+  - id: languages-wf-management
+    title: Workflow management
+    moves:
+      - action: openSlide
+        path: slides/02-languages/04-wf-management.md

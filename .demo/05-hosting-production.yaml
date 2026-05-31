@@ -6,45 +6,45 @@ description: |
 
   Slides-only — no terminal or code moves.
 version: 3
-scenes:
+demos:
   - id: hosting-section
     title: Section divider — Hosting & Production
-    moves:
+    steps:
       - action: setPresentationView
       - action: openSlide
         path: slides/03-hosting-production/00-section.md
   - id: hosting-matrix
     title: Hosting matrix
-    moves:
+    steps:
       - action: openSlide
         path: slides/03-hosting-production/01-hosting-matrix.md
-  - id: commercial-vendors
-    title: Commercial vendors
-    moves:
-      - action: openSlide
-        path: slides/03-hosting-production/02-commercial-vendors.md
   - id: prod-cadence
     title: Production — Cadence
-    moves:
+    steps:
       - action: markdownPreview
         path: slides/03-hosting-production/02-prod-cadence.md
   - id: prod-temporal
     title: Production — Temporal
-    moves:
+    steps:
       - action: markdownPreview
         path: slides/03-hosting-production/03-prod-temporal.md
   - id: prod-conductor
     title: Production — Conductor
-    moves:
+    steps:
       - action: markdownPreview
         path: slides/03-hosting-production/04-prod-conductor.md
   - id: prod-dapr
     title: Production — Dapr Workflows
-    moves:
+    steps:
       - action: markdownPreview
         path: slides/03-hosting-production/05-prod-dapr.md
   - id: prod-restate
     title: Production — Restate
-    moves:
+    steps:
       - action: markdownPreview
         path: slides/03-hosting-production/06-prod-restate.md
+  - id: commercial-vendors
+    title: Commercial vendors
+    steps:
+      - action: openSlide
+        path: slides/03-hosting-production/02-commercial-vendors.md

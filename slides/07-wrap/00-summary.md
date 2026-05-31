@@ -5,9 +5,9 @@ footer: |
   <img src=".demo/assets/diagrid-logo.webp" alt="Diagrid" style="height: 20px; width: auto;">
 ---
 
-# Two have pulled ahead
+# Summary
 
-After five dimensions, two stand out as **mature, actively-developed, foundation- or vendor-backed, workflow-as-code** engines:
+After the evaluations, two stand out as **mature, actively-developed, feature-complete, workflow-as-code** engines:
 
 | | Why it's in front |
 |---|---|
@@ -16,6 +16,6 @@ After five dimensions, two stand out as **mature, actively-developed, foundation
 
 **Why not the other three?**
 
-- **Cadence** — the original, but the latest tagged release is **>12 months old**; Go + Java only.
+- **Cadence** — the original, but the latest tagged release is **>12 months old**; Go + Java only, lacks in management operations.
 - **Conductor** — workflow-as-**data**, not code.
 - **Restate** — the youngest (2023), smallest community, source-available (BSL 1.1).

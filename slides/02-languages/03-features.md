@@ -9,5 +9,5 @@ footer: |
 
 | Feature | Cadence | Temporal | Conductor | Dapr | Restate |
 |---|---|---|---|---|---|
-| **Cross-language orchestration** | — *(Go + Java only)* | Nexus (v1.31 GA) | native — workers in any language | HTTP API — start/signal from anywhere | native — handlers are HTTP |
-| **Versioning** *(not a pattern, but worth comparing)* | `workflow.GetVersion` | Worker Deployment Versioning (GA) + patching | integer DSL version per workflow | `IsPatched` + named workflow versions *(since 1.17)* | service revisions on redeploy |
+| **Multi-app workflows** *(deployment topology)* | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Versioning** | Patching via `workflow.GetVersion` | Worker Deployment Versioning + patching | Integer DSL version per workflow | named workflow versions + patching | service revisions on redeploy |

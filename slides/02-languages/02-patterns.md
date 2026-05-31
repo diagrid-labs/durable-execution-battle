@@ -11,9 +11,6 @@ footer: |
 |---|---|---|---|---|---|
 | **Task chaining** | sequential `await` | sequential `await` | `SIMPLE` task chain | `CallActivityAsync` chain | sequential `await` |
 | **Fan-out / fan-in** | `Async.function` + `Promise.allOf` | `Async.function` + `Promise.allOf` | `FORK_JOIN` / `FORK_JOIN_DYNAMIC` | `Task.WhenAll` | `Promise.all` |
-| **Monitor (loop + sleep)** | `ContinueAsNew` | `ContinueAsNew` | `DO_WHILE` / `START_WORKFLOW` | `ContinueAsNew` | `ctx.sleep` loop *(no CAN)* |
-| **External event / human-in-the-loop** | Signal | Signal / Update | `EVENT` / `HUMAN` system task | `raiseEvent` HTTP API | Awakeable |
+| **Monitor (loop + sleep)** | `ContinueAsNew` | `ContinueAsNew` | `DO_WHILE` / `START_WORKFLOW` | `ContinueAsNew` | `ctx.sleep` loop |
+| **External event** | Signal | Signal / Update | `EVENT` / `HUMAN` system task | `raiseEvent` HTTP API | Awakeable |
 | **Child workflow** | `ChildWorkflow` | `ChildWorkflow` | `SUB_WORKFLOW` | `ChildWorkflow` | `ctx.serviceClient` (durable RPC) |
-| **Cross-language orchestration** | — *(Go + Java only)* | Nexus (v1.31 GA) | native — workers in any language | HTTP API — start/signal from anywhere | native — handlers are HTTP |
-| **Separate activity app** *(deployment topology)* | task list | task queue | native — only model | app-id *(v1.16+, shared namespace + store)* | registered deployment |
-| **Versioning** *(not a pattern, but worth comparing)* | `workflow.GetVersion` | Worker Deployment Versioning (GA) + patching | integer DSL version per workflow | `IsPatched` + named workflow versions *(since 1.17)* | service revisions on redeploy |
