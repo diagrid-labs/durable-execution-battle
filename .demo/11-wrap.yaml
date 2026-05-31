@@ -4,10 +4,47 @@ description: |
 
   Slides-only — no terminal or code moves.
 version: 3
+engageTime:
+  sessionId: sxn6sb
 scenes:
-  - id: wrap-summary
-    title: Two have pulled ahead
+  - id: scene-mpu14hb8-zt9j
+    title: Wrap up
     moves:
       - action: setPresentationView
       - action: openSlide
+        path: slides/07-wrap/00-section.md
+  - id: wrap-summary
+    title: Choices
+    moves:
+      - action: openSlide
         path: slides/07-wrap/00-summary.md
+  - id: demo-mpu15d02-ojmj
+    title: Best option IMHO
+    moves:
+      - action: openSlide
+        path: slides/07-wrap/01-why-dapr.md
+  - id: scene-mpu10kxi-lley
+    title: Which one would you try first?
+    moves:
+      - action: showEngageTimePoll
+        pollId: xumlr9
+        startOnOpen: true
+        closeOnOpen: false
+  - id: scene-mpu16ret-ipsc
+    title: Resources
+    moves:
+      - action: openSlide
+        path: slides/07-wrap/02-closing.md
+  - id: demo-mpu17emg-vns9
+    title: DevSum feedback
+    moves:
+      - action: openSlide
+        path: slides/07-wrap/03-devsum-feedback.md
+  - id: scene-mpu126hq-l5zw
+    title: Reset
+    moves:
+      - action: closeEngageTimePoll
+        pollId: xumlr9
+      - action: closeEngageTimePoll
+        pollId: 9ecd8r
+      - action: unsetPresentationView

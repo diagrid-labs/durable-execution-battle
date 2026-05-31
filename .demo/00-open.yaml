@@ -8,7 +8,7 @@ description: |
   is operated on stage.
 version: 3
 engageTime:
-  sessionId: 4pmnqn
+  sessionId: sxn6sb
 scenes:
   - id: open-title
     title: Title
@@ -19,6 +19,10 @@ scenes:
       - action: startEngageTimeSession
       - action: closeEngageTimePoll
         disabled: false
+        pollId: xumlr9
+      - action: closeEngageTimePoll
+        disabled: false
+        pollId: 9ecd8r
   - id: open-bio
     title: Bio
     moves:
@@ -34,11 +38,11 @@ scenes:
     moves:
       - action: openSlide
         path: slides/00-open/02-what-is-durable-execution.md
-  - id: open-five-contenders
-    title: The 5 contenders (poll question matches the option list)
+  - id: open-process-order
+    title: How process_order stays durable (state writes/reads)
     moves:
-      - action: openSlide
-        path: slides/00-open/03-five-contenders.md
+      - action: markdownPreview
+        path: slides/00-open/03-process-order.md
   - id: open-poll-qr
     title: Show the QR slide and start the opening poll
     moves:
@@ -47,6 +51,11 @@ scenes:
       - action: showEngageTimePoll
         pollId: opening-familiarity
         startOnOpen: true
+  - id: open-five-contenders
+    title: The 5 contenders (poll question matches the option list)
+    moves:
+      - action: openSlide
+        path: slides/00-open/04-five-contenders.md
   - id: open-lineage-map
     title: Lineage map
     moves:
@@ -57,8 +66,5 @@ scenes:
     moves:
       - action: openSlide
         path: slides/00-open/06-dimensions-preview.md
-  - id: open-poll-stop
-    title: Stop the poll (results stay frozen for one beat)
-    moves:
       - action: closeEngageTimePoll
-        pollId: opening-familiarity
+        pollId: 9ecd8r
