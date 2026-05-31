@@ -1,4 +1,4 @@
-title: 06 — Restate (TypeScript) — USS Enterprise diagnostics
+title: 02e — Restate Demo
 description: |
   Restate TypeScript demo: 5-scan fan-out, durable 60s sleep, kill+resume,
   conditional bridge alert. Single Node process (tsx watch) hosting both the

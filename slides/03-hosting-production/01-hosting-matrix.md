@@ -5,10 +5,10 @@ footer: |
   <img src=".demo/assets/diagrid-logo.webp" alt="Diagrid" style="height: 20px; width: auto;">
 ---
 
-# Hosting matrix
+# Self Hosting
 
 | | Self-host effort | Storage | K8s |
-|---|---|---|---|---|
+|---|---|---|---|
 | **Cadence** | High | Cassandra/MySQL/Postgres + ES | Community Helm |
 | **Temporal** | High | Cassandra/MySQL/Postgres + ES | Official Helm |
 | **Conductor** | Medium | Postgres/MySQL/Cassandra/Redis + ES/OS | Community |

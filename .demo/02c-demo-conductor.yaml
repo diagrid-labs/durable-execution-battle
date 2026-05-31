@@ -1,4 +1,4 @@
-title: 04 — Conductor (C# / .NET 10) — USS Enterprise diagnostics
+title: 02c — Conductor Demo (C#)
 description: |
   Conductor demo: workflow-as-data. Fluent C# builder POSTs a JSON
   workflow definition to the Conductor engine at startup; the engine

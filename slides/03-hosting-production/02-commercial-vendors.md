@@ -7,10 +7,10 @@ footer: |
 
 # Commercial vendors
 
-| | Vendor | Offering | HQ |
-|---|---|---|---|
-| **Cadence** | Instaclustr *(NetApp)* | Managed Cadence (any cloud) | 🇺🇸 USA |
-| **Temporal** | Temporal Technologies | Cloud (AWS or GCP) | 🇺🇸 USA |
-| **Conductor** | Orkes | Cloud · Enterprise | 🇺🇸 USA |
-| **Dapr** | Diagrid  | Catalyst | 🇺🇸 USA |
-| **Restate** | Restate GmbH | Cloud | 🇩🇪 Germany |
+| | Vendor | Offering | Pricing | HQ |
+|---|---|---|---|---|
+| **Cadence** | [Instaclustr *(NetApp)*](https://www.instaclustr.com/) | Managed Cadence | Fixed per node/cluster | 🇺🇸 USA |
+| **Temporal** | [Temporal Technologies](https://temporal.io/) | Cloud | PAYG | 🇺🇸 USA |
+| **Conductor** | [Orkes](https://orkes.io/) | Cloud | Enterprise | 🇺🇸 USA |
+| **Dapr** | [Diagrid](https://www.diagrid.io/)  | Catalyst | Fixed per core | 🇺🇸 USA |
+| **Restate** | [Restate GmbH](https://www.restate.dev/) | Cloud | PAYG | 🇩🇪 Germany |

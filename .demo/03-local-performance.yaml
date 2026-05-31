@@ -1,0 +1,26 @@
+title: 03 — Local performance
+description: |
+  Local performance section: section divider → how the benchmark works →
+  open the generated performance report in VS Code's internal browser.
+
+  The report (demos/perf/report.html) is produced by `npm run report` in
+  demos/perf after the per-engine bench runs (see .demo/90-94-perf-*.yaml).
+version: 3
+scenes:
+  - id: local-performance-section
+    title: Section divider — Local performance
+    moves:
+      - action: setPresentationView
+      - action: openSlide
+        path: slides/04-local-performance/00-section.md
+  - id: local-performance-test
+    title: How the performance test works
+    moves:
+      - action: openSlide
+        path: slides/04-local-performance/01-test.md
+  - id: local-performance-report
+    title: Open the performance report in the internal browser
+    moves:
+      - action: openWebsite
+        url: file:///Users/marcduiker/dev/diagrid-labs/durable-execution-battle/demos/perf/report.html
+        openInVSCode: true

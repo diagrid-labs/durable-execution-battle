@@ -9,7 +9,7 @@ footer: |
 
 | | Cadence | Temporal | Conductor | Dapr | Restate |
 |---|---|---|---|---|---|
-| Programming model | Workflow-as-code | Workflow-as-code | Workflow-as-**data** (JSON DSL) | Workflow-as-code | Workflow-as-code |
+| Programming model | Workflow-as-code | Workflow-as-code | Workflow-as-data (JSON DSL) | Workflow-as-code | Workflow-as-code |
 | First-class OSS Web UI | ✅ functional | ✅ best-in-class | ✅ DAG visualizer | ❌ → Diagrid Dashboard | ✅ journal-centric |
-| Replayer / step-through | ✅ Go/Java | ✅ per-SDK | N/A | ✅ (per-SDK) | ✅ via journal |
-| Learning curve | Determinism cliff | **Determinism cliff** | **DSL learning** | Moderate | Moderate (new model) |
+| Replayer / debugging | ✅ Go/Java | ✅ per-SDK | N/A | ✅ per-SDK | ✅ via journal |
+| Learning curve | Deterministic code | Deterministic code | DSL learning | Deterministic code | Deterministic code |

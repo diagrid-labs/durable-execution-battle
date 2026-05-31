@@ -1,4 +1,4 @@
-title: 03 — Temporal (Java) — USS Enterprise diagnostics
+title: 02b — Temporal Demo (Java)
 description: |
   Temporal Java demo: 5-scan fan-out, durable 60s timer, kill+resume,
   conditional bridge alert. Spring Boot 3 + temporal-spring-boot-starter

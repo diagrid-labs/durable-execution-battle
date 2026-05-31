@@ -1,4 +1,4 @@
-title: 05 — Dapr (C# / .NET 10) — USS Enterprise diagnostics
+title: 02d — Dapr Demo (C#)
 description: |
   Dapr Workflow demo: 5-scan fan-out, durable 60s timer, kill+resume,
   conditional bridge alert. .NET 10 + Aspire AppHost orchestrates a
@@ -66,7 +66,7 @@ scenes:
     title: ⚡ KILL POINT — stop the wf-app resource in the Aspire dashboard (~T+20s)
     moves:
       - action: waitForInput
-        message: 'Aspire dashboard → wf-app row → Stop. Valkey keeps running so state survives. Workflow stays Running in the Diagrid dashboard, timer still ticking.'
+        message: Aspire dashboard → wf-app row → Stop. Valkey keeps running so state survives. Workflow stays Running in the Diagrid dashboard, timer still ticking.
   - id: dapr-restart-app
     title: Restart the wf-app resource — timer fires, PrioritizeIssues + NotifyBridge run
     moves:

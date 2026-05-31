@@ -1,10 +1,3 @@
----
-layout: default
-footer: |
-  <span>Marc Duiker</span>
-  <img src=".demo/assets/diagrid-logo.webp" alt="Diagrid" style="height: 20px; width: auto;">
----
-
 # The scenario
 
 ```mermaid
@@ -25,5 +18,3 @@ flowchart TD
   classDef default stroke:#41bd9b,stroke-width:2px
   linkStyle default stroke:#41bd9b,stroke-width:1px
 ```
-
-Same shape, every framework. Same kill point. Same payoff.

@@ -3,4 +3,7 @@ layout: section
 ---
 
 # The Demos
-## USS Enterprise diagnostics
+
+## Enterprise Diagnostics
+
+![bot-animation](.demo/images/bot-animations-0.gif)

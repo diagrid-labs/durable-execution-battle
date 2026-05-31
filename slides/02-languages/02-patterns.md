@@ -15,9 +15,5 @@ footer: |
 | **External event / human-in-the-loop** | Signal | Signal / Update | `EVENT` / `HUMAN` system task | `raiseEvent` HTTP API | Awakeable |
 | **Child workflow** | `ChildWorkflow` | `ChildWorkflow` | `SUB_WORKFLOW` | `ChildWorkflow` | `ctx.serviceClient` (durable RPC) |
 | **Cross-language orchestration** | — *(Go + Java only)* | Nexus (v1.31 GA) | native — workers in any language | HTTP API — start/signal from anywhere | native — handlers are HTTP |
+| **Separate activity app** *(deployment topology)* | task list | task queue | native — only model | app-id *(v1.16+, shared namespace + store)* | registered deployment |
 | **Versioning** *(not a pattern, but worth comparing)* | `workflow.GetVersion` | Worker Deployment Versioning (GA) + patching | integer DSL version per workflow | `IsPatched` + named workflow versions *(since 1.17)* | service revisions on redeploy |
-
-**Two asymmetries to keep in mind:**
-
-- **Restate** has no `ContinueAsNew` and no separate "child workflow" primitive — both fold into the same `ctx.run` + durable RPC model.
-- **Cadence** is the only framework here without a credible cross-language story in 2026 — practically a Go + Java product.

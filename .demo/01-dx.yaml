@@ -1,4 +1,4 @@
-title: 07 — Developer Experience
+title: 01 — Developer Experience
 description: |
   DX section: same-idea-different-word terminology → DX matrix →
   getting-started step count → per-engine local dev → learning curve.
@@ -32,6 +32,8 @@ scenes:
     moves:
       - action: markdownPreview
         path: slides/01-dx/04-local-cadence.md
+    notes:
+      path: notes/dx-local-cadence_notes.md
   - id: dx-local-temporal
     title: Local dev — Temporal
     moves:

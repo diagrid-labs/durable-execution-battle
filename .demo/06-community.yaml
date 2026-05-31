@@ -1,0 +1,28 @@
+title: 06 — Community
+description: |
+  Community section: section divider → community & support matrix.
+
+  Slides-only — no terminal or code moves.
+version: 3
+scenes:
+  - id: community-section
+    title: Section divider — Community
+    moves:
+      - action: setPresentationView
+      - action: openSlide
+        path: slides/06-community/00-section.md
+  - id: community-github
+    title: GitHub
+    moves:
+      - action: openSlide
+        path: slides/06-community/01-github.md
+  - id: community-licenses
+    title: Licenses
+    moves:
+      - action: openSlide
+        path: slides/06-community/02-licenses.md
+  - id: community-online
+    title: Online communities
+    moves:
+      - action: openSlide
+        path: slides/06-community/03-online-community.md

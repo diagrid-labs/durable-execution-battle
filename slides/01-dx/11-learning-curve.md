@@ -7,7 +7,7 @@ footer: |
 
 # Learning curve — two cliffs
 
-**Workflow-as-code (Cadence, Temporal, Dapr, Restate)** → the **determinism cliff**: replay forces no clocks, no randomness, no I/O outside activities.
+**Workflow-as-code (Cadence, Temporal, Dapr, Restate)** → the **determinism cliff**: replay forces no date/time, no randomness, no I/O outside activities.
 
 **Workflow-as-data (Conductor)** → no determinism rules; you learn the **JSON DSL** + the task-type catalog instead.
 
