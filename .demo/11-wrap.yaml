@@ -1,0 +1,13 @@
+title: 11 — Wrap
+description: |
+  Wrap section: summary — two have pulled ahead.
+
+  Slides-only — no terminal or code moves.
+version: 3
+scenes:
+  - id: wrap-summary
+    title: Two have pulled ahead
+    moves:
+      - action: setPresentationView
+      - action: openSlide
+        path: slides/07-wrap/00-summary.md

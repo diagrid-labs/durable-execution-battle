@@ -5,12 +5,14 @@
   "private": true,
   "scripts": {
     "bench": "tsx src/driver.ts",
+    "report": "tsx src/report.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
+    "plotly.js-dist-min": "^3.5.1",
     "tsx": "^4.19.0",
     "typescript": "^5.6.0",
     "vitest": "^2.1.0"

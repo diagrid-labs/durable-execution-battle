@@ -7,6 +7,8 @@ description: |
   DemoTime drives the EngageTime poll start/stop so only one extension
   is operated on stage.
 version: 3
+engageTime:
+  sessionId: 4pmnqn
 scenes:
   - id: open-title
     title: Title
@@ -14,6 +16,9 @@ scenes:
       - action: setPresentationView
       - action: openSlide
         path: slides/00-open/00-title.md
+      - action: startEngageTimeSession
+      - action: closeEngageTimePoll
+        disabled: false
   - id: open-bio
     title: Bio
     moves:
