@@ -15,6 +15,5 @@ Dapr       │█████████░░░│  9   (2 prereq +  7 framew
 Restate    │██████░░░░░░│  6   (1 prereq +  5 framework)
 ```
 
-**Prerequisites** (Docker, language runtime — usually already installed) are counted separately.
-**Framework-specific** = install CLI/SDK → run server/worker → trigger workflow.
-
+- **Prerequisites** (Docker, language runtime — usually already installed) are counted separately.
+- **Framework-specific** = install CLI/SDK → run server/worker → trigger workflow.

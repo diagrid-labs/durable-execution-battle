@@ -15,7 +15,12 @@ scenes:
     moves:
       - action: setPresentationView
       - action: openSlide
-        path: slides/05-demo/04-conductor.md
+        path: slides/05-demo/04-conductor-intro.md
+  - id: conductor-diagram
+    title: Conductor local diagram
+    moves:
+      - action: markdownPreview
+        path: slides/05-demo/04-conductor-diagram.md
   - id: conductor-show-workflow
     title: Show the workflow — fluent C# builder, ForkJoin → Join → Wait → Switch
     moves:

@@ -12,5 +12,5 @@ footer: |
 | **Cadence** | Orchestrate with Confidence: The Open-Source Workflow Engine for Tomorrow |
 | **Temporal** | A durable execution platform that lets you write the code you want |
 | **Conductor** | Crash-proof workflows and AI agents that finish what they start — powered by durable execution at Netflix scale. |
-| **Dapr Workflows** | APIs for Building Secure and Reliable Workflows and Agentic AI Systems |
+| **Dapr** | APIs for Building Secure and Reliable Workflows and Agentic AI Systems |
 | **Restate** | Build innately resilient backends and agents |

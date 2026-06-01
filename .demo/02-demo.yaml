@@ -9,6 +9,11 @@ scenes:
     moves:
       - action: openSlide
         path: slides/05-demo/00-demo-block.md
+  - id: scene-mpvi8nx0-p44i
+    title: Demo theme
+    moves:
+      - action: openSlide
+        path: slides/05-demo/01-demo-theme.md
   - id: demo-intro-scenario
     title: The scenario (workflow shape + kill point)
     moves:

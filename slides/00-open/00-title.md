@@ -12,6 +12,6 @@ layout: intro
   <img src=".demo/images/restate-logo-white.svg" alt="Restate" style="height: 32px; width: auto;">
 </div>
 
-**Marc Duiker - Developer Advocate at Diagrid**
-
 ![bot-animation](.demo/images/bot-animations-0.gif)
+
+Marc Duiker - Developer Advocate at Diagrid

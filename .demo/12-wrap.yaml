@@ -67,4 +67,13 @@ scenes:
         pollId: xumlr9
       - action: closeEngageTimePoll
         pollId: 9ecd8r
+      - action: executeTerminalCommand
+        terminalId: demo-reset
+        command: bash scripts/reset-demos.sh
+        insertTypingMode: instant
+        autoExecute: true
+      - action: waitForInput
+        message: Wait for 'Demo reset complete.', then continue.
+      - action: closeTerminal
+        terminalId: demo-reset
       - action: unsetPresentationView

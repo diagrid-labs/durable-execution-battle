@@ -23,6 +23,11 @@ scenes:
       - action: closeEngageTimePoll
         disabled: false
         pollId: 9ecd8r
+  - id: demo-mpvgo1ji-7rhz
+    title: Start timer
+    moves:
+      - action: executeVSCodeCommand
+        command: demo-time.startCountdown
   - id: open-bio
     title: Bio
     moves:
@@ -46,11 +51,9 @@ scenes:
   - id: open-poll-qr
     title: Show the QR slide and start the opening poll
     moves:
-      - action: openSlide
-        path: slides/00-open/04-opening-poll.md
       - action: showEngageTimePoll
-        pollId: opening-familiarity
         startOnOpen: true
+        pollId: 9ecd8r
   - id: open-five-contenders
     title: The 5 contenders (poll question matches the option list)
     moves:

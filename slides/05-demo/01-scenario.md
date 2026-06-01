@@ -1,4 +1,4 @@
-# The scenario
+# The scenario: USS Enterprise Diagnostics workflow
 
 ```mermaid
 flowchart TD

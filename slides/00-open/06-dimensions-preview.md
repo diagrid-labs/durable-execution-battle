@@ -9,5 +9,5 @@ footer: |
 
 1. **Developer Experience** — quickstart, UI, learning curve
 2. **Language Support & Features** — SDKs, signals, versioning
-3. **Community & Support** — license, foundation, commercial
-4. **Production & Hosting** — self-host complexity, managed cloud, K8s
+3. **Production & Hosting** — self-host complexity, managed offerings
+4. **Community & Support** — GitHub, license,

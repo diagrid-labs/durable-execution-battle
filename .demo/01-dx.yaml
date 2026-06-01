@@ -17,45 +17,8 @@ scenes:
     moves:
       - action: openSlide
         path: slides/01-dx/01-terminology.md
-  - id: dx-matrix
-    title: DX matrix
-    moves:
-      - action: openSlide
-        path: slides/01-dx/02-dx-matrix.md
   - id: dx-getting-started
     title: Getting started — step count
     moves:
       - action: openSlide
         path: slides/01-dx/03-getting-started.md
-  - id: dx-local-cadence
-    title: Local dev — Cadence
-    moves:
-      - action: markdownPreview
-        path: slides/01-dx/04-local-cadence.md
-    notes:
-      path: notes/dx-local-cadence_notes.md
-  - id: dx-local-temporal
-    title: Local dev — Temporal
-    moves:
-      - action: markdownPreview
-        path: slides/01-dx/05-local-temporal.md
-  - id: dx-local-conductor
-    title: Local dev — Conductor
-    moves:
-      - action: markdownPreview
-        path: slides/01-dx/06-local-conductor.md
-  - id: dx-local-dapr
-    title: Local dev — Dapr Workflows
-    moves:
-      - action: markdownPreview
-        path: slides/01-dx/07-local-dapr.md
-  - id: dx-local-restate
-    title: Local dev — Restate
-    moves:
-      - action: markdownPreview
-        path: slides/01-dx/08-local-restate.md
-  - id: dx-learning-curve
-    title: Learning curve — two cliffs
-    moves:
-      - action: openSlide
-        path: slides/01-dx/11-learning-curve.md

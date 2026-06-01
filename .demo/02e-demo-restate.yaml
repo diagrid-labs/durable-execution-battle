@@ -15,7 +15,12 @@ scenes:
     moves:
       - action: setPresentationView
       - action: openSlide
-        path: slides/05-demo/06-restate.md
+        path: slides/05-demo/06-restate-intro.md
+  - id: restate-diagram
+    title: Restate local diagram
+    moves:
+      - action: markdownPreview
+        path: slides/05-demo/06-restate-diagram.md
   - id: restate-show-workflow
     title: Show the workflow — Promise.all over 5 scans, ctx.sleep(60s), conditional notifyBridge
     moves:
