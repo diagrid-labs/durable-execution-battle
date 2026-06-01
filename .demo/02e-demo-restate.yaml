@@ -107,7 +107,7 @@ scenes:
     moves:
       - action: executeTerminalCommand
         terminalId: restate-cli
-        command: restate invocations list
+        command: restate invocations list --all
         insertTypingMode: character-by-character
         insertTypingSpeed: 90
         autoExecute: true

@@ -40,6 +40,7 @@ internal sealed partial class DiagnosticsWorkflow : Workflow<DiagnosticsInput, D
         };
 
         await Task.WhenAll(scanTasks);
+
         var scans = scanTasks.Select(t => t.Result).ToArray();
         LogScansComplete(logger, context.InstanceId);
 
