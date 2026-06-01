@@ -55,6 +55,19 @@ curl -X POST http://localhost:8080/start \
 
 Then watch Cadence Web at <http://localhost:8088> → `default` domain → workflow `enterprise-ncc-1701`.
 
+## Using the CLI
+
+The `cadence` CLI ships inside the `cadence-server` container, but the auto-setup image binds the frontend to the container's broadcast IP (e.g. `172.19.0.3:7933`), **not** `127.0.0.1`. So the CLI's default address fails with `connection refused`. Use the wrapper, which resolves the container IP at runtime and defaults `--domain default`:
+
+```
+./cadence-cli.sh workflow list
+./cadence-cli.sh workflow show --workflow_id enterprise-ncc-1701
+./cadence-cli.sh domain describe
+DOMAIN=other ./cadence-cli.sh workflow list   # override the domain
+```
+
+Any args/flags after the script name pass straight through to `cadence`. Override the container name with `CADENCE_CONTAINER` if you rename it. (`workflow list` only shows recently-closed runs from the basic visibility store — use `workflow show --workflow_id <id>` for a specific run, or Cadence Web for the live UI.)
+
 ## Kill-and-resume choreography
 
 This is the demo's payoff.
