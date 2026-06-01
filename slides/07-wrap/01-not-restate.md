@@ -7,7 +7,7 @@ footer: |
 
 # Why not Restate?
 
-⚠️ **Uneven SDK maturity** — Rust not GA; TS most mature, others trail.
+⚠️ **Uneven SDK maturity** — TS most mature, others trail.
 
 ⚠️ **Sagas & cron are patterns, not APIs** — hand-rolled compensations and schedulers.
 

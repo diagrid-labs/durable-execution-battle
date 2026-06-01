@@ -15,4 +15,6 @@ footer: |
 
 ⚠️ **Multi-region is active-passive only** — operator-triggered failover.
 
-⚠️ **Eroding momentum** — fewest stars, slow releases, stale docs.
+⚠️ **Fewest SDKs** — Only available for Go and Java.
+
+⚠️ **Small community** — Not a lot of activity on Slack and GitHub Discussions.

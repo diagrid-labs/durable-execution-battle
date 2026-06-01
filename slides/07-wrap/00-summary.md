@@ -5,8 +5,16 @@ footer: |
   <img src=".demo/assets/diagrid-logo.webp" alt="Diagrid" style="height: 20px; width: auto;">
 ---
 
-# Summary
+# My opinion
 
-After the evaluations, two stand out as **mature, actively-developed, feature-complete, workflow-as-code** engines:
+I want to use a modern, workflow-as-code solution, with good developer experience, that has an active community.
 
-// TODO
+🚫 Cadence
+
+🚫 Conductor
+
+🚫 Restate
+
+⚠️ Temporal
+
+✅ Dapr

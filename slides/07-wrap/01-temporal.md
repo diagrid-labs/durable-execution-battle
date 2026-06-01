@@ -23,7 +23,7 @@ footer: |
 
 ⚠️ Heaviest self-host — Cassandra + Elasticsearch
 
-⚠️ Steepest determinism learning curve
+⚠️ Steep determinism learning curve
 
 ⚠️ Shard count fixed at creation — grows, never shrinks
 
