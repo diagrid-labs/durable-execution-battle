@@ -22,7 +22,7 @@ graph TD
   S1 --> ES[(Elasticsearch / OpenSearch - index)]
   S2 --> ES
   S3 --> ES
-  Brokers[Kafka / NATS / SQS / AMQP] -. Event tasks .- S1
+  Brokers[Kafka / NATS / SQS / AMQP] -. Event tasks .- ServerCluster
   classDef default stroke:#41bd9b,stroke-width:2px
   linkStyle default stroke:#41bd9b,stroke-width:1px
   style ServerCluster fill:#1e2a38,stroke:#7c93c7,stroke-width:1px,color:#d6def0

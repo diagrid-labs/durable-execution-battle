@@ -6,7 +6,7 @@ description: |
 version: 3
 scenes:
   - id: community-section
-    title: Section divider — Community
+    title: Community intro
     moves:
       - action: setPresentationView
       - action: openSlide

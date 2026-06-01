@@ -7,7 +7,7 @@ description: |
 version: 3
 scenes:
   - id: languages-section
-    title: Section divider — Language Support & Features
+    title: Language Support & Features intro
     moves:
       - action: setPresentationView
       - action: openSlide

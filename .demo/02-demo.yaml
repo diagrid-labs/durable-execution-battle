@@ -5,7 +5,7 @@ description: |
 version: 3
 scenes:
   - id: demo-intro-block
-    title: Demo block — 25 minutes
+    title: Demo intro
     moves:
       - action: openSlide
         path: slides/05-demo/00-demo-block.md

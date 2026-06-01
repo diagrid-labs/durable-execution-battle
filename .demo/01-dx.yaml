@@ -7,7 +7,7 @@ description: |
 version: 3
 scenes:
   - id: dx-section
-    title: Section divider — Developer Experience
+    title: Developer Experience intro
     moves:
       - action: setPresentationView
       - action: openSlide

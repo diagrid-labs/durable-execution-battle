@@ -21,9 +21,9 @@ graph TD
   FE --> VIS[("Visibility<br/>Elasticsearch / OpenSearch or SQL")]
   HIST --> VIS
   subgraph DR[Multi-cluster replication]
-    DB2[(Standby cluster + DB)]
+    mirror2["Full mirror: Frontend / History / Matching / Worker"] --> DB2[(Standby cluster DB)]
   end
-  IWRK -.async replication.-> DB2
+  HIST -.async replication.-> mirror2
   classDef default stroke:#41bd9b,stroke-width:2px
   linkStyle default stroke:#41bd9b,stroke-width:1px
   style Cluster fill:#1e2a38,stroke:#7c93c7,stroke-width:1px,color:#d6def0

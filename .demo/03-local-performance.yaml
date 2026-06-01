@@ -8,7 +8,7 @@ description: |
 version: 3
 scenes:
   - id: local-performance-section
-    title: Section divider — Local performance
+    title: Local performance intro
     moves:
       - action: setPresentationView
       - action: openSlide
