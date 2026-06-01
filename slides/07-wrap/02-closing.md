@@ -5,17 +5,13 @@ footer: |
   <img src=".demo/assets/diagrid-logo.webp" alt="Diagrid" style="height: 20px; width: auto;">
 ---
 
-# Thank you!
+### Resources & connect with me!
 
-1. Rate my session & provide feedback 📝
-2. Access resources 📚
-   - GitHub repo
-   - AI Skill to author workflows
-   - Diagrid Dev Dashboard
-   - Dapr University 
-3. Connect with me! 🤝
-
-![Dapr Community Supporter](.demo/images/dapr-community-supporter-badge-anim.gif)
+![QR Code](.demo/images/session-sxn6sb-feedback-qr.png)
+*engagetime.live*
 
 ::right::
-![QR Code](.demo/images/session-6r41hf-feedback-qr.png)
+### DevSum feedback
+
+![QR Code](.demo/images/devsum-qr.png)
+*customervoice.microsoft.com*

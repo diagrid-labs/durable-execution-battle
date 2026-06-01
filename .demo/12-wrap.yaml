@@ -6,68 +6,63 @@ description: |
 version: 3
 engageTime:
   sessionId: sxn6sb
-demos:
+scenes:
   - id: scene-mpu14hb8-zt9j
     title: Wrap up
-    steps:
+    moves:
       - action: setPresentationView
       - action: openSlide
         path: slides/07-wrap/00-section.md
   - id: wrap-summary
     title: Choices
-    steps:
+    moves:
       - action: openSlide
         path: slides/07-wrap/00-summary.md
   - id: wrap-not-cadence
     title: Why not Cadence?
-    steps:
+    moves:
       - action: openSlide
         path: slides/07-wrap/01-not-cadence.md
   - id: wrap-not-conductor
     title: Why not Conductor?
-    steps:
+    moves:
       - action: openSlide
         path: slides/07-wrap/01-not-conductor.md
   - id: wrap-not-restate
     title: Why not Restate?
-    steps:
+    moves:
       - action: openSlide
         path: slides/07-wrap/01-not-restate.md
   - id: wrap-temporal
     title: Temporal — the strong rival
-    steps:
+    moves:
       - action: openSlide
         path: slides/07-wrap/01-temporal.md
   - id: demo-mpu15d02-ojmj
     title: Best option IMHO
-    steps:
+    moves:
       - action: openSlide
         path: slides/07-wrap/01-why-dapr.md
   - id: scene-mpu10kxi-lley
     title: Which one would you try first?
-    steps:
+    moves:
       - action: showEngageTimePoll
         pollId: xumlr9
         startOnOpen: true
         closeOnOpen: false
   - id: scene-mpuvbimp-szdg
     title: Dapr University
-    steps:
+    moves:
       - action: openSlide
         path: slides/07-wrap/02-dapr-university.md
   - id: scene-mpu16ret-ipsc
     title: Resources
-    steps:
+    moves:
       - action: openSlide
         path: slides/07-wrap/02-closing.md
-  - id: demo-mpu17emg-vns9
-    title: DevSum feedback
-    steps:
-      - action: openSlide
-        path: slides/07-wrap/03-devsum-feedback.md
   - id: scene-mpu126hq-l5zw
     title: Reset
-    steps:
+    moves:
       - action: closeEngageTimePoll
         pollId: xumlr9
       - action: closeEngageTimePoll

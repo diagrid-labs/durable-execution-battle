@@ -17,4 +17,4 @@ footer: |
 
 ::right::
 
-![Join EngageTime](.demo/images/session-6r41hf-qr.png)
+![Join EngageTime](.demo/images/session-sxn6sb-qr.png)
