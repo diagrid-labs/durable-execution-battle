@@ -11,7 +11,7 @@ description: |
 version: 3
 scenes:
   - id: restate-intro
-    title: Open the demo intro slide
+    title: Restate demo intro slide
     moves:
       - action: setPresentationView
       - action: openSlide
@@ -97,6 +97,17 @@ scenes:
     moves:
       - action: waitForInput
         message: 'Click ''Send Request'' above the ### Query workflow status block.'
+  - id: restate-cli-list
+    title: List recent invocations from the Restate CLI
+    moves:
+      - action: executeTerminalCommand
+        terminalId: restate-cli
+        command: restate invocations list
+        insertTypingMode: character-by-character
+        insertTypingSpeed: 90
+        autoExecute: true
+      - action: waitForInput
+        message: The DiagnosticsWorkflow invocation lists with its id + status — no ID copy-paste needed. The restate CLI is a separate binary from restate-server.
   - id: restate-cleanup
     title: Stop the Node process and restate-server
     moves:
@@ -116,4 +127,6 @@ scenes:
         terminalId: restate-app
       - action: closeTerminal
         terminalId: restate-server
+      - action: closeTerminal
+        terminalId: restate-cli
       - action: unsetPresentationView

@@ -9,7 +9,7 @@ description: |
 version: 3
 scenes:
   - id: temporal-intro
-    title: Open the demo intro slide
+    title: Temporal demo intro slide
     moves:
       - action: setPresentationView
       - action: openSlide
@@ -95,6 +95,17 @@ scenes:
     moves:
       - action: waitForInput
         message: 'Click ''Send Request'' above the ### Status block.'
+  - id: temporal-cli-list
+    title: List recent workflows from the Temporal CLI
+    moves:
+      - action: executeTerminalCommand
+        terminalId: temporal-cli
+        command: temporal workflow list
+        insertTypingMode: character-by-character
+        insertTypingSpeed: 90
+        autoExecute: true
+      - action: waitForInput
+        message: The latest DiagnosticsWorkflow run lists with its status — no ID copy-paste needed. The temporal CLI is the same binary that ran start-dev.
   - id: temporal-cleanup
     title: Stop the worker and the dev server
     moves:
@@ -112,4 +123,6 @@ scenes:
         terminalId: temporal-app
       - action: closeTerminal
         terminalId: temporal-server
+      - action: closeTerminal
+        terminalId: temporal-cli
       - action: unsetPresentationView

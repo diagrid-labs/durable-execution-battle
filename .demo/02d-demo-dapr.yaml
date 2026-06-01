@@ -11,7 +11,7 @@ description: |
 version: 3
 scenes:
   - id: dapr-intro
-    title: Open the demo intro slide
+    title: Dapr demo intro slide
     moves:
       - action: setPresentationView
       - action: openSlide
@@ -77,6 +77,17 @@ scenes:
     moves:
       - action: waitForInput
         message: 'Click ''Send Request'' above the ### Get the workflow status block.'
+  - id: dapr-cli-list
+    title: List recent workflows from the Dapr CLI
+    moves:
+      - action: executeTerminalCommand
+        terminalId: dapr-cli
+        command: dapr workflow list -a wf-app
+        insertTypingMode: character-by-character
+        insertTypingSpeed: 90
+        autoExecute: true
+      - action: waitForInput
+        message: The DiagnosticsWorkflow instances for app wf-app list with their runtime status — no ID copy-paste needed. (dapr workflow / dapr wf, CLI 1.17.)
   - id: dapr-cleanup
     title: Stop Aspire (tears down sidecar, Valkey, Diagrid Dashboard)
     moves:
@@ -88,4 +99,6 @@ scenes:
         timeout: 2000
       - action: closeTerminal
         terminalId: dapr-aspire
+      - action: closeTerminal
+        terminalId: dapr-cli
       - action: unsetPresentationView

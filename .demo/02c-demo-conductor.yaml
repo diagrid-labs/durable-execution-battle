@@ -11,7 +11,7 @@ description: |
 version: 3
 scenes:
   - id: conductor-intro
-    title: Open the demo intro slide
+    title: Conductor demo intro slide
     moves:
       - action: setPresentationView
       - action: openSlide

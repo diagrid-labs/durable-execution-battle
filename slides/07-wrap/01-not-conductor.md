@@ -7,9 +7,9 @@ footer: |
 
 # Why not Conductor?
 
-⚠️ **Not workflow as code** — Workflos-as-data (JSON).
+⚠️ **Not workflow as code** — Workflow-as-data (JSON).
 
-⚠️ **Search index is effectively mandatory** — UI breaks without ES/OpenSearch (~16 GB local).
+⚠️ **Search index is effectively mandatory** — UI breaks without ES/OpenSearch.
 
 ⚠️ **REST long-poll workers** — more latency and idle load than gRPC streaming.
 

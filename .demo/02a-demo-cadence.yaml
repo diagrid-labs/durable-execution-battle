@@ -9,7 +9,7 @@ description: |
 version: 3
 scenes:
   - id: cadence-intro
-    title: Open the demo intro slide
+    title: Cadence demo intro slide
     moves:
       - action: setPresentationView
       - action: openSlide
@@ -102,6 +102,17 @@ scenes:
         path: demos/01-cadence/enterprise-diagnostics.http
       - action: waitForInput
         message: 'Click ''Send Request'' above the ### Status block.'
+  - id: cadence-cli-list
+    title: List recent workflows from the Cadence CLI (bundled in the server image)
+    moves:
+      - action: executeTerminalCommand
+        terminalId: cadence-cli
+        command: docker exec cadence-server cadence --domain default workflow list
+        insertTypingMode: character-by-character
+        insertTypingSpeed: 90
+        autoExecute: true
+      - action: waitForInput
+        message: enterprise-ncc-1701 shows in the list with its run id + close status — no ID copy-paste needed. There's no standalone binary; the CLI ships inside the cadence-server container.
   - id: cadence-cleanup
     title: Stop the worker and tear down the Cadence cluster (Cassandra + server + web)
     moves:
@@ -126,4 +137,6 @@ scenes:
         terminalId: cadence-app
       - action: closeTerminal
         terminalId: cadence-cluster
+      - action: closeTerminal
+        terminalId: cadence-cli
       - action: unsetPresentationView

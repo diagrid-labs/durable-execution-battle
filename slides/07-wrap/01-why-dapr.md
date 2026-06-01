@@ -15,6 +15,6 @@ footer: |
 
 ✅ **The only CNCF-graduated option** — vendor-neutral governance, Apache 2.0, no open-core gating, no single-vendor lock-in.
 
-✅ **Polyglot workflow management over plain HTTP** — start, signal, and query a workflow from `curl`. No SDK required.
+✅ **Complete workflow management API** — SDKs, CLI & REST APIs.
 
 ✅ **Versioning is first-class** — 1.17 added patching + named versions; 1.18 adds tamper detection, concurrency caps, and access policies.
