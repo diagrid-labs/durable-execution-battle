@@ -9,7 +9,7 @@ footer: |
 
 ⚠️ **Uneven SDK maturity** — TS most mature, others trail.
 
-⚠️ **Sagas & cron are patterns, not APIs** — hand-rolled compensations and schedulers.
+⚠️ **Cron is a pattern, not an API** — hand-rolled scheduler.
 
 ⚠️ **License friction** — BSL 1.1, not OSI-open until rolling 4-year Apache conversion.
 

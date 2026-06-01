@@ -15,6 +15,4 @@ footer: |
 
 ⚠️ **Open-core gating** — editor, RBAC, SSO, secrets, human tasks, SLA behind Orkes.
 
-⚠️ **No native imperative control flow** — branching is `SWITCH` + JQ over a JSON DAG.
-
 ⚠️ **Single-vendor, not in CNCF** — opaque pricing (only $99k/yr public).
