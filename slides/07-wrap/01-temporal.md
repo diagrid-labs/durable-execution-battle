@@ -5,25 +5,21 @@ footer: |
   <img src=".demo/assets/diagrid-logo.webp" alt="Diagrid" style="height: 20px; width: auto;">
 ---
 
-# Temporal — the strong rival
-
+# Temporal 
 **The good**
 
 ✅ Broadest SDK coverage — 7 GA languages
 
 ✅ Industry-leading Web UI + per-language Replayer
 
-✅ MIT — no feature paywall, no open core
-
 ✅ Nexus cross-app RPC + multi-cloud HA failover
 
 ::right::
+# — the strong rival
 
 **The critiques**
 
 ⚠️ Heaviest self-host — Cassandra + Elasticsearch
-
-⚠️ Steep determinism learning curve
 
 ⚠️ Shard count fixed at creation — grows, never shrinks
 
