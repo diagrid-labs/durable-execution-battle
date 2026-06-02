@@ -58,10 +58,6 @@ scenes:
     moves:
       - action: open
         path: demos/04-dapr/EnterpriseDiagnostics.ApiService/EnterpriseDiagnostics.ApiService.http
-      - action: waitForTimeout
-        timeout: 100
-      - action: waitForInput
-        message: Click 'Send Request' to start the workflow
   - id: dapr-watch-fanout
     title: Watch the 5 scan activities fan out in the Diagrid Dev Dashboard
     moves:

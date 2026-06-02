@@ -11,7 +11,7 @@ graph LR
      hosts HTTP API :5467] -->|gRPC work-item stream| Sidecar[Dapr sidecar
      with wf engine]
     Sidecar -->|history/inbox/state| Store[(Valkey state store :16379)]
-    Dashboard[Diagrid Dev Dashboard]
+    Dashboard[Diagrid Dev Dashboard] -->|retrieve workflow data| Store
   end
   Sidecar -->|actor placement| Placement[Placement service]
   Sidecar -->|timers/reminders| Scheduler[Scheduler service]

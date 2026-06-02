@@ -78,10 +78,6 @@ scenes:
     moves:
       - action: open
         path: demos/03-conductor/enterprise-diagnostics.http
-      - action: waitForTimeout
-        timeout: 100
-      - action: waitForInput
-        message: 'Click ''Send Request'' above the ### Start the diagnostics workflow block. '
   - id: conductor-watch-fanout
     title: Watch the 5 scan tasks fan out in the Conductor UI
     moves:
@@ -114,6 +110,12 @@ scenes:
       - action: waitForInput
         message: 'Click ''Send Request'' above the ### Get the workflow status block.'
     disabled: true
+  - id: scene-mpx5um3v-qzjd
+    title: Conductor CLI - list workflows
+    moves:
+      - action: executeTerminalCommand
+        command: conductor workflow list
+        terminalId: conductor-cli
   - id: conductor-cleanup
     title: Stop the app and tear down the Conductor container (+ volume)
     moves:
@@ -139,6 +141,8 @@ scenes:
       - action: closeTerminal
         terminalId: conductor-server
       - action: unsetPresentationView
+      - action: closeTerminal
+        terminalId: conductor-cli
   - id: conductor-reset
     title: Reset the Conductor demo — stop any stragglers for a clean slate
     moves:

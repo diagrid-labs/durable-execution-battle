@@ -71,10 +71,6 @@ scenes:
     moves:
       - action: open
         path: demos/01-cadence/enterprise-diagnostics.http
-      - action: waitForTimeout
-        timeout: 100
-      - action: waitForInput
-        message: 'Click ''Send Request'' above the ### Start diagnostics block.'
   - id: cadence-watch-fanout
     title: Watch the 5 scan activities fan out in Cadence Web
     moves:
