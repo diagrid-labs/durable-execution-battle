@@ -31,12 +31,13 @@ scenes:
     moves:
       - action: open
         path: demos/05-restate/src/services.ts
+    disabled: true
   - id: restate-start-server
     title: Start restate-server (single binary, RocksDB embedded — no Docker)
     moves:
       - action: executeTerminalCommand
         terminalId: restate-server
-        command: restate-server
+        command: RESTATE_ADVERTISED_ADDRESS="http://127.0.0.1:5122/" restate-server
         insertTypingMode: instant
         autoExecute: true
       - action: waitForInput
@@ -62,11 +63,10 @@ scenes:
     moves:
       - action: open
         path: demos/05-restate/enterprise-diagnostics.http
-  - id: restate-send-start
-    title: POST /start — kick off the workflow
-    moves:
+      - action: waitForTimeout
+        timeout: 100
       - action: waitForInput
-        message: 'Click ''Send Request'' above the ### Start a diagnostics workflow block.'
+        message: Click 'Send Request' to start the workflow
   - id: restate-watch-fanout
     title: Watch the 5 scan calls fan out in the Restate admin UI
     moves:
@@ -102,6 +102,7 @@ scenes:
     moves:
       - action: waitForInput
         message: 'Click ''Send Request'' above the ### Query workflow status block.'
+    disabled: true
   - id: restate-cli-list
     title: List recent invocations from the Restate CLI
     moves:

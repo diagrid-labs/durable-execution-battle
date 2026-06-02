@@ -7,8 +7,8 @@ graph LR
   Cadence -.fork 2019.-> Temporal["Temporal
   (MIT)"]
 
-  MS["Microsoft Durable Functions"] --> DTFx["Durable Task Framework"]
-  DTFx -."rewritten in Go".-> Dapr["Dapr Workflows
+  DTFx["Durable Task Framework 2016"] --> MS["Azure Durable Functions 2017"] 
+  DTFx -."rewritten in Go".-> Dapr["Dapr Workflows 2023
   (Apache 2.0
   CNCF graduated)"]
 

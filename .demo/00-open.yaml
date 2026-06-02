@@ -54,21 +54,17 @@ scenes:
       - action: markdownPreview
         path: slides/00-open/03-process-order.md
   - id: open-poll-qr
-    title: Show the QR slide and start the opening poll
+    title: Start workflow usages poll
     moves:
       - action: showEngageTimePoll
         startOnOpen: true
         pollId: 9ecd8r
+    disabled: true
   - id: open-five-contenders
-    title: The 5 contenders (poll question matches the option list)
+    title: The 5 contenders
     moves:
       - action: openSlide
         path: slides/00-open/04-five-contenders.md
-  - id: open-lineage-map
-    title: Lineage map
-    moves:
-      - action: markdownPreview
-        path: slides/00-open/05-lineage-map.md
   - id: open-dimensions-preview
     title: Dimensions preview
     moves:
@@ -76,3 +72,9 @@ scenes:
         path: slides/00-open/06-dimensions-preview.md
       - action: closeEngageTimePoll
         pollId: 9ecd8r
+    disabled: true
+  - id: open-lineage-map
+    title: Lineage map
+    moves:
+      - action: markdownPreview
+        path: slides/00-open/05-lineage-map.md

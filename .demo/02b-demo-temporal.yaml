@@ -34,6 +34,7 @@ scenes:
     moves:
       - action: open
         path: demos/02-temporal/src/main/java/io/diagrid/enterprisediagnostics/activity/ScanWarpCoreActivityImpl.java
+    disabled: true
   - id: temporal-start-server
     title: Start the Temporal dev server (single binary, in-memory)
     moves:
@@ -65,9 +66,8 @@ scenes:
     moves:
       - action: open
         path: demos/02-temporal/enterprise-diagnostics.http
-  - id: temporal-send-start
-    title: POST /start — kick off the workflow
-    moves:
+      - action: waitForTimeout
+        timeout: 100
       - action: waitForInput
         message: 'Click ''Send Request'' above the ### Start diagnostics block.'
   - id: temporal-watch-fanout
@@ -100,6 +100,7 @@ scenes:
     moves:
       - action: waitForInput
         message: 'Click ''Send Request'' above the ### Status block.'
+    disabled: true
   - id: temporal-cli-list
     title: List recent workflows from the Temporal CLI
     moves:

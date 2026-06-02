@@ -49,6 +49,7 @@ scenes:
     moves:
       - action: open
         path: demos/01-cadence/src/main/java/io/diagrid/enterprisediagnostics/activity/ScanWarpCoreActivityImpl.java
+    disabled: true
   - id: cadence-start-app
     title: Start the Spring Boot worker (port 8080)
     moves:
@@ -70,9 +71,8 @@ scenes:
     moves:
       - action: open
         path: demos/01-cadence/enterprise-diagnostics.http
-  - id: cadence-send-start
-    title: POST /start — kick off the workflow
-    moves:
+      - action: waitForTimeout
+        timeout: 100
       - action: waitForInput
         message: 'Click ''Send Request'' above the ### Start diagnostics block.'
   - id: cadence-watch-fanout
@@ -103,10 +103,9 @@ scenes:
   - id: cadence-send-status
     title: GET /status — final workflow output
     moves:
-      - action: open
-        path: demos/01-cadence/enterprise-diagnostics.http
       - action: waitForInput
         message: 'Click ''Send Request'' above the ### Status block.'
+    disabled: true
   - id: cadence-cli-list
     title: List recent workflows from the Cadence CLI (bundled in the server image)
     moves:

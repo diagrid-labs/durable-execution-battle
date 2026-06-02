@@ -27,6 +27,11 @@ scenes:
       - action: open
         path: demos/03-conductor/docker-compose.yml
   - id: conductor-show-workflow
+    title: Show the workflow registration
+    moves:
+      - action: open
+        path: demos/03-conductor/Workflows/DiagnosticsWorkflowRegistrar.cs
+  - id: demo-mpx27h14-g7s3
     title: Show the workflow — fluent C# builder, ForkJoin → Join → Wait → Switch
     moves:
       - action: open
@@ -36,6 +41,7 @@ scenes:
     moves:
       - action: open
         path: demos/03-conductor/Workers/ScanWarpCoreWorker.cs
+    disabled: true
   - id: conductor-start-server
     title: Start Conductor (single container — server + UI + embedded Elasticsearch)
     moves:
@@ -72,11 +78,10 @@ scenes:
     moves:
       - action: open
         path: demos/03-conductor/enterprise-diagnostics.http
-  - id: conductor-send-start
-    title: POST /start — kick off the workflow
-    moves:
+      - action: waitForTimeout
+        timeout: 100
       - action: waitForInput
-        message: 'Click ''Send Request'' above the ### Start the diagnostics workflow block. Copy the returned workflow_id.'
+        message: 'Click ''Send Request'' above the ### Start the diagnostics workflow block. '
   - id: conductor-watch-fanout
     title: Watch the 5 scan tasks fan out in the Conductor UI
     moves:
@@ -108,6 +113,7 @@ scenes:
     moves:
       - action: waitForInput
         message: 'Click ''Send Request'' above the ### Get the workflow status block.'
+    disabled: true
   - id: conductor-cleanup
     title: Stop the app and tear down the Conductor container (+ volume)
     moves:

@@ -36,6 +36,7 @@ scenes:
     moves:
       - action: open
         path: demos/04-dapr/EnterpriseDiagnostics.ApiService/Activities/ScanWarpCoreActivity.cs
+    disabled: true
   - id: dapr-start-aspire
     title: Start Aspire — boots Valkey, ApiService + Dapr sidecar, Diagrid Dashboard
     moves:
@@ -57,11 +58,10 @@ scenes:
     moves:
       - action: open
         path: demos/04-dapr/EnterpriseDiagnostics.ApiService/EnterpriseDiagnostics.ApiService.http
-  - id: dapr-send-start
-    title: POST /start — kick off the workflow
-    moves:
+      - action: waitForTimeout
+        timeout: 100
       - action: waitForInput
-        message: 'Click ''Send Request'' above the ### Start the diagnostics workflow block. Copy the returned instanceId.'
+        message: Click 'Send Request' to start the workflow
   - id: dapr-watch-fanout
     title: Watch the 5 scan activities fan out in the Diagrid Dev Dashboard
     moves:
@@ -82,6 +82,7 @@ scenes:
     moves:
       - action: waitForInput
         message: 'Click ''Send Request'' above the ### Get the workflow status block.'
+    disabled: true
   - id: dapr-cli-list
     title: List recent workflows from the Dapr CLI
     moves:
