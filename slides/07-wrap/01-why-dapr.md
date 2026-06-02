@@ -7,13 +7,13 @@ footer: |
 
 # Why Dapr Workflow should be your default
 
-✅ **Lowest operational footprint** — the engine runs inside the `daprd` sidecar. No separate workflow cluster, no Cassandra + Elasticsearch to operate. Already running Dapr? Workflows add **zero** new services.
+✅ **Lowest operational footprint** — the engine runs inside the `daprd` sidecar, no separate workflow cluster.
 
-✅ **Bring your own datastore** — any transactional + ETag store (Postgres, Redis, SQL Server, Cosmos…). No mandatory search-index tier.
+✅ **Bring your own datastore** — any transactional + ETag store.
 
-✅ **One of 12 building blocks** — state, pub/sub, secrets, bindings, service invocation with mTLS — same sidecar, callable from workflow code.
+✅ **One of 12 building blocks** — state, pub/sub, secrets, bindings, conversation, service invocation with mTLS — same sidecar.
 
-✅ **The only CNCF-graduated option** — vendor-neutral governance, Apache 2.0, no open-core gating, no single-vendor lock-in.
+✅ **The only CNCF-graduated option** — vendor-neutral governance, Apache 2.0, no open-core gating.
 
 ✅ **Complete workflow management API** — SDKs, CLI & REST APIs.
 

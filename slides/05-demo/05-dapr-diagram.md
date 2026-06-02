@@ -2,17 +2,19 @@
 
 ```mermaid
 graph LR
-  Dev[Developer] -->|aspire run| App
+  Dev[Developer] -->|aspire run| AspireManaged
   Dev -->|POST /start HTTP :5467| App
   Dev -->|dapr workflow list -a wf-app| CLI[Dapr CLI]
+  Dev -->|inspect workflows| Dashboard
   subgraph AspireManaged[Managed by Aspire]
     App[Worker App + Dapr SDK
      hosts HTTP API :5467] -->|gRPC work-item stream| Sidecar[Dapr sidecar
      with wf engine]
     Sidecar -->|history/inbox/state| Store[(Valkey state store :16379)]
+    Dashboard[Diagrid Dev Dashboard]
   end
   Sidecar -->|actor placement| Placement[Placement service]
-  Sidecar -->|timers/reminders| Scheduler[Scheduler service + embedded etcd]
+  Sidecar -->|timers/reminders| Scheduler[Scheduler service]
   CLI -->|retrieve workflow data| Store
   classDef default stroke:#41bd9b,stroke-width:2px
   linkStyle default stroke:#41bd9b,stroke-width:1px
