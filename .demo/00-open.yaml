@@ -33,6 +33,11 @@ scenes:
     moves:
       - action: openSlide
         path: slides/00-open/01-bio.md
+  - id: open-why-durable-execution
+    title: Why durable execution matters now
+    moves:
+      - action: openSlide
+        path: slides/00-open/00b-why-durable-execution.md
   - id: open-agenda
     title: Agenda
     moves:

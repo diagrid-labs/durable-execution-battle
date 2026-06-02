@@ -39,11 +39,9 @@ export const diagnosticsWorkflow = restate.workflow({
       ]);
 
       if (!input.testing) {
-        ctx.console.log("All scans complete — engineering review pending, sleeping 60s");
+        ctx.console.log("Engineering review pending — sleeping 60s");
         // ── 60s durable sleep — ⚡ KILL POINT ⚡ ──
         await ctx.sleep({ seconds: 60 });
-      } else {
-        ctx.console.log("testing=true — skipping engineering review wait");
       }
 
       // ── Prioritization ──
@@ -51,8 +49,6 @@ export const diagnosticsWorkflow = restate.workflow({
         shipName: input.shipName,
         scans,
       });
-
-      ctx.console.log(`Prioritized with severity: ${priority.severity}`);
 
       // ── Conditional bridge notification ──
       let bridgeNotification: string | null = null;
@@ -64,6 +60,8 @@ export const diagnosticsWorkflow = restate.workflow({
         });
         bridgeNotification = result.message;
       }
+
+      ctx.console.log(`Diagnostics complete for ${input.shipName} (id: ${input.id})`);
 
       return {
         shipName: input.shipName,

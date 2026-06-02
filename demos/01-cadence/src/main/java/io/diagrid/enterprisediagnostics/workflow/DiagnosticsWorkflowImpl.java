@@ -51,8 +51,6 @@ public class DiagnosticsWorkflowImpl implements DiagnosticsWorkflow {
         if (!input.testing()) {
             logger.info("Engineering review pending — sleeping 60s");
             Workflow.sleep(Duration.ofSeconds(60));
-        } else {
-            logger.info("testing=true — skipping engineering review wait");
         }
 
         Priority priority = prioritize.execute(new PrioritizeInput(input.shipName(), scans));
@@ -62,6 +60,8 @@ public class DiagnosticsWorkflowImpl implements DiagnosticsWorkflow {
             bridgeResult = notify.execute(
                 new BridgeNotificationInput(input.shipName(), input.engineerName(), priority));
         }
+
+        logger.info("Diagnostics complete for {}", input.shipName());
 
         return new DiagnosticsOutput(
             input.shipName(),

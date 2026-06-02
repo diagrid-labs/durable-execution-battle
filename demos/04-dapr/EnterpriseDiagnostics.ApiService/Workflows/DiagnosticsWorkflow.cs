@@ -42,7 +42,6 @@ internal sealed partial class DiagnosticsWorkflow : Workflow<DiagnosticsInput, D
         await Task.WhenAll(scanTasks);
 
         var scans = scanTasks.Select(t => t.Result).ToArray();
-        LogScansComplete(logger, context.InstanceId);
 
         // ── 60s durable sleep — ⚡ KILL POINT ⚡ ──
         if (!input.Testing)
@@ -50,18 +49,12 @@ internal sealed partial class DiagnosticsWorkflow : Workflow<DiagnosticsInput, D
             LogSleeping(logger, context.InstanceId);
             await context.CreateTimer(TimeSpan.FromSeconds(60));
         }
-        else
-        {
-            LogSleepSkipped(logger, context.InstanceId);
-        }
 
         // ── Prioritization ──
         var priority = await context.CallActivityAsync<Priority>(
             nameof(PrioritizeIssuesActivity),
             new PrioritizeInput(input.ShipName, scans),
             GetActivityRetryPolicy());
-
-        LogPrioritized(logger, context.InstanceId, priority.Severity);
 
         // ── Conditional bridge notification ──
         string? bridgeMessage = null;
@@ -98,18 +91,9 @@ internal sealed partial class DiagnosticsWorkflow : Workflow<DiagnosticsInput, D
     [LoggerMessage(LogLevel.Information, "Starting diagnostics workflow {Id} for ship: {ShipName}")]
     static partial void LogStart(ILogger logger, string Id, string ShipName);
 
-    [LoggerMessage(LogLevel.Information, "All scans complete for workflow {Id}")]
-    static partial void LogScansComplete(ILogger logger, string Id);
-
     [LoggerMessage(LogLevel.Information, "Workflow {Id} sleeping 60s — engineering review window")]
     static partial void LogSleeping(ILogger logger, string Id);
 
-    [LoggerMessage(LogLevel.Information, "Workflow {Id} prioritized with severity: {Severity}")]
-    static partial void LogPrioritized(ILogger logger, string Id, string Severity);
-
     [LoggerMessage(LogLevel.Information, "Diagnostics workflow {Id} complete")]
     static partial void LogWorkflowComplete(ILogger logger, string Id);
-
-    [LoggerMessage(LogLevel.Information, "Workflow {Id} testing=true — skipping engineering review wait")]
-    static partial void LogSleepSkipped(ILogger logger, string Id);
 }

@@ -49,24 +49,22 @@ public class DiagnosticsWorkflowImpl implements DiagnosticsWorkflow {
 
         List<ScanResult> scans = List.of(
             pWarp.get(), pShields.get(), pLifeSupport.get(), pSensors.get(), pWeapons.get());
-        logger.info("All scans complete for {}", input.shipName());
 
         if (!input.testing()) {
             // KILL POINT — durable timer
             logger.info("Engineering review pending — sleeping 60s");
             Workflow.sleep(Duration.ofSeconds(60));
-        } else {
-            logger.info("testing=true — skipping engineering review wait");
         }
 
         Priority priority = prioritize.execute(new PrioritizeInput(input.shipName(), scans));
-        logger.info("Prioritized with severity: {}", priority.severity());
 
         BridgeNotificationResult bridgeResult = null;
         if (priority.severity() == Severity.YELLOW_ALERT || priority.severity() == Severity.RED_ALERT) {
             bridgeResult = notify.execute(
                 new BridgeNotificationInput(input.shipName(), input.engineerName(), priority));
         }
+
+        logger.info("Diagnostics complete for {}", input.shipName());
 
         return new DiagnosticsOutput(
             input.shipName(),
