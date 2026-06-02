@@ -3,7 +3,7 @@
 ```mermaid
 graph TD
   Dev[Developer]
-  CLI[temporal CLI]
+  CLI[Temporal CLI]
   subgraph DevServer[temporal server start-dev single process]
     SRV["Embedded Temporal Server<br/>Frontend+History+Matching+Worker"]
     DB[("SQLite<br/>in-memory or file")]
@@ -11,11 +11,11 @@ graph TD
     SRV --- DB
     SRV --- UI
   end
-  Worker["Your Worker process<br/>app code + SDK"]
+  Worker["Your Worker process<br/>app code + SDK<br/>hosts HTTP API :8080"]
   CLI -->|start/inspect workflows :7233| SRV
-  Worker -->|poll task queues gRPC :7233| SRV
+  Worker -->|start wf + poll task queues gRPC :7233| SRV
   Dev --> CLI
-  Dev --> Worker
+  Dev -->|POST /start HTTP :8080| Worker
   Dev -->|browser| UI
   classDef default stroke:#41bd9b,stroke-width:2px
   linkStyle default stroke:#41bd9b,stroke-width:1px

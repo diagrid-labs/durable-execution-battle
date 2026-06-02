@@ -131,3 +131,15 @@ scenes:
       - action: closeTerminal
         terminalId: temporal-cli
       - action: unsetPresentationView
+  - id: temporal-reset
+    title: Reset the Temporal demo — stop any stragglers for a clean slate
+    moves:
+      - action: executeTerminalCommand
+        terminalId: temporal-reset
+        command: ./scripts/reset-demos.sh temporal
+        insertTypingMode: instant
+        autoExecute: true
+      - action: waitForInput
+        message: Wait for 'Demo reset complete.', then continue.
+      - action: closeTerminal
+        terminalId: temporal-reset

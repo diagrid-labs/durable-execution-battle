@@ -7,21 +7,21 @@ description: |
   API calls are driven from demos/01-cadence/enterprise-diagnostics.http —
   the speaker clicks "Send Request" on each block when prompted.
 version: 3
-demos:
+scenes:
   - id: cadence-intro
     title: Cadence demo intro slide
-    steps:
+    moves:
       - action: setPresentationView
       - action: openSlide
         path: slides/05-demo/02-cadence-intro.md
   - id: cadence-diagram
     title: Cadence local diagram
-    steps:
+    moves:
       - action: markdownPreview
         path: slides/05-demo/02-cadence-diagram.md
   - id: cadence-start-cluster
     title: Start the Cadence cluster (Cassandra + server + web)
-    steps:
+    moves:
       - action: executeTerminalCommand
         terminalId: cadence-cluster
         command: cd demos/01-cadence && docker compose up
@@ -31,27 +31,27 @@ demos:
         message: Wait for Cassandra healthy + Cadence server ready, then continue.
   - id: cadence-show-cluster
     title: Show the Cassandra + Cadence cluster (the cost-of-entry)
-    steps:
+    moves:
       - action: open
         path: demos/01-cadence/docker-compose.yml
   - id: cadence-show-config
     title: Show the manual @Bean wiring (vs Temporal's Spring Boot starter)
-    steps:
+    moves:
       - action: open
         path: demos/01-cadence/src/main/java/io/diagrid/enterprisediagnostics/config/CadenceConfig.java
   - id: cadence-show-workflow
     title: Show the workflow — 5 parallel scans, 60s timer, conditional NotifyBridge
-    steps:
+    moves:
       - action: open
         path: demos/01-cadence/src/main/java/io/diagrid/enterprisediagnostics/workflow/DiagnosticsWorkflowImpl.java
   - id: cadence-show-activity
     title: Show one scan activity (deterministic mock analysis)
-    steps:
+    moves:
       - action: open
         path: demos/01-cadence/src/main/java/io/diagrid/enterprisediagnostics/activity/ScanWarpCoreActivityImpl.java
   - id: cadence-start-app
     title: Start the Spring Boot worker (port 8080)
-    steps:
+    moves:
       - action: executeTerminalCommand
         terminalId: cadence-app
         command: cd demos/01-cadence && ./mvnw spring-boot:run
@@ -62,27 +62,27 @@ demos:
         message: Wait for 'Started EnterpriseDiagnosticsApplication', then continue.
   - id: cadence-open-cadence-web
     title: Open Cadence Web (manual — browser)
-    steps:
+    moves:
       - action: waitForInput
         message: Open http://localhost:8088 → default domain. Keep it visible.
   - id: cadence-open-http-file
     title: Open the .http file for API calls
-    steps:
+    moves:
       - action: open
         path: demos/01-cadence/enterprise-diagnostics.http
   - id: cadence-send-start
     title: POST /start — kick off the workflow
-    steps:
+    moves:
       - action: waitForInput
         message: 'Click ''Send Request'' above the ### Start diagnostics block.'
   - id: cadence-watch-fanout
     title: Watch the 5 scan activities fan out in Cadence Web
-    steps:
+    moves:
       - action: waitForInput
         message: 'Cadence Web → enterprise-ncc-1701: 5 Scan* activities complete in ~2s, then TimerStarted.'
   - id: cadence-kill-point
     title: ⚡ KILL POINT — Ctrl+C the Spring Boot app mid-timer (~T+20s)
-    steps:
+    moves:
       - action: focusTerminal
       - action: sendKeybinding
         keybinding: ctrl+c
@@ -92,7 +92,7 @@ demos:
         message: 'Cadence Web: workflow still Running, history frozen on TimerStarted. Now restart.'
   - id: cadence-restart-app
     title: Restart the worker — the timer durably wakes
-    steps:
+    moves:
       - action: executeTerminalCommand
         terminalId: cadence-app
         command: ./mvnw spring-boot:run
@@ -102,14 +102,14 @@ demos:
         message: 'Watch worker stdout: PrioritizeIssues → 🚨 BRIDGE ALERT RED_ALERT banner.'
   - id: cadence-send-status
     title: GET /status — final workflow output
-    steps:
+    moves:
       - action: open
         path: demos/01-cadence/enterprise-diagnostics.http
       - action: waitForInput
         message: 'Click ''Send Request'' above the ### Status block.'
   - id: cadence-cli-list
     title: List recent workflows from the Cadence CLI (bundled in the server image)
-    steps:
+    moves:
       - action: executeTerminalCommand
         terminalId: cadence-cli
         command: ./demos/01-cadence/cadence-cli.sh workflow list
@@ -120,7 +120,7 @@ demos:
         message: enterprise-ncc-1701 shows in the list with its run id + close status — no ID copy-paste needed. There's no standalone binary; the CLI ships inside the cadence-server container.
   - id: cadence-cleanup
     title: Stop the worker and tear down the Cadence cluster (Cassandra + server + web)
-    steps:
+    moves:
       - action: focusTerminal
         terminalId: cadence-app
       - action: sendKeybinding
@@ -145,3 +145,15 @@ demos:
       - action: closeTerminal
         terminalId: cadence-cli
       - action: unsetPresentationView
+  - id: cadence-reset
+    title: Reset the Cadence demo — stop any stragglers for a clean slate
+    moves:
+      - action: executeTerminalCommand
+        terminalId: cadence-reset
+        command: ./scripts/reset-demos.sh cadence
+        insertTypingMode: instant
+        autoExecute: true
+      - action: waitForInput
+        message: Wait for 'Demo reset complete.', then continue.
+      - action: closeTerminal
+        terminalId: cadence-reset

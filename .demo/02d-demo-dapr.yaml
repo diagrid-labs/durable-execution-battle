@@ -107,3 +107,15 @@ scenes:
       - action: closeTerminal
         terminalId: dapr-cli
       - action: unsetPresentationView
+  - id: dapr-reset
+    title: Reset the Dapr demo — stop any stragglers for a clean slate
+    moves:
+      - action: executeTerminalCommand
+        terminalId: dapr-reset
+        command: ./scripts/reset-demos.sh dapr
+        insertTypingMode: instant
+        autoExecute: true
+      - action: waitForInput
+        message: Wait for 'Demo reset complete.', then continue.
+      - action: closeTerminal
+        terminalId: dapr-reset

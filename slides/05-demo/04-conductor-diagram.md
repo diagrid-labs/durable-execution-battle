@@ -3,8 +3,9 @@
 ```mermaid
 graph TD
   Dev[Developer] -->|authors JSON workflow + task defs| Server
-  Dev -->|writes worker code via SDK| Worker[Worker process - your code]
-  Worker -->|polls task queue HTTP/gRPC ~100ms| Server[Conductor Server - Java/Spring Boot]
+  Dev -->|writes worker code via SDK| Worker["Worker process - your code<br/>hosts HTTP API :5050"]
+  Dev -->|POST /start HTTP :5050| Worker
+  Worker -->|polls task queue HTTP/gRPC ~250ms| Server[Conductor Server - Java/Spring Boot]
   Server -->|state, queues, history| DB[(Persistence: Redis default / Postgres / MySQL / Cassandra)]
   UI[Conductor Web UI] -->|REST| Server
   subgraph LocalDockerCompose[Single host - docker-compose]

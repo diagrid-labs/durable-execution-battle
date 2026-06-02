@@ -21,6 +21,11 @@ scenes:
     moves:
       - action: markdownPreview
         path: slides/05-demo/04-conductor-diagram.md
+  - id: demo-mpwfrs37-vm2r
+    title: Conductor docker compose
+    moves:
+      - action: open
+        path: demos/03-conductor/docker-compose.yml
   - id: conductor-show-workflow
     title: Show the workflow — fluent C# builder, ForkJoin → Join → Wait → Switch
     moves:
@@ -128,3 +133,15 @@ scenes:
       - action: closeTerminal
         terminalId: conductor-server
       - action: unsetPresentationView
+  - id: conductor-reset
+    title: Reset the Conductor demo — stop any stragglers for a clean slate
+    moves:
+      - action: executeTerminalCommand
+        terminalId: conductor-reset
+        command: ./scripts/reset-demos.sh conductor
+        insertTypingMode: instant
+        autoExecute: true
+      - action: waitForInput
+        message: Wait for 'Demo reset complete.', then continue.
+      - action: closeTerminal
+        terminalId: conductor-reset

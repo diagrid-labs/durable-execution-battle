@@ -135,3 +135,15 @@ scenes:
       - action: closeTerminal
         terminalId: restate-cli
       - action: unsetPresentationView
+  - id: restate-reset
+    title: Reset the Restate demo — stop any stragglers for a clean slate
+    moves:
+      - action: executeTerminalCommand
+        terminalId: restate-reset
+        command: ./scripts/reset-demos.sh restate
+        insertTypingMode: instant
+        autoExecute: true
+      - action: waitForInput
+        message: Wait for 'Demo reset complete.', then continue.
+      - action: closeTerminal
+        terminalId: restate-reset
