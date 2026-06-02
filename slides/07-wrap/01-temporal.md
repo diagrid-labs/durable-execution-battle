@@ -19,8 +19,8 @@ footer: |
 
 **The critiques**
 
-⚠️ Heaviest self-host — Cassandra + Elasticsearch
+⚠️ Heavy self-host — Cassandra + Elasticsearch
 
 ⚠️ Shard count fixed at creation — grows, never shrinks
 
-⚠️ Action-based Cloud pricing; HA = 2× multiplier
+⚠️ PAYG action-based Cloud pricing

@@ -13,11 +13,6 @@ scenes:
       - action: setPresentationView
       - action: openSlide
         path: slides/07-wrap/00-section.md
-  - id: wrap-summary
-    title: Choices
-    moves:
-      - action: openSlide
-        path: slides/07-wrap/00-summary.md
   - id: wrap-not-cadence
     title: Why not Cadence?
     moves:

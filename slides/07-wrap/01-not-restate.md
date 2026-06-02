@@ -9,10 +9,8 @@ footer: |
 
 ⚠️ **Uneven SDK maturity** — TS most mature, others trail.
 
-⚠️ **Cron is a pattern, not an API** — hand-rolled scheduler.
-
 ⚠️ **License friction** — BSL 1.1, not OSI-open until rolling 4-year Apache conversion.
 
 ⚠️ **Least mature multi-region** — one stretched cluster, no auto-failover product.
 
-⚠️ **Bring-your-own observability** — minimal UI, fewest integrations and scale references.
+⚠️ **Bring-your-own observability** — fewest integrations and scale references.

@@ -3,6 +3,6 @@ layout: section
 customTheme: .demo/themes/diagrid.css
 ---
 
-# Wrap up
+# My opinion & wrap up
 
 ![bot-animation](.demo/images/bot-animations-0.gif)
