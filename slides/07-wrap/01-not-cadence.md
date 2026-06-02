@@ -11,9 +11,9 @@ footer: |
 
 ⚠️ **`numHistoryShards` is immutable** — over-provision shards up front, forever.
 
-⚠️ **No first-party managed cloud** — only third-party Instaclustr.
+⚠️ **Thinnest management API** — no pause/resume/purge.
 
-⚠️ **Multi-region is active-passive only** — operator-triggered failover.
+⚠️ **No first-party managed cloud** — only third-party Instaclustr.
 
 ⚠️ **Fewest SDKs** — Only available for Go and Java.
 

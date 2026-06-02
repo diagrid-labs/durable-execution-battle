@@ -7,10 +7,8 @@ footer: |
 
 # Why not Restate?
 
-⚠️ **Uneven SDK maturity** — TS most mature, others trail.
+⚠️ **Uneven SDK maturity** — TS & Java most mature, others trail.
 
 ⚠️ **License friction** — BSL 1.1, not OSI-open until rolling 4-year Apache conversion.
 
-⚠️ **Least mature multi-region** — one stretched cluster, no auto-failover product.
-
-⚠️ **Bring-your-own observability** — fewest integrations and scale references.
+⚠️ **Young project** — small(ish) community, fewest integrations and little scale references.

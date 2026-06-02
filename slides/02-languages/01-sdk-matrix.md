@@ -13,7 +13,7 @@ footer: |
 | **Temporal** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | 🟡 | — | ✅ | — |
 | **Conductor** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | 🟡 | — | — | ⚪ |
 | **Dapr Workflows** | ✅ | ✅ | ✅ | ✅ | ✅ | — | 🟡 | — | — | — |
-| **Restate** | ✅ | ✅ | ✅ | ✅ | — | 🟡 | ✅ | ✅ | — | — |
+| **Restate** | 🟡 | ✅ | 🟡 | ✅ | — | 🟡 | 🟡 | ✅ | — | — |
 
 ✅ GA first-party · 🟡 beta / preview / early first-party · ⚪ community · — none
 

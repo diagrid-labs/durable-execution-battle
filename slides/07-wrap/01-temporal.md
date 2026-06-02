@@ -12,14 +12,12 @@ footer: |
 
 ✅ Industry-leading Web UI + per-language Replayer
 
-✅ Nexus cross-app RPC + multi-cloud HA failover
-
 ::right::
 # — the strong rival
 
 **The critiques**
 
-⚠️ Heavy self-host — Cassandra + Elasticsearch
+⚠️ Heavy self-host — Cassandra + Elasticsearch + 4 services
 
 ⚠️ Shard count fixed at creation — grows, never shrinks
 
