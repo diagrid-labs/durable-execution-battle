@@ -8,9 +8,9 @@ builder.AddDapr();
 string executingPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
     ?? throw new("Where am I?");
 
-var cachePassword = builder.AddParameter("cache-password", "state-store-123", secret: true);
-var cache = builder
-    .AddValkey("cache", 16379, cachePassword)
+var statePassword = builder.AddParameter("cache-password", "state-store-123", secret: true);
+var workflowState = builder
+    .AddValkey("workflow-state", 16379, statePassword)
     .WithContainerName("workflow-state")
     .WithDataVolume("workflow-state-data");
 
@@ -25,7 +25,7 @@ var workflowApp = builder
         ],
     });
 
-workflowApp.WaitFor(cache);
+workflowApp.WaitFor(workflowState);
 
 builder
     .AddContainer("diagrid-dashboard", "ghcr.io/diagridio/diagrid-dashboard:latest")
@@ -34,6 +34,6 @@ builder
     .WithEnvironment("COMPONENT_FILE", "/app/components/statestore-dashboard.yaml")
     .WithEnvironment("APP_ID", "diagrid-dashboard")
     .WithHttpEndpoint(port: 58888, targetPort: 8080)
-    .WithReference(cache);
+    .WithReference(workflowState);
 
 builder.Build().Run();

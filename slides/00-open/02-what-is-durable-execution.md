@@ -7,7 +7,7 @@ footer: |
 
 # What is durable execution?
 
-Code that survives **process crashes**, **host failures**, **deploys**, and **indefinite waits** — without you writing the checkpointing or retry plumbing.
+Code that survives **process crashes**, **host failures**, and **deploys** — without you writing the checkpointing or retry plumbing.
 
 ```python
 async def process_order(order):

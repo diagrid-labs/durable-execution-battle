@@ -8,7 +8,7 @@ graph LR
   (MIT)"]
 
   DTFx["Durable Task Framework 2016"] --> MS["Azure Durable Functions 2017"] 
-  DTFx -."rewritten in Go".-> Dapr["Dapr Workflows 2023
+  DTFx -."rewritten in Go".-> Dapr["Dapr Workflow 2023
   (Apache 2.0
   CNCF graduated)"]
 

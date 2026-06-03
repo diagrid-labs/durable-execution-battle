@@ -14,4 +14,4 @@ layout: intro
 
 Marc Duiker - Developer Advocate at Diagrid
 
-<img src=".demo/images/bot-animations-0.gif" alt="Bot animations" style="height: 48px; width: auto;">
+<img src=".demo/images/bot-animations-0.gif" alt="Bot animations" style="height: 80px; width: auto;">

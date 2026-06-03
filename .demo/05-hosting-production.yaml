@@ -23,26 +23,31 @@ scenes:
     moves:
       - action: markdownPreview
         path: slides/03-hosting-production/02-prod-cadence.md
+    disabled: true
   - id: prod-temporal
     title: Production — Temporal
     moves:
       - action: markdownPreview
         path: slides/03-hosting-production/03-prod-temporal.md
+    disabled: true
   - id: prod-conductor
     title: Production — Conductor
     moves:
       - action: markdownPreview
         path: slides/03-hosting-production/04-prod-conductor.md
+    disabled: true
   - id: prod-dapr
     title: Production — Dapr Workflows
     moves:
       - action: markdownPreview
         path: slides/03-hosting-production/05-prod-dapr.md
+    disabled: true
   - id: prod-restate
     title: Production — Restate
     moves:
       - action: markdownPreview
         path: slides/03-hosting-production/06-prod-restate.md
+    disabled: true
   - id: commercial-vendors
     title: Commercial vendors
     moves:
