@@ -19,6 +19,6 @@ footer: |
 
 ⚠️ Heavy self-host — Cassandra + Elasticsearch + 4 services
 
-⚠️ Shard count fixed at creation — grows, never shrinks
+⚠️ Shard count fixed at creation
 
 ⚠️ PAYG action-based Cloud pricing

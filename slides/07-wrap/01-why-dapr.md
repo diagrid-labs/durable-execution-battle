@@ -7,7 +7,7 @@ footer: |
 
 # Why Dapr Workflow should be your default
 
-✅ **Lowest operational footprint** — the engine runs inside the `daprd` sidecar, no separate workflow cluster.
+✅ **Lowest operational footprint** — the engine runs inside the sidecar, no separate workflow cluster.
 
 ✅ **Bring your own datastore** — any transactional + ETag store.
 
