@@ -126,7 +126,7 @@ graph TD
 | Placement service | Maintains actor distribution/lookup table, load-balances actors | Workflow durability rides on virtual actors | Required |
 | Scheduler service (embedded etcd) | Stores/fires jobs, actor reminders, and the reminders backing workflow timers/durability | Stable since v1.15; workflows misbehave without it | Required |
 | Zipkin (tracing) | Default tracing container | Local debugging only | Optional |
-| Diagrid Catalyst Cloud (free) | Hosted managed Dapr endpoint your app dials remotely | Removes need to run control plane/state store locally | Optional |
+| Diagrid Cloud (free) | Hosted managed Dapr endpoint your app dials remotely | Removes need to run control plane/state store locally | Optional |
 
 ```mermaid
 graph LR
@@ -305,7 +305,7 @@ graph TD
 
 Typically Kubernetes: a control plane (Operator, Sentry for mTLS, Placement, Scheduler) + Sidecar Injector. Each workflow worker pod gets a `daprd` sidecar with the embedded `durabletask-go` engine + actor runtime. **There is no dedicated workflow cluster** — the engine scales with your app pods; Placement load-balances workflow/activity actors. State is event-sourced into an external transactional+ETag store; timers/reminders live in the Scheduler's etcd.
 
-- **Observability:** Prometheus metrics from every sidecar + control-plane service, bundled Grafana dashboards; OpenTelemetry/W3C tracing → Zipkin/Jaeger/Datadog/New Relic; logs via FluentD/Elastic/Kibana. Note: OSS docs do not document workflow-specific dashboards; deeper workflow inspection is via the management API/SDKs or richer UI in Diagrid Catalyst.
+- **Observability:** Prometheus metrics from every sidecar + control-plane service, bundled Grafana dashboards; OpenTelemetry/W3C tracing → Zipkin/Jaeger/Datadog/New Relic; logs via FluentD/Elastic/Kibana. Note: OSS docs do not document workflow-specific dashboards; deeper workflow inspection is via the management API/SDKs or richer UI in Diagrid.
 - **Scaling:** add worker pods; Placement spreads actors. **Key constraint:** a single workflow instance runs on one node (single-threaded actor) — you can't scale an individual workflow; activities can fan out, but workflow and activity replicas scale together. Bottlenecks: state-store latency/item-size limits, history rehydration on replay, too many active reminders, cluster CPU. Mitigations: continue-as-new, child workflows, scheduled start times, high-throughput state store.
 - **HA:** control-plane services run multiple replicas; on K8s Scheduler always runs HA as peers (no single leader). Durability/HA is delegated to the chosen external state store + Scheduler etcd. **Caution:** rescaling Scheduler with embedded etcd risks data loss — use external etcd + `dapr scheduler export` backups. No built-in cross-region workflow replication; multi-region via the datastore's geo-replication.
 
@@ -407,8 +407,8 @@ graph TD
 
 ## 3.4 Dapr Workflows
 - **OSS (Apache 2.0, CNCF Graduated):** runtime/sidecar (`daprd`) with embedded engine, `durabletask-go`, control-plane services (Placement, Scheduler, Sentry, Operator, Injector), SDKs, CLI + dashboard, pluggable components.
-- **Commercial:** **Diagrid Catalyst** (managed/serverless Dapr-as-a-service: durable workflows, agents/MCP, pub/sub, state, visualizers, app graph; Cloud or dedicated/self-hosted Enterprise); **Diagrid Conductor** (management/monitoring/advisory for self-managed Dapr-on-K8s — does **not** host workflows); **Azure Container Apps managed Dapr** (Microsoft) — GA building blocks but **does NOT support the Workflow API**.
-- **License posture:** 100% Apache 2.0, no open-core gating, no paid Dapr feature tier. Commercial value is hosting/operations. **Important boundary:** because ACA's managed Dapr excludes Workflows, "managed Dapr Workflows" in production effectively means **Diagrid Catalyst** or self-managing the OSS control plane.
+- **Commercial:** **Diagrid** (managed/serverless Dapr-as-a-service: durable workflows, agents/MCP, pub/sub, state, visualizers, app graph; Cloud or dedicated/self-hosted Enterprise); **Diagrid Conductor** (management/monitoring/advisory for self-managed Dapr-on-K8s — does **not** host workflows); **Azure Container Apps managed Dapr** (Microsoft) — GA building blocks but **does NOT support the Workflow API**.
+- **License posture:** 100% Apache 2.0, no open-core gating, no paid Dapr feature tier. Commercial value is hosting/operations. **Important boundary:** because ACA's managed Dapr excludes Workflows, "managed Dapr Workflows" in production effectively means **Diagrid** or self-managing the OSS control plane.
 
 ## 3.5 Restate
 - **Source-available (BSL 1.1 → Apache 2.0 four years after each version's release):** `restate-server` (full Rust core single binary incl. log, metadata store, RocksDB, ingress, admin, Web UI), `restate` CLI + `restatectl`, Kubernetes operator/Helm. SDKs (TS/Python/Java/Kotlin/Go/Rust) are permissive (MIT/Apache) client libraries. Web UI is in the OSS server, not gated.
@@ -422,7 +422,7 @@ graph TD
 | Cadence | Apache 2.0 | None | NetApp Instaclustr Managed Cadence | Yes (RIYOA) |
 | Temporal | MIT | None (no open core) | Temporal Cloud (+ HA namespaces, AWS Marketplace) | Not confirmed publicly |
 | Conductor | Apache 2.0 | Yes — enterprise/security features (editor, RBAC, SSO, human tasks, SLA) | Orkes Cloud / Enterprise / Dev Edition | Yes (customer-hosted/in-VPC) |
-| Dapr | Apache 2.0 (CNCF Graduated) | None | Diagrid Catalyst (ACA managed Dapr excludes Workflows) | Yes (Catalyst dedicated/self-hosted/air-gapped) |
+| Dapr | Apache 2.0 (CNCF Graduated) | None | Diagrid (ACA managed Dapr excludes Workflows) | Yes (Diagrid dedicated/self-hosted/air-gapped) |
 | Restate | BSL 1.1 → Apache 2.0 (4-yr) | None (anti-reseller clause only) | Restate Cloud | Cloud is multi-tenant SaaS |
 
 **Slide ideas**
@@ -480,13 +480,13 @@ Dapr Workflows have **no engine license cost**. All figures verified **accurate*
 | Offering | Model | Details | Confidence |
 |---|---|---|---|
 | Dapr OSS (self-hosted) | **Free** (Apache 2.0) | Pay only for infra: state store, Scheduler etcd storage, compute. Verdict refinement: etcd is **embedded** in the Scheduler by default (PVC-backed, ~1Gi default, 16Gi+ recommended prod, 3-node HA on K8s); external etcd only if you opt in | high |
-| Diagrid Catalyst Cloud | **Free ($0)** | Full platform for non-critical workloads: durable workflows, agent/MCP discovery, authn/z, workflow visualizers, app graph. No public per-unit price sheet | high |
-| Diagrid Catalyst Enterprise | **Contact-sales (custom)** | Dedicated/private/self-hosted/air-gapped hosting, agent-framework integrations, 99.99% SLA, dedicated CS, architectural reviews | high |
+| Diagrid Cloud | **Free ($0)** | Full platform for non-critical workloads: durable workflows, agent/MCP discovery, authn/z, workflow visualizers, app graph. No public per-unit price sheet | high |
+| Diagrid Enterprise | **Contact-sales (custom)** | Dedicated/private/self-hosted/air-gapped hosting, agent-framework integrations, 99.99% SLA, dedicated CS, architectural reviews | high |
 | Diagrid Conductor Free | **Permanently free** | 1 cluster, 1 user, 20 apps/cluster, 10K metric series, 12h retention, 0 API keys. Manages self-hosted Dapr clusters (does **not** host workflows) | high |
 | Diagrid Conductor Enterprise | **Contact-sales, capacity-based** | 30-day trial (1 cluster, 5 users, 100 apps, 1M metric series, 7-day retention, 10 API keys); Enterprise: unlimited clusters/users, 250+ apps, 10M+ metric series, customizable | high |
 | Azure Container Apps (managed Dapr) — **NOT Workflows** | Usage-based / dedicated | Consumption free grant/sub/month: first 180,000 vCPU-s, 360,000 GiB-s, 2,000,000 requests; scale-to-zero = no charge. Sidecar not separately metered. **ACA does NOT support the Dapr Workflow API**, so this does not price Dapr Workflows | medium |
 
-Sources: [diagrid.io/pricing](https://www.diagrid.io/pricing), [Conductor plans & limits](https://docs.diagrid.io/dapr-open-source/conductor/plans-and-limits/), [ACA billing](https://learn.microsoft.com/en-us/azure/container-apps/billing), [CNCF Dapr](https://www.cncf.io/projects/dapr/). The clearest managed path **specifically for Dapr Workflows** is Diagrid Catalyst (free Cloud tier; Enterprise = contact-sales, no public numbers).
+Sources: [diagrid.io/pricing](https://www.diagrid.io/pricing), [Conductor plans & limits](https://docs.diagrid.io/dapr-open-source/conductor/plans-and-limits/), [ACA billing](https://learn.microsoft.com/en-us/azure/container-apps/billing), [CNCF Dapr](https://www.cncf.io/projects/dapr/). The clearest managed path **specifically for Dapr Workflows** is Diagrid (free Cloud tier; Enterprise = contact-sales, no public numbers).
 
 ## 4.5 Restate
 Self-hosting the BSL-1.1 binary has **no license fee** (subject to the no-reselling clause). The only paid product is Restate Cloud; durable **actions** are the metered unit, and **state read/write is free**.
@@ -506,12 +506,12 @@ Sources: [Restate Cloud public launch](https://www.restate.dev/blog/announcing-r
 | Cadence | Free (Apache 2.0) + infra | Per-node subscription (resource-based) | Free trial | Partial — $133/mo dev, $523/mo smallest dedicated (vendor blog) |
 | Temporal | Free (MIT) + infra | Usage: Actions + storage, plan minimums | $1,000 trial credit | **Yes** — full public rate card |
 | Conductor | Free (Apache 2.0) + infra | Contact-sales / custom | Free Dev Edition + 14-day trial | Only AWS Marketplace: $99,000/yr contract |
-| Dapr | Free (Apache 2.0) + infra | Catalyst: free Cloud tier; Enterprise contact-sales | **Free Catalyst Cloud tier** | No public per-unit for paid tiers |
+| Dapr | Free (Apache 2.0) + infra | Diagrid: free Cloud tier; Enterprise contact-sales | **Free Diagrid Cloud tier** | No public per-unit for paid tiers |
 | Restate | Free (BSL→Apache) + infra | Usage: durable actions (state R/W free) | 50K actions/mo free | Free tier yes; paid rate not public (JS-rendered) |
 
 **Slide ideas**
 - "Usage vs subscription vs contact-sales" — the three billing philosophies in one row: Temporal/Restate (per-action), Instaclustr (per-node), Orkes/Diagrid/Restate-Enterprise (contact-sales).
-- "What's free forever" callout: Dapr OSS, Temporal/Cadence/Conductor OSS, plus genuinely free managed entry points (Catalyst Cloud $0, Orkes Dev Edition $0, Restate 50K actions/mo).
+- "What's free forever" callout: Dapr OSS, Temporal/Cadence/Conductor OSS, plus genuinely free managed entry points (Diagrid Cloud $0, Orkes Dev Edition $0, Restate 50K actions/mo).
 - A "re-verify morning-of-talk" footnote on any slide showing dollar figures.
 
 ---
@@ -547,7 +547,7 @@ Sources: [Restate Cloud public launch](https://www.restate.dev/blog/announcing-r
 - **Workflows are one of a family of pluggable building blocks** — same sidecar gives state, pub/sub, bindings, service invocation with mTLS, secrets, configuration, actors, Jobs API — all swappable via component YAML and callable from workflow code.
 - **Pull-based gRPC work-item model needs no inbound app ports** — workers receive work over an outbound stream; fits zero-trust and scale-to-zero topologies.
 - **Strong cloud-native governance / supply-chain posture** — CNCF-graduated, vendor-neutral, automatic sidecar mTLS via Sentry, per-app-id RBAC/scoping, SPIFFE-style identity.
-- **Portability and exit-optionality** — identical workflow code runs on a laptop, self-managed K8s, or Diagrid Catalyst; commercial layer is hosting, not the API.
+- **Portability and exit-optionality** — identical workflow code runs on a laptop, self-managed K8s, or Diagrid; commercial layer is hosting, not the API.
 
 ## 5.5 Restate
 - **Zero-infrastructure runtime — one binary, no DB/broker/index** — RocksDB + replicated log + Raft metadata store inside one Rust binary; the same artifact runs locally and as a production cluster.

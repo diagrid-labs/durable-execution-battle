@@ -195,7 +195,7 @@ Content...
 
 1. **Hosting matrix** — from research.md §8.3.
 2. **Operational footprint comparison** — visual: Temporal cluster (frontend/history/matching/worker + Cassandra + ES) vs Restate single binary.
-3. **Managed cloud landscape** — Temporal Cloud, Restate Cloud, Orkes Cloud, Diagrid Catalyst, Instaclustr Cadence (verify GA status pre-talk).
+3. **Managed cloud landscape** — Temporal Cloud, Restate Cloud, Orkes Cloud, Diagrid, Instaclustr Cadence (verify GA status pre-talk).
 
 #### `04-performance.md` — Performance & Scalability (3 min, ~3 slides)
 
