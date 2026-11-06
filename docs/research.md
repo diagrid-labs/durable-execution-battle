@@ -7,7 +7,7 @@ is the super# Durable Execution Battle — Research
 
 > ⚠️ **Sourcing note.** First-pass briefs were written from training data through early 2026. **Round-2 verification (2026-05-16)** confirmed everything via GitHub WebFetch — licenses, latest versions, star counts, Dapr versioning details, Restate operator/HA, .NET + Java versioning APIs. Items that remain "Marc must verify manually" (pricing pages, Uber blog scale numbers, etc.) are restricted to non-GitHub commercial domains that the sandbox blocked, and are explicitly flagged in §11.
 
-> ⚠️ **Speaker disclosure.** Marc is employed by Diagrid, the commercial company behind Dapr/Catalyst. The Dapr section is written with deliberate honesty about limitations vs the alternatives; disclosure should be made explicitly on the opening slide and again whenever showing Diagrid Catalyst / Conductor as a "managed UI" visual.
+> ⚠️ **Speaker disclosure.** Marc is employed by Diagrid, the commercial company behind Dapr/Catalyst. The Dapr section is written with deliberate honesty about limitations vs the alternatives; disclosure should be made explicitly on the opening slide and again whenever showing Diagrid / Conductor as a "managed UI" visual.
 
 ---
 
@@ -37,7 +37,7 @@ is the super# Durable Execution Battle — Research
 | **Primary languages (GA)** | Go, Java, Python, TS, .NET, PHP, Ruby (7 GA) | Go, Java (Python/Ruby community, Python archived) | Python, Java, Go, C#, JS, Clojure, Rust, Ruby | .NET, Python stable; Java beta; Go/JS less mature | TS, Java, Kotlin, Python, Go, Rust |
 | **Local dev** | `temporal server start-dev` (single binary) | `docker compose up` (Cassandra + server) | `docker run conductoross/conductor:latest` (single container) | `dapr init` (Docker pulls placement/scheduler/Redis) | `restate-server` (single Rust binary, RocksDB) |
 | **Web UI in OSS** | Yes — strong | Yes — functional, less polished | Yes — DAG visualizer is excellent | **No native OSS UI** — Diagrid Dashboard (free, container, requires disclosure) fills the gap | Yes — focused, journal-centric |
-| **Managed cloud** | Temporal Cloud (+ BYOC) | Instaclustr (verify); no first-party | Orkes Cloud | Diagrid Catalyst | Restate Cloud |
+| **Managed cloud** | Temporal Cloud (+ BYOC) | Instaclustr (verify); no first-party | Orkes Cloud | Diagrid | Restate Cloud |
 | **Production storage** | Cassandra / MySQL / Postgres + Elasticsearch | Cassandra (primary) / MySQL / Postgres + ES | Postgres / MySQL / Cassandra / Redis + ES/OpenSearch | Any txn+ETag state store (Postgres / Redis / Cassandra…) via component model | Embedded RocksDB; clustered replicated logs (Bifrost) |
 | **Workflow versioning** | `GetVersion` + Worker Deployment Versioning (GA 2025) | `GetVersion` API | Workflow `version` integer (full pinning) | **`IsPatched()` + named versions** since Dapr 1.17 (Feb 27, 2026) — GA in Go/Python/.NET/Java | Code-version via deployment registration |
 | **Search / visibility** | Search attributes + ES advanced visibility | Same model as Temporal (ES) | Full-text via ES/OpenSearch | **Limited** — no advanced visibility | SQL introspection endpoint on server |
@@ -475,7 +475,7 @@ The official [workflow-versioning docs page](https://github.com/dapr/docs/blob/v
   - **Also packaged as**: NuGet `Diagrid.Aspire.Hosting.Dashboard` v0.0.1 (May 5, 2026) — `builder.AddDiagridDashboard();` from a .NET Aspire AppHost. Docker Compose snippets and a Kind/K8s ConfigMap+Deployment+NodePort manifest are also in the docs.
   - **Demo repo**: [`diagrid-labs/dapr-workflow-versioning`](https://github.com/diagrid-labs/dapr-workflow-versioning) — .NET 10 + Aspire orchestrating ApiService, Dapr sidecar, Valkey state store, and the Diagrid Dashboard. Evolves four workflow versions live: **V0** (sequential), **V1** (`IsPatched("AddWeaponsAnalysis")`), **V2** (`DiagnosticsWorkflowV2` fan-out/fan-in — new named workflow), **V3** (adds `WorkflowRetryPolicy` 5 attempts / 3s / 1.5x). V1 stays registered alongside V2 so in-flight V1 instances complete. Requires Dapr CLI 1.17+.
   - **UI version visibility — unconfirmed via web**: `docs.diagrid.io` was blocked from research. Whether the dashboard distinguishes V1 vs V2 instances or surfaces the patch list in the UI **was not verifiable**. **Action**: run the demo locally before the talk, screenshot what the dashboard actually shows, and only assert from direct observation. Don't claim version-aware UI on stage without seeing it.
-- **Diagrid Catalyst** (commercial managed Dapr — **disclose**): hosted control plane, managed state stores, **Workflow Explorer UI** in the SaaS console. Distinct from the local Dev Dashboard.
+- **Diagrid** (commercial managed Dapr — **disclose**): hosted control plane, managed state stores, **Workflow Explorer UI** in the SaaS console. Distinct from the local Dev Dashboard.
 - **Diagrid Conductor** (also Diagrid, separate product — confusingly named, distinct from `conductor-oss/conductor`): Kubernetes management/observability plane for self-hosted Dapr; includes a workflow dashboard for cluster-wide visibility.
 - **BYO component model**: swap Redis for Postgres by changing YAML, no code change. Differentiator vs Temporal.
 
@@ -501,7 +501,7 @@ The official [workflow-versioning docs page](https://github.com/dapr/docs/blob/v
 - GitHub: `dapr/dapr` ~25k+ stars.
 - Components ecosystem: ~100+ across state stores, pub/sub, bindings, secrets.
 - Community: Discord, weekly community calls.
-- Commercial support: **Diagrid** (Catalyst managed, Conductor self-host mgmt, enterprise contracts), **Microsoft** indirectly via Azure Container Apps Dapr integration + AKS Dapr extension, smaller consultancy ecosystem.
+- Commercial support: **Diagrid** (Diagrid managed, Conductor self-host mgmt, enterprise contracts), **Microsoft** indirectly via Azure Container Apps Dapr integration + AKS Dapr extension, smaller consultancy ecosystem.
 
 ### Demo plan
 
@@ -550,7 +550,7 @@ curl http://localhost:3500/v1.0/workflows/dapr/demo1 | jq
    Disclosure phrasing: *"To visualize Dapr workflows I'm using the free Diagrid Dashboard container — full disclosure, Diagrid is my employer. It's anonymously-pulled from GHCR, no account required; Dapr OSS doesn't ship a Web UI so this fills the gap locally."*
 2. **CLI tail + jq** — `watch -n1 'curl -s localhost:3500/v1.0/workflows/dapr/demo1 | jq'`. Pure OSS, no disclosure needed. Use if the audience seems skeptical of vendor framing.
 3. **Zipkin tracing** — `dapr init` ships Zipkin at `localhost:9411`; workflows emit one span per activity. OSS-only fallback.
-4. **Diagrid Catalyst Workflow Explorer** — the managed SaaS console. Use briefly as a "what the production-tier looks like" closer, clearly disclosed.
+4. **Diagrid Workflow Explorer** — the managed SaaS console. Use briefly as a "what the production-tier looks like" closer, clearly disclosed.
 
 **Where Dapr genuinely shines**: lowest-friction local setup; workflows-as-a-feature inside a broader app platform (state/pub-sub/secrets); polyglot via HTTP API (any language can start/signal without an SDK); Apache 2.0; CNCF graduated; **workflow versioning now first-class (1.17)**.
 
@@ -714,7 +714,7 @@ Features:
 | Temporal | High (Cassandra/SQL + ES) | Cassandra/MySQL/Postgres + ES | Temporal Cloud (+BYOC AWS GA) | Official Helm |
 | Cadence | High (Cassandra default) | Cassandra/MySQL/Postgres + ES | Instaclustr only (verify) | Community Helm (`banzaicloud`) |
 | Conductor | Medium (server + Postgres/Redis + ES) | Postgres/MySQL/Cassandra/Redis + ES/OS | Orkes Cloud | Community |
-| Dapr | Low (sidecar + state store) | Any txn+ETag store (Postgres, Redis, …) | Diagrid Catalyst | Operator / Helm |
+| Dapr | Low (sidecar + state store) | Any txn+ETag store (Postgres, Redis, …) | Diagrid | Operator / Helm |
 | Restate | **Lowest** (single binary) | Embedded RocksDB; Bifrost replicated log for HA (3 nodes / RF 2) | Restate Cloud | Operator v2.5.1 — `RestateCluster` v1 stable; `RestateDeployment` / `RestateCloudEnvironment` beta |
 
 ### 8.4 Performance & scalability
@@ -736,7 +736,7 @@ All license / star figures verified via GitHub LICENSE files and repo homepages 
 | Temporal | MIT | ~20.3k | None | Temporal Technologies (Cloud, BYOC, support, SLAs) |
 | Cadence | Apache 2.0 | ~9.3k | None (uses CNCF Slack) | Instaclustr (verify) |
 | Conductor | Apache 2.0 | ~31.8k | None | Orkes (Cloud, Enterprise) |
-| Dapr | Apache 2.0 | ~25.8k | **CNCF Graduated** | Diagrid (Catalyst, Conductor, Dashboard) + Microsoft (Azure Container Apps) |
+| Dapr | Apache 2.0 | ~25.8k | **CNCF Graduated** | Diagrid (Diagrid, Conductor, Dashboard) + Microsoft (Azure Container Apps) |
 | Restate | BSL 1.1 (Change License = Apache 2.0, Change Date = 4y) | ~3.9k (fastest growing) | None | Restate GmbH (Cloud) |
 
 ---
@@ -847,4 +847,4 @@ These items live on vendor websites the research sandbox could not reach (tempor
 
 ### Cross-cutting
 - [ ] **Lineage-map slide accuracy** — any new forks / donations / acquisitions in 2025–2026?
-- [ ] **Three Diagrid products** — Dashboard (free local), Catalyst (managed SaaS), Conductor (self-host mgmt) — keep distinct disclosure phrasing for each. Audience confusion likely if they're conflated.
+- [ ] **Three Diagrid products** — Dashboard (free local), Diagrid (managed SaaS), Conductor (self-host mgmt) — keep distinct disclosure phrasing for each. Audience confusion likely if they're conflated.
